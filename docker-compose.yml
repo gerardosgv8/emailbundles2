@@ -1,0 +1,13 @@
+# Run Mailcraft Studio without installing PHP locally:
+#   docker compose up
+# Then open http://localhost:8080
+
+services:
+  web:
+    image: php:8.3-cli
+    working_dir: /app
+    volumes:
+      - .:/app
+    ports:
+      - "8080:8080"
+    command: php -S 0.0.0.0:8080 -t /app

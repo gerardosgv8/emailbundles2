@@ -1,0 +1,1360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Brand Design Wizard | Mailcraft Studio</title>
+  <style>
+    :root {
+      --bg: #f1f5f9;
+      --surface: #ffffff;
+      --surface-2: #f8fafc;
+      --border: #e2e8f0;
+      --border-strong: #cbd5e1;
+      --text: #0f172a;
+      --text-secondary: #334155;
+      --muted: #64748b;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --accent-soft: #eff6ff;
+      --success: #16a34a;
+      --success-soft: #f0fdf4;
+      --radius: 12px;
+      --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.05);
+      --shadow-md: 0 4px 12px rgba(15, 23, 42, 0.06);
+      --shadow-lg: 0 8px 24px rgba(15, 23, 42, 0.08);
+    }
+    * { box-sizing: border-box; }
+    html { color-scheme: light; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+    .app {
+      display: grid;
+      grid-template-columns: 272px 1fr 340px;
+      min-height: 100vh;
+      max-width: 1600px;
+      margin: 0 auto;
+    }
+    @media (max-width: 1100px) {
+      .app { grid-template-columns: 240px 1fr; max-width: none; }
+      .preview-panel { display: none; }
+    }
+    @media (max-width: 768px) {
+      .app { grid-template-columns: 1fr; }
+      .sidebar {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        border-bottom: 1px solid var(--border);
+        box-shadow: var(--shadow-sm);
+      }
+      .main { padding: 1.25rem; }
+    }
+    .sidebar {
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      padding: 1.5rem 0;
+      overflow-y: auto;
+    }
+    .sidebar h1 {
+      font-size: 1rem;
+      font-weight: 700;
+      margin: 0 1.25rem 0.35rem;
+      line-height: 1.3;
+      color: var(--text);
+    }
+    .sidebar p.sub {
+      margin: 0 1.25rem 1.25rem;
+      font-size: 0.78rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      width: 100%;
+      padding: 0.6rem 1.25rem;
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      font-size: 0.875rem;
+      text-align: left;
+      cursor: pointer;
+      border-left: 3px solid transparent;
+      transition: background 0.15s, color 0.15s;
+    }
+    .nav-item:hover {
+      background: var(--surface-2);
+      color: var(--text-secondary);
+    }
+    .nav-item.active {
+      color: var(--accent);
+      background: var(--accent-soft);
+      border-left-color: var(--accent);
+      font-weight: 600;
+    }
+    .nav-num {
+      width: 1.5rem;
+      height: 1.5rem;
+      border-radius: 50%;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.7rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .nav-item.active .nav-num {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+    .nav-item.done .nav-num {
+      background: var(--success-soft);
+      border-color: #bbf7d0;
+      color: var(--success);
+    }
+    .main {
+      padding: 2rem 2.25rem;
+      overflow-y: auto;
+      background: var(--bg);
+    }
+    .main-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1.75rem;
+    }
+    .main-header h2 {
+      margin: 0;
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--text);
+    }
+    .main-header p {
+      margin: 0.35rem 0 0;
+      color: var(--muted);
+      font-size: 0.925rem;
+      line-height: 1.5;
+    }
+    .toolbar {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+    .btn {
+      padding: 0.55rem 1rem;
+      border-radius: 8px;
+      border: 1px solid var(--border-strong);
+      background: var(--surface);
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: var(--shadow-sm);
+      transition: background 0.15s, border-color 0.15s, box-shadow 0.15s;
+    }
+    .btn:hover {
+      background: var(--surface-2);
+      border-color: var(--border-strong);
+    }
+    .btn:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+    .btn-primary {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+      box-shadow: 0 1px 2px rgba(37, 99, 235, 0.2);
+    }
+    .btn-primary:hover {
+      background: var(--accent-hover);
+      border-color: var(--accent-hover);
+    }
+    .btn-success {
+      background: var(--success);
+      border-color: var(--success);
+      color: #fff;
+      box-shadow: 0 1px 2px rgba(22, 163, 74, 0.2);
+    }
+    .btn-success:hover {
+      background: #15803d;
+      border-color: #15803d;
+    }
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.35rem 1.5rem;
+      margin-bottom: 1rem;
+      box-shadow: var(--shadow-sm);
+    }
+    .card h3 {
+      margin: 0 0 1.1rem;
+      font-size: 0.72rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      font-weight: 700;
+    }
+    .field-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 1.1rem;
+    }
+    .field { display: flex; flex-direction: column; gap: 0.4rem; }
+    .field.full { grid-column: 1 / -1; }
+    .field label {
+      font-size: 0.8125rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+    .field label span.hint {
+      font-weight: 400;
+      color: var(--muted);
+    }
+    .field input[type="text"],
+    .field input[type="email"],
+    .field input[type="url"],
+    .field input[type="number"],
+    .field textarea,
+    .field select {
+      padding: 0.6rem 0.75rem;
+      border-radius: 8px;
+      border: 1px solid var(--border-strong);
+      background: var(--surface);
+      color: var(--text);
+      font-size: 0.9rem;
+      font-family: inherit;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .field input:focus,
+    .field textarea:focus,
+    .field select:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+    }
+    .field textarea { min-height: 88px; resize: vertical; line-height: 1.5; }
+    .color-row {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .color-row input[type="color"] {
+      width: 44px;
+      height: 38px;
+      padding: 3px;
+      border: 1px solid var(--border-strong);
+      border-radius: 8px;
+      background: var(--surface);
+      cursor: pointer;
+    }
+    .color-row input[type="text"] {
+      flex: 1;
+      font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+      font-size: 0.85rem;
+      padding: 0.5rem 0.65rem;
+      border-radius: 8px;
+      border: 1px solid var(--border-strong);
+      background: var(--surface);
+      color: var(--text);
+    }
+    .color-row input[type="text"]:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+    }
+    .color-token {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 1rem;
+      align-items: center;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .color-token:last-child { border-bottom: none; padding-bottom: 0; }
+    .color-token:first-child { padding-top: 0; }
+    .color-token-info strong {
+      display: block;
+      font-size: 0.9rem;
+      color: var(--text);
+      font-weight: 600;
+    }
+    .color-token-info small {
+      color: var(--muted);
+      font-size: 0.78rem;
+      line-height: 1.4;
+    }
+    .step-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 1.75rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--border);
+    }
+    .preview-panel {
+      background: var(--surface);
+      border-left: 1px solid var(--border);
+      padding: 1.5rem 1.25rem;
+      overflow-y: auto;
+    }
+    .preview-panel h3 {
+      margin: 0 0 1rem;
+      font-size: 0.72rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      font-weight: 700;
+    }
+    .preview-email {
+      background: #fff;
+      border-radius: 10px;
+      overflow: hidden;
+      color: #1f2937;
+      font-size: 14px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-lg);
+    }
+    .preview-email .p-header {
+      padding: 1.25rem;
+      text-align: center;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    .preview-email .p-header img {
+      max-width: 120px;
+      max-height: 40px;
+      object-fit: contain;
+      margin-bottom: 0.75rem;
+    }
+    .preview-email .p-body { padding: 1.25rem; }
+    .preview-email .p-footer {
+      padding: 1rem 1.25rem;
+      border-top: 1px solid #e2e8f0;
+      font-size: 11px;
+      text-align: center;
+      background: #fafafa;
+    }
+    .preview-btns { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 1rem 0; }
+    .preview-btns span {
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .swatch-heading {
+      margin: 1.25rem 0 0.5rem;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .swatch-list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.55rem 0.65rem;
+    }
+    .swatch-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      min-width: 0;
+    }
+    .swatch {
+      width: 28px;
+      height: 28px;
+      flex-shrink: 0;
+      border-radius: 8px;
+      border: 1px solid rgba(15, 23, 42, 0.1);
+      box-shadow: var(--shadow-sm);
+    }
+    .swatch-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 0.1rem;
+      min-width: 0;
+    }
+    .swatch-label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--text);
+      line-height: 1.2;
+    }
+    .swatch-hex {
+      font-size: 0.65rem;
+      color: var(--muted);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      line-height: 1.2;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .toast {
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      background: var(--text);
+      color: #fff;
+      padding: 0.75rem 1.25rem;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.2s, transform 0.2s;
+      z-index: 100;
+      pointer-events: none;
+      box-shadow: var(--shadow-lg);
+    }
+    .toast.show { opacity: 1; transform: translateY(0); }
+    .checklist { list-style: none; padding: 0; margin: 0; }
+    .checklist li {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.65rem 0;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      border-bottom: 1px solid var(--border);
+    }
+    .checklist li:last-child { border-bottom: none; }
+    .checklist input { width: 1.05rem; height: 1.05rem; accent-color: var(--accent); }
+    .ref-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+    }
+    .ref-table th, .ref-table td {
+      padding: 0.6rem 0.75rem;
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+    }
+    .ref-table th {
+      color: var(--muted);
+      font-weight: 600;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .ref-table code {
+      font-size: 0.8rem;
+      color: var(--accent);
+      background: var(--accent-soft);
+      padding: 0.15rem 0.4rem;
+      border-radius: 4px;
+    }
+    .hidden { display: none !important; }
+    .save-indicator {
+      font-size: 0.75rem;
+      color: var(--muted);
+      padding-right: 0.25rem;
+    }
+    .card-note {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.875rem;
+      line-height: 1.6;
+    }
+    .export-cta {
+      text-align: center;
+      padding: 2rem 1.5rem !important;
+    }
+    .export-cta p {
+      margin: 0 0 1.25rem;
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <h1>Brand Design Wizard</h1>
+      <p class="sub">Mailcraft Studio: define brand tokens, preview, and export DESIGN_RULES.md</p>
+      <p class="sub" style="margin-top:-0.75rem"><a href="../index.php" style="color:var(--accent);font-weight:600">← Back to site</a></p>
+      <nav id="nav"></nav>
+    </aside>
+
+    <main class="main">
+      <div class="main-header">
+        <div>
+          <h2 id="step-title">Brand identity</h2>
+          <p id="step-desc">Company name, taglines, and sender details</p>
+        </div>
+        <div class="toolbar">
+          <span class="save-indicator" id="save-indicator"></span>
+          <button type="button" class="btn" id="btn-reset">Reset defaults</button>
+          <button type="button" class="btn btn-success" id="btn-export-top">Export .md</button>
+        </div>
+      </div>
+      <div id="step-content"></div>
+      <div class="step-actions">
+        <button type="button" class="btn" id="btn-prev">← Previous</button>
+        <button type="button" class="btn btn-primary" id="btn-next">Next →</button>
+      </div>
+    </main>
+
+    <aside class="preview-panel">
+      <h3>Live preview</h3>
+      <div class="preview-email" id="live-preview"></div>
+      <p class="swatch-heading">Palette reference</p>
+      <div class="swatch-list" id="swatch-row"></div>
+    </aside>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const STORAGE_KEY = 'mailcraft-studio-design-rules-v1';
+
+    const STEPS = [
+      { id: 'brand', title: 'Brand identity', desc: 'Company name, taglines, and sender details' },
+      { id: 'logo', title: 'Logo', desc: 'Logo URL, dimensions, and alt text' },
+      { id: 'colors-core', title: 'Core colors', desc: 'Primary, secondary, and accent palette' },
+      { id: 'colors-text', title: 'Text colors', desc: 'Headings, body, and muted text' },
+      { id: 'colors-bg', title: 'Surfaces', desc: 'Backgrounds, sections, and dividers' },
+      { id: 'colors-badge', title: 'Badges', desc: 'Event icons, steps, and promo highlights' },
+      { id: 'buttons', title: 'Buttons & CTAs', desc: 'Primary, secondary, and link styles' },
+      { id: 'typography', title: 'Typography', desc: 'Font stack and type scale' },
+      { id: 'footer', title: 'Footer', desc: 'Address, social, and legal links' },
+      { id: 'layout', title: 'Layout & spacing', desc: 'Width, padding, and radii' },
+      { id: 'imagery', title: 'Imagery', desc: 'Image sizes and asset URLs' },
+      { id: 'export', title: 'Review & export', desc: 'Checklist and download DESIGN_RULES.md' },
+    ];
+
+    function defaults() {
+      const year = new Date().getFullYear();
+      return {
+        brandName: 'ForgeLine Industrial',
+        legalName: 'ForgeLine Industrial, Inc.',
+        tagline: 'Engineered for demanding environments',
+        footerTrustLine: 'ISO 9001 certified • 24/7 field support • Nationwide parts delivery',
+        copyrightNote: `©${year} ForgeLine Industrial *(set automatically when templates are generated)*`,
+        fromName: 'ForgeLine Industrial',
+        replyToEmail: 'support@forgeline-industrial.com',
+
+        logoUrl: 'https://www.fmt.se/wp-content/uploads/2023/02/logo-placeholder-image.png',
+        logoAlt: 'ForgeLine Industrial',
+        logoWidth: '180px',
+        logoHeight: 'auto',
+        logoDarkUrl: '',
+        faviconUrl: '',
+
+        colorPrimary: '#1e40af',
+        colorSecondary: '#2563eb',
+        colorAccent: '#ea580c',
+
+        colorHeadingDark: '#1f2937',
+        colorHeadingAlt: '#1e293b',
+        colorHeaderKicker: '#1a1a1a',
+        colorBody: '#666666',
+        colorBodyAlt: '#6b7280',
+        colorMuted: '#64748b',
+
+        colorBgEmail: '#ffffff',
+        colorBgLightGray: '#f8fafc',
+        colorBgInfo: '#e0e7ff',
+        colorBgService: '#f0f9ff',
+        colorBgServiceBorder: '#bae6fd',
+        colorBgPromoDark: '#1e293b',
+        colorBgWarning: '#fef3c7',
+        colorBgWarningBorder: '#fbbf24',
+        colorBgWarningText: '#92400e',
+        colorBgUrgency: '#fef2f2',
+        colorBgUrgencyBorder: '#fecaca',
+        colorBgUrgencyText: '#dc2626',
+        colorDivider: '#e5e5e5',
+        colorFooterDivider: '#e2e8f0',
+
+        colorBadgeEventBg: '#e0e7ff',
+        colorBadgeEventText: '#1e40af',
+        colorBadgeStepBg: '#fff7ed',
+        colorBadgeStepText: '#ea580c',
+        colorPromoHighlight: '#fbbf24',
+
+        btnPrimaryBg: '#1e40af',
+        btnPrimaryText: '#ffffff',
+        btnPrimaryRadius: '8px',
+        btnPrimaryPadding: '16px 32px',
+        btnSecondaryBg: '#ffffff',
+        btnSecondaryText: '#1e40af',
+        btnSecondaryBorder: '#1e40af',
+        btnPricingBg: '#1a1a1a',
+        btnPricingText: '#ffffff',
+        btnPromoBg: '#ea580c',
+        btnPromoText: '#ffffff',
+        linkColor: '#2563eb',
+        urlBase: 'https://www.forgeline-industrial.com',
+        urlQuote: '',
+        urlSupport: '',
+
+        fontStack: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+        fontCustomUrl: '',
+        fontCustomName: '',
+
+        footerCompany: 'ForgeLine Industrial',
+        footerAddress1: '2800 Industrial Parkway',
+        footerAddress2: 'Cleveland, OH 44114',
+        footerCountry: 'United States',
+        footerEmail: 'support@forgeline-industrial.com',
+        footerPhone: '',
+        footerTagline: 'ISO 9001 certified • 24/7 field support • Nationwide parts delivery',
+        footerTextColor: '#64748b',
+        footerHeadingColor: '#1e293b',
+        footerLinkColor: '#2563eb',
+        socialFacebook: '',
+        socialTwitter: '',
+        socialInstagram: '',
+        socialLinkedin: '',
+        linkPrivacy: '',
+        linkTerms: '',
+        linkHelp: '',
+        linkUnsubscribe: '{{unsubscribe_url}}',
+
+        layoutMaxWidth: '600px',
+        layoutOuterPadding: '20px 0',
+        layoutSectionPadding: '40px 30px',
+        layoutHorizontalPadding: '30px',
+        layoutSpacerStandard: '24px',
+        layoutSpacerLarge: '32–40px',
+        layoutRadiusButtons: '8px',
+        layoutRadiusHero: '12px',
+        layoutRadiusGrid: '8px',
+
+        imgHeroWidth: '600px (full bleed)',
+        imgFeaturedWidth: '540px max',
+        imgGridSize: '250 × 150px',
+        imgThumbSize: '150 × 150px',
+        imgHeroAspect: '3:2 or 16:9 landscape',
+        imgHeroDefault: '',
+        imgCdnBase: '',
+
+        darkBgOverride: '',
+        darkTextOverride: '',
+        contrastTarget: '4.5:1 (body text)',
+
+        checklist: [false, false, false, false, false, false, false],
+      };
+    }
+
+    let state = loadState();
+    let currentStep = 0;
+
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) return { ...defaults(), ...JSON.parse(raw) };
+      } catch (_) {}
+      return defaults();
+    }
+
+    function saveState() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      const el = document.getElementById('save-indicator');
+      el.textContent = 'Saved locally · ' + new Date().toLocaleTimeString();
+    }
+
+    function setField(key, value) {
+      state[key] = value;
+      saveState();
+      updatePreview();
+    }
+
+    function escMd(s) {
+      return String(s ?? '').replace(/\|/g, '\\|');
+    }
+
+    function val(s) {
+      return s ? s : '';
+    }
+
+    function exportMarkdown() {
+      const d = state;
+      const year = new Date().getFullYear();
+      const copyright = d.copyrightNote.includes('{current year}')
+        ? d.copyrightNote.replace('{current year}', year)
+        : d.copyrightNote.replace(/\d{4}/, year);
+
+      return `# Email Bundle: Design Rules
+
+Define your baseline brand settings here before customizing templates. Generated by the Mailcraft Studio Brand Design Wizard.
+
+> **How to use:** Fill in every section. When applying branding across templates, map each token to the matching \`data-element\` in the HTML (see *Element mapping* at the bottom).
+
+---
+
+## 1. Brand identity
+
+| Field | Value |
+|-------|-------|
+| **Brand / company name** | ${escMd(d.brandName)} |
+| **Legal entity name** *(if different)* | ${escMd(d.legalName)} |
+| **Short tagline** | ${escMd(d.tagline)} |
+| **Footer trust line** | ${escMd(d.footerTrustLine)} |
+| **Copyright line** | ${escMd(copyright)} |
+| **Default "From" name** *(email sender)* | ${escMd(d.fromName)} |
+| **Default reply-to email** | ${escMd(d.replyToEmail)} |
+
+---
+
+## 2. Logo
+
+| Field | Value |
+|-------|-------|
+| **Logo URL** | \`${escMd(d.logoUrl)}\` |
+| **Logo alt text** | ${escMd(d.logoAlt)} |
+| **Display width** | ${escMd(d.logoWidth)} |
+| **Display height** | ${escMd(d.logoHeight)} |
+| **Logo URL (dark background)** *(optional)* | ${escMd(val(d.logoDarkUrl))} |
+| **Favicon / small mark URL** *(optional)* | ${escMd(val(d.faviconUrl))} |
+
+**Notes**
+- Use HTTPS-hosted PNG or JPG (SVG support varies in email clients).
+- Keep file size under ~100 KB for deliverability.
+- Transparent background recommended.
+
+---
+
+## 3. Color palette
+
+### Core brand colors
+
+| Token | Hex | Usage |
+|-------|-----|-------|
+| **Primary** | \`${d.colorPrimary}\` | Primary buttons, key links, icon badges, brand accents |
+| **Secondary** | \`${d.colorSecondary}\` | Product CTAs, text links, footer legal links |
+| **Accent** | \`${d.colorAccent}\` | Promotions, step numbers, highlight pricing |
+
+### Neutrals & text
+
+| Token | Hex | Usage |
+|-------|-----|-------|
+| **Heading dark** | \`${d.colorHeadingDark}\` | H1–H4, section titles |
+| **Heading alt** | \`${d.colorHeadingAlt}\` | Hero titles, footer company name |
+| **Header kicker** | \`${d.colorHeaderKicker}\` | Top-of-email kicker headlines |
+| **Body text** | \`${d.colorBody}\` | Long-form body copy |
+| **Body text alt** | \`${d.colorBodyAlt}\` | Descriptions, summaries |
+| **Muted / subtitle** | \`${d.colorMuted}\` | Subtitles, captions, footer address |
+
+### Backgrounds & surfaces
+
+| Token | Hex | Usage |
+|-------|-----|-------|
+| **Email background** | \`${d.colorBgEmail}\` | Outer body and card |
+| **Section: light gray** | \`${d.colorBgLightGray}\` | Pricing blocks, tier rows |
+| **Section: info blue** | \`${d.colorBgInfo}\` | Insight callouts, download banners |
+| **Section: service blue** | \`${d.colorBgService}\` | Service tier panels *(with border \`${d.colorBgServiceBorder}\`)* |
+| **Section: promo dark** | \`${d.colorBgPromoDark}\` | Promo code / dark CTA bands |
+| **Section: warning** | \`${d.colorBgWarning}\` | Important notes *(border \`${d.colorBgWarningBorder}\`, text \`${d.colorBgWarningText}\`)* |
+| **Section: urgency** | \`${d.colorBgUrgency}\` | Limited-time alerts *(border \`${d.colorBgUrgencyBorder}\`, text \`${d.colorBgUrgencyText}\`)* |
+| **Divider** | \`${d.colorDivider}\` | In-content section breaks |
+| **Footer divider** | \`${d.colorFooterDivider}\` | Above footer block |
+
+### Badge & icon colors
+
+| Token | Hex | Usage |
+|-------|-----|-------|
+| **Event badge background** | \`${d.colorBadgeEventBg}\` | DATE / LOC / AUD icons |
+| **Event badge text** | \`${d.colorBadgeEventText}\` | Event badge labels |
+| **Step badge background** | \`${d.colorBadgeStepBg}\` | Numbered steps (enablement guide) |
+| **Step badge text** | \`${d.colorBadgeStepText}\` | Step numbers |
+| **Promo highlight text** | \`${d.colorPromoHighlight}\` | Promo codes on dark backgrounds |
+
+---
+
+## 4. Buttons & CTAs
+
+### Primary button
+
+| Field | Value |
+|-------|-------|
+| **Background** | \`${d.btnPrimaryBg}\` |
+| **Text color** | \`${d.btnPrimaryText}\` |
+| **Border** | none |
+| **Border radius** | ${d.btnPrimaryRadius} |
+| **Padding** | ${d.btnPrimaryPadding} |
+| **Font size** | 16px |
+| **Font weight** | 600 |
+
+### Secondary button *(outline)*
+
+| Field | Value |
+|-------|-------|
+| **Background** | \`${d.btnSecondaryBg}\` |
+| **Text color** | \`${d.btnSecondaryText}\` |
+| **Border** | 2px solid \`${d.btnSecondaryBorder}\` |
+| **Border radius** | ${d.btnPrimaryRadius} |
+| **Padding** | ${d.btnPrimaryPadding} |
+
+### Pricing / dark CTA *(product launch)*
+
+| Field | Value |
+|-------|-------|
+| **Background** | \`${d.btnPricingBg}\` |
+| **Text color** | \`${d.btnPricingText}\` |
+| **Padding** | 18px 36px |
+| **Font size** | 18px |
+
+### Promo / accent button
+
+| Field | Value |
+|-------|-------|
+| **Background** | \`${d.btnPromoBg}\` |
+| **Text color** | \`${d.btnPromoText}\` |
+| **Border radius** | ${d.btnPrimaryRadius} |
+
+### Text links *(inline, product cards)*
+
+| Field | Value |
+|-------|-------|
+| **Color** | \`${d.linkColor}\` |
+| **Decoration** | none |
+| **Font weight** | 600 |
+
+### Default CTA destination
+
+| Field | Value |
+|-------|-------|
+| **Base website URL** | \`${escMd(d.urlBase)}\` |
+| **Quote / contact URL** | ${escMd(val(d.urlQuote))} |
+| **Support / help URL** | ${escMd(val(d.urlSupport))} |
+
+---
+
+## 5. Typography
+
+| Field | Value |
+|-------|-------|
+| **Font stack** | \`${escMd(d.fontStack)}\` |
+| **Custom web font URL** *(optional)* | ${escMd(val(d.fontCustomUrl))} |
+| **Custom web font name** *(optional)* | ${escMd(val(d.fontCustomName))} |
+
+---
+
+## 6. Footer
+
+| Field | Value |
+|-------|-------|
+| **Company name** | ${escMd(d.footerCompany)} |
+| **Address line 1** | ${escMd(d.footerAddress1)} |
+| **Address line 2** | ${escMd(d.footerAddress2)} |
+| **Country** | ${escMd(d.footerCountry)} |
+| **Support email** | ${escMd(d.footerEmail)} |
+| **Support phone** *(optional)* | ${escMd(val(d.footerPhone))} |
+| **Footer tagline** | ${escMd(d.footerTagline)} |
+| **Footer text color** | \`${d.footerTextColor}\` |
+| **Footer heading color** | \`${d.footerHeadingColor}\` |
+| **Footer link color** | \`${d.footerLinkColor}\` |
+
+### Social links
+
+| Platform | URL |
+|----------|-----|
+| Facebook | ${escMd(val(d.socialFacebook))} |
+| X (Twitter) | ${escMd(val(d.socialTwitter))} |
+| Instagram | ${escMd(val(d.socialInstagram))} |
+| LinkedIn | ${escMd(val(d.socialLinkedin))} |
+
+### Legal & compliance links
+
+| Link | URL |
+|------|-----|
+| Privacy Policy | ${escMd(val(d.linkPrivacy))} |
+| Terms of Service | ${escMd(val(d.linkTerms))} |
+| Help Center | ${escMd(val(d.linkHelp))} |
+| Unsubscribe | \`${escMd(d.linkUnsubscribe)}\` *(ESP merge tag)* |
+
+---
+
+## 7. Layout & spacing
+
+| Field | Value |
+|-------|-------|
+| **Email max width** | ${d.layoutMaxWidth} |
+| **Outer padding** | ${d.layoutOuterPadding} |
+| **Section padding** | ${d.layoutSectionPadding} |
+| **Content horizontal padding** | ${d.layoutHorizontalPadding} |
+| **Standard vertical spacer** | ${d.layoutSpacerStandard} |
+| **Large vertical spacer** | ${d.layoutSpacerLarge} |
+| **Border radius: buttons and cards** | ${d.layoutRadiusButtons} |
+| **Border radius: hero product image** | ${d.layoutRadiusHero} |
+| **Border radius: grid product images** | ${d.layoutRadiusGrid} |
+
+---
+
+## 8. Imagery
+
+| Field | Value |
+|-------|-------|
+| **Hero image width** | ${d.imgHeroWidth} |
+| **Featured product width** | ${d.imgFeaturedWidth} |
+| **Grid product size** | ${d.imgGridSize} |
+| **Horizontal catalog thumb** | ${d.imgThumbSize} |
+| **Preferred hero aspect** | ${d.imgHeroAspect} |
+| **Default hero image URL** *(placeholder)* | ${escMd(val(d.imgHeroDefault))} |
+| **Image CDN / asset base URL** | ${escMd(val(d.imgCdnBase))} |
+
+---
+
+## 9. Template-specific notes
+
+| Template | Notes |
+|----------|-------|
+| \`01_Product_Launch\` | Feature list: **left-aligned**. Pricing CTA uses dark button. |
+| \`02_Product_Update\` | Numbered feature icons (01, 02, 03). Dual CTAs: primary + outline. |
+| \`03_Products_Horizontal\` | Text links only (no filled buttons per row). |
+| \`04_Products_Catalog_Grid\` | Divider between featured hero and product grid. |
+| \`05_Event_Invitation\` | Icon badges: DATE, LOC, AUD. |
+| \`06_Service_Launch\` | Feature list: **left-aligned**. Service tier panel uses info blue. |
+| \`07_Product_Enablement_Guide\` | Orange step badges. Download banner uses info blue. |
+| \`08_Promotion\` | Dark promo band + orange accent button. Tier rows on light gray. |
+| \`09_Company_Update\` | Company Highlights: **left-aligned**. Featured article stays centered. |
+
+---
+
+## 10. Dark mode / preview
+
+| Field | Value |
+|-------|-------|
+| **Dark mode background override** | ${escMd(val(d.darkBgOverride)) || '*(leave blank to use template defaults)*'} |
+| **Dark mode text override** | ${escMd(val(d.darkTextOverride))} |
+| **Minimum contrast ratio target** | ${d.contrastTarget} |
+
+---
+
+## 11. Element mapping *(reference)*
+
+| Design token | \`data-element\` examples |
+|--------------|-------------------------|
+| Logo | \`logo\`, header \`<img>\` |
+| Primary CTA | \`cta-primary\`, \`hero-cta\`, \`pricing-cta\`, \`promo-cta\` |
+| Secondary CTA | \`cta-secondary\`, \`secondary-cta\` |
+| Headings | \`header-kicker\`, \`header-title\`, \`launch-title\`, \`overview-heading\` |
+| Body copy | \`launch-subtitle\`, \`overview-description\`, \`featured-body\` |
+| Footer company | \`footer-company-name\` |
+| Footer address | \`footer-address\` |
+| Footer tagline | \`footer-tagline\` |
+| Footer contact | \`footer-contact\` |
+| Footer social | \`footer-social-facebook\`, \`footer-social-linkedin\`, … |
+| Footer legal | \`footer-link-privacy\`, \`footer-link-terms\`, \`footer-link-unsubscribe\` |
+
+---
+
+## 12. Checklist before go-live
+
+${[
+  'Logo URL loads over HTTPS',
+  'Primary and secondary button colors meet contrast requirements',
+  'Footer includes physical mailing address (CAN-SPAM)',
+  'Unsubscribe link uses your ESP merge tag',
+  'Support email is monitored',
+  'Social and legal URLs are correct (or hidden if unused)',
+  'Spot-check all 9 templates after applying brand changes',
+].map((item, i) => `- [${state.checklist[i] ? 'x' : ' '}] ${item}`).join('\n')}
+
+---
+
+*Exported from Brand Design Wizard on ${new Date().toLocaleDateString()}.*
+`;
+    }
+
+    function downloadMd() {
+      const blob = new Blob([exportMarkdown()], { type: 'text/markdown;charset=utf-8' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'DESIGN_RULES.md';
+      a.click();
+      URL.revokeObjectURL(a.href);
+      showToast('DESIGN_RULES.md downloaded');
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2500);
+    }
+
+    function fieldText(key, label, opts = {}) {
+      const type = opts.type || 'text';
+      const hint = opts.hint ? ` <span class="hint">${opts.hint}</span>` : '';
+      const full = opts.full ? ' full' : '';
+      return `<div class="field${full}">
+        <label for="${key}">${label}${hint}</label>
+        <input type="${type}" id="${key}" data-key="${key}" value="${escapeAttr(state[key])}" ${opts.placeholder ? `placeholder="${escapeAttr(opts.placeholder)}"` : ''} />
+      </div>`;
+    }
+
+    function fieldTextarea(key, label) {
+      return `<div class="field full">
+        <label for="${key}">${label}</label>
+        <textarea id="${key}" data-key="${key}">${escapeHtml(state[key])}</textarea>
+      </div>`;
+    }
+
+    function escapeAttr(s) {
+      return String(s ?? '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
+    }
+
+    function escapeHtml(s) {
+      return String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    function colorField(key, label, usage) {
+      const v = state[key] || '#000000';
+      return `<div class="color-token">
+        <div class="color-token-info"><strong>${label}</strong><small>${usage}</small></div>
+        <div class="color-row">
+          <input type="color" data-key="${key}" data-color value="${v}" />
+          <input type="text" data-key="${key}" data-hex value="${v}" maxlength="7" />
+        </div>
+      </div>`;
+    }
+
+    function renderStep() {
+      const step = STEPS[currentStep];
+      document.getElementById('step-title').textContent = step.title;
+      document.getElementById('step-desc').textContent = step.desc;
+      document.getElementById('btn-prev').disabled = currentStep === 0;
+      document.getElementById('btn-next').textContent = currentStep === STEPS.length - 1 ? 'Finish' : 'Next →';
+
+      const c = document.getElementById('step-content');
+      let html = '';
+
+      switch (step.id) {
+        case 'brand':
+          html = `<div class="card"><h3>Company & sender</h3><div class="field-grid">
+            ${fieldText('brandName', 'Brand / company name')}
+            ${fieldText('legalName', 'Legal entity name', { hint: 'if different' })}
+            ${fieldText('tagline', 'Short tagline', { full: true })}
+            ${fieldText('footerTrustLine', 'Footer trust line', { full: true })}
+            ${fieldText('copyrightNote', 'Copyright line', { hint: 'year auto on export', full: true })}
+            ${fieldText('fromName', 'Default From name')}
+            ${fieldText('replyToEmail', 'Reply-to email', { type: 'email' })}
+          </div></div>`;
+          break;
+
+        case 'logo':
+          html = `<div class="card"><h3>Logo assets</h3><div class="field-grid">
+            ${fieldText('logoUrl', 'Logo URL', { type: 'url', full: true })}
+            ${fieldText('logoAlt', 'Logo alt text')}
+            ${fieldText('logoWidth', 'Display width')}
+            ${fieldText('logoHeight', 'Display height')}
+            ${fieldText('logoDarkUrl', 'Logo (dark background)', { type: 'url', hint: 'optional' })}
+            ${fieldText('faviconUrl', 'Favicon URL', { type: 'url', hint: 'optional' })}
+          </div></div>
+          <div class="card"><p class="card-note">
+            Use HTTPS PNG or JPG. Keep under ~100 KB. Transparent background recommended.
+          </p></div>`;
+          break;
+
+        case 'colors-core':
+          html = `<div class="card"><h3>Core brand colors</h3>
+            ${colorField('colorPrimary', 'Primary', 'Buttons, badges, accents')}
+            ${colorField('colorSecondary', 'Secondary', 'Links, product CTAs')}
+            ${colorField('colorAccent', 'Accent', 'Promos, step numbers')}
+          </div>`;
+          break;
+
+        case 'colors-text':
+          html = `<div class="card"><h3>Text colors</h3>
+            ${colorField('colorHeadingDark', 'Heading dark', 'H1–H4')}
+            ${colorField('colorHeadingAlt', 'Heading alt', 'Hero titles')}
+            ${colorField('colorHeaderKicker', 'Header kicker', 'Top headlines')}
+            ${colorField('colorBody', 'Body text', 'Long copy')}
+            ${colorField('colorBodyAlt', 'Body alt', 'Descriptions')}
+            ${colorField('colorMuted', 'Muted / subtitle', 'Captions, footer')}
+          </div>`;
+          break;
+
+        case 'colors-bg':
+          html = `<div class="card"><h3>Backgrounds & surfaces</h3>
+            ${colorField('colorBgEmail', 'Email background', 'Body & card')}
+            ${colorField('colorBgLightGray', 'Light gray section', 'Pricing, tiers')}
+            ${colorField('colorBgInfo', 'Info blue', 'Callouts')}
+            ${colorField('colorBgService', 'Service blue', 'Service panels')}
+            ${colorField('colorBgServiceBorder', 'Service border', 'Panel border')}
+            ${colorField('colorBgPromoDark', 'Promo dark', 'Dark CTA bands')}
+            ${colorField('colorBgWarning', 'Warning bg', 'Important notes')}
+            ${colorField('colorBgWarningBorder', 'Warning border', '')}
+            ${colorField('colorBgWarningText', 'Warning text', '')}
+            ${colorField('colorBgUrgency', 'Urgency bg', 'Limited-time')}
+            ${colorField('colorBgUrgencyBorder', 'Urgency border', '')}
+            ${colorField('colorBgUrgencyText', 'Urgency text', '')}
+            ${colorField('colorDivider', 'Divider', 'Section breaks')}
+            ${colorField('colorFooterDivider', 'Footer divider', 'Above footer')}
+          </div>`;
+          break;
+
+        case 'colors-badge':
+          html = `<div class="card"><h3>Badges & highlights</h3>
+            ${colorField('colorBadgeEventBg', 'Event badge bg', 'DATE / LOC / AUD')}
+            ${colorField('colorBadgeEventText', 'Event badge text', '')}
+            ${colorField('colorBadgeStepBg', 'Step badge bg', 'Enablement steps')}
+            ${colorField('colorBadgeStepText', 'Step badge text', '')}
+            ${colorField('colorPromoHighlight', 'Promo highlight', 'Codes on dark bg')}
+          </div>`;
+          break;
+
+        case 'buttons':
+          html = `<div class="card"><h3>Primary & secondary</h3><div class="field-grid">
+            ${colorField('btnPrimaryBg', 'Primary bg', '')}
+            ${colorField('btnPrimaryText', 'Primary text', '')}
+            ${colorField('btnSecondaryBg', 'Secondary bg', '')}
+            ${colorField('btnSecondaryText', 'Secondary text', '')}
+            ${colorField('btnSecondaryBorder', 'Secondary border', '')}
+            ${fieldText('btnPrimaryRadius', 'Border radius')}
+            ${fieldText('btnPrimaryPadding', 'Padding')}
+          </div></div>
+          <div class="card"><h3>Variants & links</h3><div class="field-grid">
+            ${colorField('btnPricingBg', 'Pricing / dark CTA bg', '')}
+            ${colorField('btnPricingText', 'Pricing text', '')}
+            ${colorField('btnPromoBg', 'Promo button bg', '')}
+            ${colorField('btnPromoText', 'Promo text', '')}
+            ${colorField('linkColor', 'Text link color', '')}
+            ${fieldText('urlBase', 'Base website URL', { type: 'url', full: true })}
+            ${fieldText('urlQuote', 'Quote / contact URL', { type: 'url' })}
+            ${fieldText('urlSupport', 'Support URL', { type: 'url' })}
+          </div></div>`;
+          break;
+
+        case 'typography':
+          html = `<div class="card"><h3>Fonts</h3><div class="field-grid">
+            ${fieldText('fontStack', 'Font stack', { full: true })}
+            ${fieldText('fontCustomUrl', 'Custom font URL', { type: 'url', hint: 'optional' })}
+            ${fieldText('fontCustomName', 'Custom font name', { hint: 'optional' })}
+          </div></div>`;
+          break;
+
+        case 'footer':
+          html = `<div class="card"><h3>Contact & address</h3><div class="field-grid">
+            ${fieldText('footerCompany', 'Company name')}
+            ${fieldText('footerAddress1', 'Address line 1')}
+            ${fieldText('footerAddress2', 'Address line 2')}
+            ${fieldText('footerCountry', 'Country')}
+            ${fieldText('footerEmail', 'Support email', { type: 'email' })}
+            ${fieldText('footerPhone', 'Support phone', { hint: 'optional' })}
+            ${fieldText('footerTagline', 'Footer tagline', { full: true })}
+            ${colorField('footerTextColor', 'Footer text', '')}
+            ${colorField('footerHeadingColor', 'Footer heading', '')}
+            ${colorField('footerLinkColor', 'Footer links', '')}
+          </div></div>
+          <div class="card"><h3>Social links</h3><div class="field-grid">
+            ${fieldText('socialFacebook', 'Facebook', { type: 'url' })}
+            ${fieldText('socialTwitter', 'X (Twitter)', { type: 'url' })}
+            ${fieldText('socialInstagram', 'Instagram', { type: 'url' })}
+            ${fieldText('socialLinkedin', 'LinkedIn', { type: 'url' })}
+          </div></div>
+          <div class="card"><h3>Legal links</h3><div class="field-grid">
+            ${fieldText('linkPrivacy', 'Privacy Policy', { type: 'url' })}
+            ${fieldText('linkTerms', 'Terms of Service', { type: 'url' })}
+            ${fieldText('linkHelp', 'Help Center', { type: 'url' })}
+            ${fieldText('linkUnsubscribe', 'Unsubscribe merge tag')}
+          </div></div>`;
+          break;
+
+        case 'layout':
+          html = `<div class="card"><h3>Layout tokens</h3><div class="field-grid">
+            ${fieldText('layoutMaxWidth', 'Email max width')}
+            ${fieldText('layoutOuterPadding', 'Outer padding')}
+            ${fieldText('layoutSectionPadding', 'Section padding')}
+            ${fieldText('layoutHorizontalPadding', 'Horizontal padding')}
+            ${fieldText('layoutSpacerStandard', 'Standard spacer')}
+            ${fieldText('layoutSpacerLarge', 'Large spacer')}
+            ${fieldText('layoutRadiusButtons', 'Button radius')}
+            ${fieldText('layoutRadiusHero', 'Hero image radius')}
+            ${fieldText('layoutRadiusGrid', 'Grid image radius')}
+          </div></div>`;
+          break;
+
+        case 'imagery':
+          html = `<div class="card"><h3>Image specs</h3><div class="field-grid">
+            ${fieldText('imgHeroWidth', 'Hero width')}
+            ${fieldText('imgFeaturedWidth', 'Featured product width')}
+            ${fieldText('imgGridSize', 'Grid product size')}
+            ${fieldText('imgThumbSize', 'Catalog thumb size')}
+            ${fieldText('imgHeroAspect', 'Hero aspect ratio')}
+            ${fieldText('imgHeroDefault', 'Default hero URL', { type: 'url', full: true })}
+            ${fieldText('imgCdnBase', 'CDN base URL', { type: 'url', full: true })}
+          </div></div>`;
+          break;
+
+        case 'export':
+          html = `<div class="card"><h3>Pre-flight checklist</h3>
+            <ul class="checklist" id="checklist">
+              ${[
+                'Logo URL loads over HTTPS',
+                'Button colors meet contrast requirements',
+                'Footer has physical mailing address (CAN-SPAM)',
+                'Unsubscribe uses ESP merge tag',
+                'Support email is monitored',
+                'Social & legal URLs are correct',
+                'All 9 templates spot-checked',
+              ].map((label, i) => `<li><input type="checkbox" data-check="${i}" ${state.checklist[i] ? 'checked' : ''} /><span>${label}</span></li>`).join('')}
+            </ul>
+          </div>
+          <div class="card"><h3>Element mapping reference</h3>
+            <table class="ref-table">
+              <tr><th>Token</th><th>data-element</th></tr>
+              <tr><td>Logo</td><td><code>logo</code></td></tr>
+              <tr><td>Primary CTA</td><td><code>cta-primary</code>, <code>hero-cta</code></td></tr>
+              <tr><td>Footer</td><td><code>footer-company-name</code>, <code>footer-address</code></td></tr>
+            </table>
+          </div>
+          <div class="card export-cta">
+            <p>Download your completed design rules as Markdown.</p>
+            <button type="button" class="btn btn-success" id="btn-export-main" style="font-size:1rem;padding:0.75rem 1.5rem">↓ Export DESIGN_RULES.md</button>
+          </div>`;
+          break;
+      }
+
+      c.innerHTML = html;
+      bindStepInputs();
+      renderNav();
+    }
+
+    function bindStepInputs() {
+      document.querySelectorAll('[data-key]').forEach((el) => {
+        const key = el.dataset.key;
+        const handler = () => {
+          let v = el.value;
+          if (el.dataset.color) {
+            const hex = document.querySelector(`[data-hex][data-key="${key}"]`);
+            if (hex) hex.value = v;
+          }
+          if (el.dataset.hex) {
+            v = v.startsWith('#') ? v : '#' + v;
+            if (/^#[0-9A-Fa-f]{6}$/.test(v)) {
+              const pick = document.querySelector(`[data-color][data-key="${key}"]`);
+              if (pick) pick.value = v;
+            }
+          }
+          setField(key, el.dataset.hex || el.dataset.color ? v : el.value);
+        };
+        el.addEventListener('input', handler);
+        el.addEventListener('change', handler);
+      });
+
+      document.querySelectorAll('[data-check]').forEach((el) => {
+        el.addEventListener('change', () => {
+          state.checklist[+el.dataset.check] = el.checked;
+          saveState();
+        });
+      });
+
+      const exp = document.getElementById('btn-export-main');
+      if (exp) exp.addEventListener('click', downloadMd);
+    }
+
+    function renderNav() {
+      const nav = document.getElementById('nav');
+      nav.innerHTML = STEPS.map((s, i) => {
+        const cls = i === currentStep ? 'active' : i < currentStep ? 'done' : '';
+        return `<button type="button" class="nav-item ${cls}" data-step="${i}">
+          <span class="nav-num">${i + 1}</span>${s.title}
+        </button>`;
+      }).join('');
+
+      nav.querySelectorAll('[data-step]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          currentStep = +btn.dataset.step;
+          renderStep();
+          updatePreview();
+        });
+      });
+    }
+
+    function updatePreview() {
+      const d = state;
+      const preview = document.getElementById('live-preview');
+      preview.innerHTML = `
+        <div class="p-header" style="background:${d.colorBgEmail}">
+          <img src="${escapeAttr(d.logoUrl)}" alt="" onerror="this.style.display='none'" />
+          <div style="font-weight:700;font-size:18px;color:${d.colorHeaderKicker}">${escapeHtml(d.brandName)}</div>
+          <div style="font-size:13px;color:${d.colorMuted};margin-top:4px">${escapeHtml(d.tagline)}</div>
+        </div>
+        <div class="p-body" style="background:${d.colorBgEmail};font-family:${d.fontStack}">
+          <div style="font-size:16px;font-weight:600;color:${d.colorHeadingDark}">Section heading</div>
+          <div style="font-size:14px;color:${d.colorBody};margin:8px 0 12px;line-height:1.5">Sample body copy showing how your text colors work together in an email template.</div>
+          <div class="preview-btns">
+            <span style="background:${d.btnPrimaryBg};color:${d.btnPrimaryText}">Primary</span>
+            <span style="background:${d.btnSecondaryBg};color:${d.btnSecondaryText};border:2px solid ${d.btnSecondaryBorder}">Secondary</span>
+            <span style="background:${d.btnPromoBg};color:${d.btnPromoText}">Promo</span>
+          </div>
+          <div style="background:${d.colorBgInfo};padding:10px;border-radius:8px;font-size:12px;color:${d.colorPrimary}">Info callout panel</div>
+        </div>
+        <div class="p-footer" style="color:${d.footerTextColor}">
+          <strong style="color:${d.footerHeadingColor}">${escapeHtml(d.footerCompany)}</strong><br />
+          ${escapeHtml(d.footerAddress1)}<br />
+          ${escapeHtml(d.footerTagline)}<br />
+          <a href="#" style="color:${d.footerLinkColor}">${escapeHtml(d.footerEmail)}</a>
+        </div>`;
+
+      const swatches = [
+        { label: 'Primary', color: d.colorPrimary },
+        { label: 'Secondary', color: d.colorSecondary },
+        { label: 'Accent', color: d.colorAccent },
+        { label: 'Heading', color: d.colorHeadingDark },
+        { label: 'Body', color: d.colorBody },
+        { label: 'Muted', color: d.colorMuted },
+        { label: 'Info panel', color: d.colorBgInfo },
+        { label: 'Warning', color: d.colorBgWarning },
+        { label: 'Urgency', color: d.colorBgUrgency },
+      ];
+      document.getElementById('swatch-row').innerHTML = swatches
+        .map(({ label, color }) => `
+          <div class="swatch-item" title="${escapeAttr(label)}: ${escapeAttr(color)}">
+            <div class="swatch" style="background:${color}" aria-hidden="true"></div>
+            <div class="swatch-meta">
+              <span class="swatch-label">${escapeHtml(label)}</span>
+              <span class="swatch-hex">${escapeHtml(color)}</span>
+            </div>
+          </div>`)
+        .join('');
+    }
+
+    document.getElementById('btn-prev').addEventListener('click', () => {
+      if (currentStep > 0) { currentStep--; renderStep(); updatePreview(); }
+    });
+
+    document.getElementById('btn-next').addEventListener('click', () => {
+      if (currentStep < STEPS.length - 1) { currentStep++; renderStep(); updatePreview(); }
+      else showToast('Review complete. Export your .md file when you are ready.');
+    });
+
+    document.getElementById('btn-export-top').addEventListener('click', downloadMd);
+
+    document.getElementById('btn-reset').addEventListener('click', () => {
+      if (confirm('Reset all fields to ForgeLine defaults?')) {
+        state = defaults();
+        saveState();
+        renderStep();
+        updatePreview();
+        showToast('Defaults restored');
+      }
+    });
+
+    renderNav();
+    renderStep();
+    updatePreview();
+  </script>
+</body>
+</html>

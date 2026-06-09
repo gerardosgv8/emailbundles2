@@ -1,0 +1,27 @@
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { SiteLayout } from './components/SiteLayout';
+import { BrandWizardPage } from './pages/BrandWizardPage';
+import { BrandWizardSelectPage } from './pages/BrandWizardSelectPage';
+import { DocsPage } from './pages/DocsPage';
+import { FaqPage } from './pages/FaqPage';
+import { HomePage } from './pages/HomePage';
+import { ProductsPage } from './pages/ProductsPage';
+import { TestimonialsPage } from './pages/TestimonialsPage';
+
+export function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route element={<SiteLayout />}>
+          <Route index element={<HomePage />} />
+          <Route path="docs" element={<DocsPage />} />
+          <Route path="products" element={<ProductsPage />} />
+          <Route path="testimonials" element={<TestimonialsPage />} />
+          <Route path="faq" element={<FaqPage />} />
+          <Route path="brand-wizard" element={<BrandWizardSelectPage />} />
+          <Route path="brand-wizard/:bundleId" element={<BrandWizardPage />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
+  );
+}

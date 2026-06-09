@@ -416,33 +416,64 @@ function BrandWizardEditor({
       <div className="wizard-app">
         <aside className="sidebar">
           <Link to="/brand-wizard" className="wizard-bundle-back">← All bundles</Link>
-          <h1>{bundle.name}</h1>
-          <p className="sub">
-            {enhanced
-              ? 'Define brand tokens, apply to templates, and export DESIGN_RULES.md'
-              : 'Define brand tokens, preview, and export DESIGN_RULES.md'}
-          </p>
-          {enhanced ? (
-            <span className="wizard-mode-badge wizard-mode-badge--enhanced">Enhanced · apply to HTML</span>
-          ) : (
-            <span className="wizard-mode-badge">Standard · export .md</span>
-          )}
-          <nav>
-            {WIZARD_STEPS.map((s, i) => {
-              const cls = i === currentStep ? 'active' : i < currentStep ? 'done' : '';
-              return (
-                <button
-                  key={s.id}
-                  type="button"
-                  className={`nav-item ${cls}`}
-                  onClick={() => setCurrentStep(i)}
-                >
-                  <span className="nav-num">{i + 1}</span>
-                  {s.title}
-                </button>
-              );
-            })}
-          </nav>
+
+          <div className="wizard-sidebar-desktop">
+            <h1>{bundle.name}</h1>
+            <p className="sub">
+              {enhanced
+                ? 'Define brand tokens, apply to templates, and export DESIGN_RULES.md'
+                : 'Define brand tokens, preview, and export DESIGN_RULES.md'}
+            </p>
+            {enhanced ? (
+              <span className="wizard-mode-badge wizard-mode-badge--enhanced">Enhanced · apply to HTML</span>
+            ) : (
+              <span className="wizard-mode-badge">Standard · export .md</span>
+            )}
+            <nav aria-label="Wizard steps">
+              {WIZARD_STEPS.map((s, i) => {
+                const cls = i === currentStep ? 'active' : i < currentStep ? 'done' : '';
+                return (
+                  <button
+                    key={s.id}
+                    type="button"
+                    className={`nav-item ${cls}`}
+                    onClick={() => setCurrentStep(i)}
+                  >
+                    <span className="nav-num">{i + 1}</span>
+                    {s.title}
+                  </button>
+                );
+              })}
+            </nav>
+          </div>
+
+          <div className="wizard-sidebar-mobile">
+            <div className="wizard-mobile-head">
+              <h1>{bundle.name}</h1>
+              {enhanced ? (
+                <span className="wizard-mode-badge wizard-mode-badge--enhanced">Enhanced</span>
+              ) : (
+                <span className="wizard-mode-badge">Standard</span>
+              )}
+            </div>
+            <label className="wizard-step-picker">
+              <span className="wizard-step-picker-label">
+                Step {currentStep + 1} of {WIZARD_STEPS.length}
+              </span>
+              <select
+                className="wizard-step-picker-select"
+                value={currentStep}
+                aria-label="Jump to wizard step"
+                onChange={(e) => setCurrentStep(Number(e.target.value))}
+              >
+                {WIZARD_STEPS.map((s, i) => (
+                  <option key={s.id} value={i}>
+                    {i + 1}. {s.title}
+                  </option>
+                ))}
+              </select>
+            </label>
+          </div>
         </aside>
 
         <main className="wizard-main">

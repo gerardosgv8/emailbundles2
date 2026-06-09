@@ -3,13 +3,14 @@
   "private": true,
   "version": "0.1.0",
   "type": "module",
-  "homepage": "https://gerardosgv89.github.io/emailbundles2",
+  "homepage": "https://gerardosgv8.github.io/emailbundles2",
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
+    "build:gh-pages": "tsc --noEmit && vite build --base=/emailbundles2/ && cp dist/index.html dist/404.html",
     "preview": "vite preview",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist",
+    "predeploy": "npm run build:gh-pages",
+    "deploy": "node scripts/deploy-gh-pages.mjs",
     "verify:templates": "node scripts/verify-bundle-templates.mjs",
     "sync:registry": "node scripts/sync-industrial-bundle-registry.mjs",
     "sync:bundle": "node scripts/sync-industrial-bundle-registry.mjs && node scripts/verify-bundle-templates.mjs"

@@ -1,5 +1,33 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { TEMPLATE_BUNDLES } from '../data/templateBundles';
+import { startCheckout } from '../lib/checkout';
+
+function BuyButton({ productId, label = 'Buy now' }: { productId: string; label?: string }) {
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleBuy = async () => {
+    setBusy(true);
+    setError(null);
+    try {
+      const url = await startCheckout(productId);
+      window.location.href = url;
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Checkout unavailable');
+      setBusy(false);
+    }
+  };
+
+  return (
+    <div className="product-buy">
+      <button type="button" className="btn btn-primary" disabled={busy} onClick={handleBuy}>
+        {busy ? 'Redirecting…' : label}
+      </button>
+      {error ? <p className="product-buy-error">{error}</p> : null}
+    </div>
+  );
+}
 
 export function ProductsPage() {
   return (
@@ -20,11 +48,20 @@ export function ProductsPage() {
                 <li key={feature}>{feature}</li>
               ))}
             </ul>
-            {product.wizardAvailable ? (
-              <Link to={`/brand-wizard/${product.id}`} className="btn btn-primary">Get started</Link>
-            ) : (
-              <Link to="/brand-wizard" className="btn btn-primary">Get started</Link>
-            )}
+            <div className="product-card-actions">
+              {product.checkoutProductId ? (
+                <BuyButton productId={product.checkoutProductId} />
+              ) : null}
+              {product.wizardAvailable ? (
+                <Link to={`/brand-wizard/${product.id}`} className="btn btn-secondary">
+                  Brand Wizard
+                </Link>
+              ) : (
+                <Link to="/brand-wizard" className="btn btn-secondary">
+                  Brand Wizard
+                </Link>
+              )}
+            </div>
           </article>
         ))}
 
@@ -43,7 +80,7 @@ export function ProductsPage() {
       </div>
 
       <p className="text-center mt-8" style={{ color: 'var(--muted)', fontSize: '0.9rem' }}>
-        Checkout and dynamic pricing will connect to the backend when ready.
+        Secure checkout powered by Stripe. Downloads are delivered via time-limited links after payment.
       </p>
     </main>
   );

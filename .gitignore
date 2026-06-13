@@ -1,6 +1,43 @@
+# Dependencies
 node_modules
-FinalBundles
+
+# Build output (Vite + gh-pages deploy artifact)
 dist
-.DS_Store
-*.local
+
+# Commercial template source — ship via R2 after purchase, not in public repo
+FinalBundles
+
+# Environment & secrets (never commit real keys)
 .env
+.env.*
+!.env.example
+
+# Vercel CLI local project link + local build output
+.vercel
+
+# Vite / TypeScript caches
+.vite
+*.tsbuildinfo
+
+# Local overrides (e.g. .env.local, vite.config.ts.local)
+*.local
+
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Optional credential files
+*.pem
+*.key
+credentials.json
+secrets.json
+
+# IDE (optional — uncomment if you do not want these in git)
+# .vscode/
+# .idea/
+# .cursor/

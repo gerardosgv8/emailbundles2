@@ -243,6 +243,19 @@ input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px
 .product-grid { display: grid; gap: 1.5rem; }
 @media (min-width: 768px) { .product-grid { grid-template-columns: repeat(2, 1fr); } }
 .product-card { display: flex; flex-direction: column; }
+.product-card-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: auto;
+  padding-top: 0.75rem;
+}
+.product-buy-error {
+  margin: 0.35rem 0 0;
+  font-size: 0.8rem;
+  color: #b45309;
+  line-height: 1.4;
+}
 .product-price { font-size: 1.75rem; font-weight: 800; color: var(--text); margin: 0.5rem 0 1rem; }
 .product-features { list-style: none; padding: 0; margin: 0 0 1.5rem; flex: 1; }
 .product-features li { padding: 0.35rem 0; font-size: 0.9rem; }

@@ -6,6 +6,7 @@ Playbooks for template bundles that share the **centralized Brand Wizard** and a
 |----------|---------|
 | **[wizard-element-alignment.md](./wizard-element-alignment.md)** | **Start here** — button fixes, hooks, preview CSS, apply order, verify checklist |
 | [bundle-scaffolding-plan.md](./bundle-scaffolding-plan.md) | Broader scaffolding: folders, phases, shared vs per-bundle code |
+| [stripe-delivery-scaffolding.md](./stripe-delivery-scaffolding.md) | Stripe Checkout + Vercel API + R2 ZIP delivery |
 | [new-bundle-checklist.md](./templates/new-bundle-checklist.md) | Copy per bundle when shipping |
 
 **Reference bundle:** Industrial B2B — `FinalBundles/Industrial B2B Bundle/`

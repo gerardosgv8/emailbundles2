@@ -6,6 +6,8 @@ export type TemplateBundle = {
   features: string[];
   templateCount?: number;
   wizardAvailable: boolean;
+  /** When set, Products page shows Buy → Stripe Checkout for this id (see api/_lib/products.ts). */
+  checkoutProductId?: string;
 };
 
 export const TEMPLATE_BUNDLES: TemplateBundle[] = [
@@ -17,6 +19,7 @@ export const TEMPLATE_BUNDLES: TemplateBundle[] = [
     features: ['Product & service launches', 'Event invitations', 'Catalog grids', 'Brand Design Wizard compatible'],
     templateCount: 9,
     wizardAvailable: true,
+    checkoutProductId: 'industrial-b2b',
   },
   {
     id: 'ecommerce',

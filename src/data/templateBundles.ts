@@ -4,6 +4,8 @@ export type TemplateBundle = {
   price: string;
   description: string;
   features: string[];
+  imageUrl: string;
+  imageAlt: string;
   templateCount?: number;
   wizardAvailable: boolean;
   /** When set, Products page shows Buy → Stripe Checkout for this id (see api/_lib/products.ts). */
@@ -17,6 +19,8 @@ export const TEMPLATE_BUNDLES: TemplateBundle[] = [
     price: '$89',
     description: 'Nine templates for product launches, events, company updates, and more.',
     features: ['Product & service launches', 'Event invitations', 'Catalog grids', 'Brand Design Wizard compatible'],
+    imageUrl: '/images/products/industrial-b2b.svg',
+    imageAlt: 'Preview of Industrial B2B email templates',
     templateCount: 9,
     wizardAvailable: true,
     checkoutProductId: 'industrial-b2b',
@@ -27,14 +31,8 @@ export const TEMPLATE_BUNDLES: TemplateBundle[] = [
     price: '$79',
     description: 'Complete set of conversion-focused templates for online stores.',
     features: ['Checkout & order emails', 'Promotional campaigns', 'Product recommendations', 'Lifetime updates'],
-    wizardAvailable: false,
-  },
-  {
-    id: 'free-flow-starter',
-    name: 'Free Flow Starter',
-    price: 'Free',
-    description: 'Essential templates to get started with professional email design.',
-    features: ['Welcome & onboarding', 'Newsletter editorial', 'Feature announcements', 'Community support'],
+    imageUrl: '/images/products/ecommerce.svg',
+    imageAlt: 'Preview of eCommerce email templates',
     wizardAvailable: false,
   },
 ];

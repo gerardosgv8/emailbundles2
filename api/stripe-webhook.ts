@@ -1,8 +1,8 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { fulfillCheckoutSession } from './_lib/delivery';
-import { getStripeWebhookSecret } from './_lib/env';
-import { readRawBody } from './_lib/rawBody';
-import { getStripe } from './_lib/stripe';
+import { fulfillCheckoutSession } from './_lib/delivery.js';
+import { getStripeWebhookSecret } from './_lib/env.js';
+import { readRawBody } from './_lib/rawBody.js';
+import { getStripe } from './_lib/stripe.js';
 
 export const config = {
   api: {

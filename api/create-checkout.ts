@@ -1,8 +1,8 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { applyCors } from './_lib/cors';
-import { getSiteUrl } from './_lib/env';
-import { getProduct, getStripePriceId } from './_lib/products';
-import { getStripe } from './_lib/stripe';
+import { applyCors } from './_lib/cors.js';
+import { getSiteUrl } from './_lib/env.js';
+import { getProduct, getStripePriceId } from './_lib/products.js';
+import { getStripe } from './_lib/stripe.js';
 
 type CheckoutBody = {
   productId?: string;

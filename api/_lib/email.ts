@@ -1,4 +1,4 @@
-import { getEmailFrom, getResendApiKey } from './env';
+import { getEmailFrom, getResendApiKey } from './env.js';
 
 type DeliveryEmail = {
   to: string;

@@ -1,4 +1,4 @@
-import { optional } from './env';
+import { optional } from './env.js';
 
 /**
  * Maps storefront product ids → Stripe Price ID + R2 object key.

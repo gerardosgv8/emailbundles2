@@ -44,7 +44,7 @@ export function HomePage() {
           </div>
         </div>
         <div className="hero-visual">
-          <div className="email-mockup">
+          <div className="email-mockup glass-card">
             <div className="email-mockup-bar" />
             <div className="email-mockup-body">
               <div className="email-mockup-logo">MS</div>

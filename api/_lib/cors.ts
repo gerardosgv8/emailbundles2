@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { getAllowedOrigins } from './env';
+import { getAllowedOrigins } from './env.js';
 
 export function applyCors(req: VercelRequest, res: VercelResponse): boolean {
   const origin = req.headers.origin;

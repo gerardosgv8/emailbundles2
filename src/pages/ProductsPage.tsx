@@ -40,43 +40,36 @@ export function ProductsPage() {
       <div className="product-grid">
         {TEMPLATE_BUNDLES.map((product) => (
           <article key={product.id} className="card product-card">
-            <h3 style={{ margin: '0 0 0.5rem' }}>{product.name}</h3>
-            <p>{product.description}</p>
-            <p className="product-price">{product.price}</p>
-            <ul className="product-features">
-              {product.features.map((feature) => (
-                <li key={feature}>{feature}</li>
-              ))}
-            </ul>
-            <div className="product-card-actions">
-              {product.checkoutProductId ? (
-                <BuyButton productId={product.checkoutProductId} />
-              ) : null}
-              {product.wizardAvailable ? (
-                <Link to={`/brand-wizard/${product.id}`} className="btn btn-secondary">
-                  Brand Wizard
-                </Link>
-              ) : (
-                <Link to="/brand-wizard" className="btn btn-secondary">
-                  Brand Wizard
-                </Link>
-              )}
+            <div className="product-card-image">
+              <img src={product.imageUrl} alt={product.imageAlt} loading="lazy" />
+            </div>
+            <div className="product-card-body">
+              <h3>{product.name}</h3>
+              <p>{product.description}</p>
+              <p className="product-price">{product.price}</p>
+              <ul className="product-features">
+                {product.features.map((feature) => (
+                  <li key={feature}>{feature}</li>
+                ))}
+              </ul>
+              <div className="product-card-actions">
+                {product.checkoutProductId ? (
+                  <BuyButton productId={product.checkoutProductId} />
+                ) : null}
+                {product.wizardAvailable ? (
+                  <Link to={`/brand-wizard/${product.id}`} className="btn btn-secondary">
+                    Brand Wizard
+                  </Link>
+                ) : (
+                  <Link to="/brand-wizard" className="btn btn-secondary">
+                    Brand Wizard
+                  </Link>
+                )}
+              </div>
             </div>
           </article>
         ))}
 
-        <article className="card product-card">
-          <h3 style={{ margin: '0 0 0.5rem' }}>Mailcraft Pro</h3>
-          <p>Visual builder, saved templates, and component library access.</p>
-          <p className="product-price">$19/mo</p>
-          <ul className="product-features">
-            <li>Drag-and-drop editor</li>
-            <li>All template bundles</li>
-            <li>Export HTML</li>
-            <li>Priority support</li>
-          </ul>
-          <Link to="/brand-wizard" className="btn btn-primary">Get started</Link>
-        </article>
       </div>
 
       <p className="text-center mt-8" style={{ color: 'var(--muted)', fontSize: '0.9rem' }}>

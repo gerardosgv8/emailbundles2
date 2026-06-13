@@ -6,6 +6,7 @@ import { DocsPage } from './pages/DocsPage';
 import { FaqPage } from './pages/FaqPage';
 import { HomePage } from './pages/HomePage';
 import { PurchaseSuccessPage } from './pages/PurchaseSuccessPage';
+import { NotFoundPage } from './pages/NotFoundPage';
 import { ProductsPage } from './pages/ProductsPage';
 import { TestimonialsPage } from './pages/TestimonialsPage';
 
@@ -22,6 +23,7 @@ export function App() {
           <Route path="faq" element={<FaqPage />} />
           <Route path="brand-wizard" element={<BrandWizardSelectPage />} />
           <Route path="brand-wizard/:bundleId" element={<BrandWizardPage />} />
+          <Route path="*" element={<NotFoundPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

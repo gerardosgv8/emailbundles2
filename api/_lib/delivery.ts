@@ -1,7 +1,7 @@
 import type Stripe from 'stripe';
-import { sendDownloadEmail } from './email';
-import { getProduct } from './products';
-import { createPresignedDownloadUrl } from './r2';
+import { sendDownloadEmail } from './email.js';
+import { getProduct } from './products.js';
+import { createPresignedDownloadUrl } from './r2.js';
 
 export type DeliveryResult = {
   email: string;

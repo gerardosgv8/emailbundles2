@@ -1,7 +1,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { applyCors } from './_lib/cors';
-import { fulfillCheckoutSession } from './_lib/delivery';
-import { getStripe } from './_lib/stripe';
+import { applyCors } from './_lib/cors.js';
+import { fulfillCheckoutSession } from './_lib/delivery.js';
+import { getStripe } from './_lib/stripe.js';
 
 /**
  * After Stripe redirects back, the success page calls this with session_id.

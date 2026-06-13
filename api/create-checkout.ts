@@ -32,6 +32,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     const priceId = getStripePriceId(product);
     const siteUrl = getSiteUrl().replace(/\/$/, '');
+    if (!siteUrl.includes('emailbundles2') && !siteUrl.includes('localhost')) {
+      console.warn(
+        `[create-checkout] SITE_URL="${siteUrl}" may be missing the /emailbundles2 path — Stripe success redirects can land on a 404.`,
+      );
+    }
     const stripe = getStripe();
 
     const session = await stripe.checkout.sessions.create({

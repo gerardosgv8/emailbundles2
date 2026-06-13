@@ -40,8 +40,12 @@ export function toClientErrorMessage(err: unknown, fallback: string): string {
     return 'This order is missing product details. Contact support with your receipt.';
   }
 
-  if (/NoSuchKey|NotFound|AccessDenied|Failed to fetch/i.test(message)) {
+  if (/NoSuchKey|NotFound|AccessDenied|Failed to fetch|specified key does not exist|NoSuchBucket|InvalidAccessKeyId|SignatureDoesNotMatch|R2 object not found/i.test(message)) {
     return 'Your payment went through, but we could not prepare the download. Contact support with your receipt.';
+  }
+
+  if (/No such checkout\.session/i.test(message)) {
+    return 'This checkout session is invalid or expired. Return to products and try again, or use the link from your receipt email.';
   }
 
   if (message.length > 160 || message.includes(' at ') || message.includes('Error:')) {

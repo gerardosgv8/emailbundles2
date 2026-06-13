@@ -34,6 +34,25 @@ export function getSiteUrl() {
   return optional('SITE_URL') ?? 'http://localhost:5174';
 }
 
+/** Public API origin for download links in emails (defaults to Vercel deployment URL). */
+export function getApiBaseUrl(): string {
+  const explicit = optional('API_BASE_URL');
+  if (explicit) {
+    return explicit.replace(/\/$/, '');
+  }
+
+  const vercelUrl = optional('VERCEL_URL');
+  if (vercelUrl) {
+    return `https://${vercelUrl.replace(/\/$/, '')}`;
+  }
+
+  return 'http://localhost:3000';
+}
+
+export function getSupportEmail(): string {
+  return optional('SUPPORT_EMAIL') ?? 'support@mailcraft.studio';
+}
+
 export function getDownloadLinkTtlSeconds() {
   const raw = optional('DOWNLOAD_LINK_TTL_SECONDS');
   const parsed = raw ? Number.parseInt(raw, 10) : 86400;
@@ -46,6 +65,11 @@ export function getResendApiKey() {
 
 export function getEmailFrom() {
   return optional('EMAIL_FROM') ?? 'Mailcraft Studio <downloads@mailcraft.studio>';
+}
+
+/** Resend dashboard template alias or ID. Set to `local` to use repo HTML fallback. */
+export function getResendPurchaseTemplateId() {
+  return optional('RESEND_PURCHASE_TEMPLATE_ID') ?? 'mailcraft-studio-intro';
 }
 
 export function getAllowedOrigins(): string[] {

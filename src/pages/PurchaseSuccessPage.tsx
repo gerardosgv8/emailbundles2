@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { safeUserMessage } from '../lib/apiError';
-import { verifyPurchaseSession, type VerifiedPurchase } from '../lib/checkout';
+import { getPurchaseDownloadUrl, verifyPurchaseSession, type VerifiedPurchase } from '../lib/checkout';
 
 const VERIFY_ERROR_FALLBACK =
   'We could not prepare your download right now. Try refreshing, or contact support with your receipt.';
@@ -87,16 +87,33 @@ export function PurchaseSuccessPage() {
         ) : purchase ? (
           <>
             <p>
-              <strong>{purchase.productName}</strong> is ready. We sent a link to{' '}
-              <strong>{purchase.email}</strong>
-              {purchase.emailed ? '' : ' (email delivery is optional — use the button below)'}.
+              <strong>{purchase.productName}</strong> is ready.
+              {purchase.emailed ? (
+                <>
+                  {' '}
+                  We sent a download link to <strong>{purchase.email}</strong> — check your inbox
+                  (and spam folder).
+                </>
+              ) : (
+                <>
+                  {' '}
+                  Use the button below to download your files
+                  {purchase.email ? (
+                    <>
+                      {' '}
+                      for <strong>{purchase.email}</strong>
+                    </>
+                  ) : null}
+                  .
+                </>
+              )}
             </p>
             <p style={{ fontSize: '0.9rem', color: 'var(--muted)' }}>
               Transaction ID: <code>{purchase.transactionId}</code>
             </p>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem', marginTop: '1.5rem' }}>
               <a
-                href={purchase.downloadUrl}
+                href={getPurchaseDownloadUrl(sessionId)}
                 className="btn btn-primary btn-lg"
                 rel="noopener noreferrer"
               >

@@ -24,7 +24,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {
     const stripe = getStripe();
     const session = await stripe.checkout.sessions.retrieve(sessionId);
-    const delivery = await fulfillCheckoutSession(session);
+    const delivery = await fulfillCheckoutSession(session, { sendEmail: false });
 
     res.setHeader('Cache-Control', 'no-store');
     return res.redirect(302, delivery.downloadUrl);

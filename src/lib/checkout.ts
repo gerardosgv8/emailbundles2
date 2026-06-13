@@ -2,21 +2,18 @@
  * Calls Vercel serverless checkout API.
  * Set VITE_API_URL in production when frontend is on GitHub Pages.
  */
+import { getApiBase } from './apiBase';
 import { safeUserMessage } from './apiError';
 
-const API_BASE = (import.meta.env.VITE_API_URL as string | undefined)?.replace(/\/$/, '') ?? '';
-
-export function getApiBase(): string {
-  return API_BASE;
-}
+export { getApiBase };
 
 export function getPurchaseDownloadUrl(sessionId: string): string {
   const params = new URLSearchParams({ session_id: sessionId });
-  return `${API_BASE}/api/download?${params}`;
+  return `${getApiBase()}/api/download?${params}`;
 }
 
 export async function startCheckout(productId: string, email?: string): Promise<string> {
-  const response = await fetch(`${API_BASE}/api/create-checkout`, {
+  const response = await fetch(`${getApiBase()}/api/create-checkout`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ productId, email: email?.trim() || undefined }),
@@ -42,7 +39,7 @@ export type VerifiedPurchase = {
 
 export async function verifyPurchaseSession(sessionId: string): Promise<VerifiedPurchase> {
   const params = new URLSearchParams({ session_id: sessionId });
-  const response = await fetch(`${API_BASE}/api/verify-session?${params}`);
+  const response = await fetch(`${getApiBase()}/api/verify-session?${params}`);
 
   const data = (await response.json()) as VerifiedPurchase & { error?: string };
 

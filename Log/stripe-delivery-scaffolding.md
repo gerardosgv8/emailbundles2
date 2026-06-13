@@ -91,11 +91,22 @@ VITE_API_URL=https://YOUR-PROJECT.vercel.app
 
 Rebuild and deploy the site so checkout calls the API.
 
-### 5. Optional email (Resend)
+### 5. Post-purchase email (Resend)
 
-1. Verify domain at [resend.com](https://resend.com).
-2. Set `RESEND_API_KEY` and `EMAIL_FROM`.
-3. Webhook + success page both trigger fulfillment; email is a backup delivery channel.
+1. Create account at [resend.com](https://resend.com) and **verify your sending domain**.
+2. Create an API key → `RESEND_API_KEY` in Vercel.
+3. Set `EMAIL_FROM` to an address on that domain (e.g. `Mailcraft Studio <downloads@yourdomain.com>`).
+4. Set `SUPPORT_EMAIL` for reply-to on purchase emails.
+5. Set `API_BASE_URL` to your Vercel API URL (used for download links in email).
+6. Ensure Stripe webhook is configured (see §1) — **`checkout.session.completed`** triggers the email.
+7. The success page also attempts delivery as a fallback; emails are **idempotent** (one per session).
+
+Flow:
+
+```
+Stripe payment → webhook → fulfill + Resend email (download + Brand Wizard links)
+Success page   → verify-session → same fulfillment (skips email if already sent)
+```
 
 ---
 

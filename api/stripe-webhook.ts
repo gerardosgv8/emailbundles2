@@ -34,7 +34,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {
     if (event.type === 'checkout.session.completed') {
       const session = event.data.object;
-      await fulfillCheckoutSession(session);
+      await fulfillCheckoutSession(session, { sendEmail: true });
     }
 
     return res.status(200).json({ received: true });

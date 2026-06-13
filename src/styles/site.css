@@ -121,7 +121,7 @@ h1, h2, h3, h4, h5, h6 { color: var(--text); line-height: 1.25; }
 .hero-visual {
   min-height: 50vh;
   background-color: #eff6ff;
-  background-image: url(/images/Email_showcase3.svg);
+  background-image: var(--hero-showcase-bg);
   background-size: cover; background-position: center;
   display: grid; place-items: center; padding: 2rem; position: relative; overflow: hidden;
 }

@@ -6,8 +6,9 @@
   "homepage": "https://gerardosgv8.github.io/emailbundles2",
   "scripts": {
     "dev": "vite",
-    "build": "tsc --noEmit && vite build",
-    "build:gh-pages": "tsc --noEmit && vite build --base=/emailbundles2/ && cp dist/index.html dist/404.html",
+    "build": "npx tsc --noEmit && npx vite build",
+    "vercel-build": "npm run build",
+    "build:gh-pages": "npx tsc --noEmit && npx vite build --base=/emailbundles2/ && cp dist/index.html dist/404.html",
     "preview": "vite preview",
     "predeploy": "npm run build:gh-pages",
     "deploy": "node scripts/deploy-gh-pages.mjs",
@@ -24,15 +25,15 @@
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "react-router-dom": "^7.9.4",
-    "stripe": "^18.5.0"
+    "stripe": "^18.5.0",
+    "@vitejs/plugin-react": "^5.0.4",
+    "typescript": "^5.9.3",
+    "vite": "^7.1.7"
   },
   "devDependencies": {
     "@types/node": "^25.9.3",
     "@types/react": "^19.1.16",
     "@types/react-dom": "^19.1.9",
-    "@vercel/node": "^5.3.21",
-    "@vitejs/plugin-react": "^5.0.4",
-    "typescript": "^5.9.3",
-    "vite": "^7.1.7"
+    "@vercel/node": "^5.3.21"
   }
 }

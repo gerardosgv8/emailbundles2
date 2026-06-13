@@ -13,6 +13,20 @@ export function PurchaseSuccessPage() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
+  const loadPurchase = (id: string) => {
+    setLoading(true);
+    setError(null);
+    setPurchase(null);
+
+    return verifyPurchaseSession(id)
+      .then((result) => setPurchase(result))
+      .catch((err) => {
+        const raw = err instanceof Error ? err.message : undefined;
+        setError(safeUserMessage(raw, VERIFY_ERROR_FALLBACK));
+      })
+      .finally(() => setLoading(false));
+  };
+
   useEffect(() => {
     if (!sessionId) {
       setError('Missing checkout session. Return to products and try again.');
@@ -54,9 +68,21 @@ export function PurchaseSuccessPage() {
               If you were charged, your receipt email may still include a download link once processing
               finishes.
             </p>
-            <Link to="/products" className="btn btn-primary" style={{ marginTop: '1rem' }}>
-              Back to products
-            </Link>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem', marginTop: '1rem' }}>
+              {sessionId ? (
+                <button
+                  type="button"
+                  className="btn btn-primary"
+                  onClick={() => loadPurchase(sessionId)}
+                  disabled={loading}
+                >
+                  {loading ? 'Checking…' : 'Try again'}
+                </button>
+              ) : null}
+              <Link to="/products" className="btn btn-secondary">
+                Back to products
+              </Link>
+            </div>
           </>
         ) : purchase ? (
           <>
@@ -69,7 +95,11 @@ export function PurchaseSuccessPage() {
               Transaction ID: <code>{purchase.transactionId}</code>
             </p>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem', marginTop: '1.5rem' }}>
-              <a href={purchase.downloadUrl} className="btn btn-primary btn-lg">
+              <a
+                href={purchase.downloadUrl}
+                className="btn btn-primary btn-lg"
+                rel="noopener noreferrer"
+              >
                 Download your files
               </a>
               <Link to="/brand-wizard" className="btn btn-secondary btn-lg">

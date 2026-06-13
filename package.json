@@ -8,6 +8,7 @@
     "dev": "vite",
     "build": "npx tsc --noEmit && npx vite build",
     "vercel-build": "node scripts/vercel-stub-dist.mjs",
+    "postinstall": "node scripts/ensure-vite-cli.mjs",
     "build:gh-pages": "npx tsc --noEmit && npx vite build --base=/emailbundles2/ && cp dist/index.html dist/404.html",
     "preview": "vite preview",
     "predeploy": "npm run build:gh-pages",

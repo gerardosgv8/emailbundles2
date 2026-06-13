@@ -6,6 +6,15 @@ import { safeUserMessage } from './apiError';
 
 const API_BASE = (import.meta.env.VITE_API_URL as string | undefined)?.replace(/\/$/, '') ?? '';
 
+export function getApiBase(): string {
+  return API_BASE;
+}
+
+export function getPurchaseDownloadUrl(sessionId: string): string {
+  const params = new URLSearchParams({ session_id: sessionId });
+  return `${API_BASE}/api/download?${params}`;
+}
+
 export async function startCheckout(productId: string, email?: string): Promise<string> {
   const response = await fetch(`${API_BASE}/api/create-checkout`, {
     method: 'POST',

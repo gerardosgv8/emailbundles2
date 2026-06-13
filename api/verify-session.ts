@@ -1,5 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { applyCors } from './_lib/cors.js';
+import { toClientErrorMessage } from './_lib/clientError.js';
 import { fulfillCheckoutSession } from './_lib/delivery.js';
 import { getStripe } from './_lib/stripe.js';
 
@@ -35,7 +36,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     });
   } catch (err) {
     console.error('[verify-session]', err);
-    const message = err instanceof Error ? err.message : 'Could not verify purchase';
-    return res.status(400).json({ error: message });
+    return res.status(400).json({
+      error: toClientErrorMessage(
+        err,
+        'We could not prepare your download right now. Try refreshing, or contact support with your receipt.',
+      ),
+    });
   }
 }

@@ -2,6 +2,8 @@
  * Calls Vercel serverless checkout API.
  * Set VITE_API_URL in production when frontend is on GitHub Pages.
  */
+import { safeUserMessage } from './apiError';
+
 const API_BASE = (import.meta.env.VITE_API_URL as string | undefined)?.replace(/\/$/, '') ?? '';
 
 export async function startCheckout(productId: string, email?: string): Promise<string> {
@@ -14,7 +16,7 @@ export async function startCheckout(productId: string, email?: string): Promise<
   const data = (await response.json()) as { url?: string; error?: string };
 
   if (!response.ok || !data.url) {
-    throw new Error(data.error ?? 'Could not start checkout');
+    throw new Error(safeUserMessage(data.error, 'Could not start checkout. Please try again.'));
   }
 
   return data.url;
@@ -36,7 +38,12 @@ export async function verifyPurchaseSession(sessionId: string): Promise<Verified
   const data = (await response.json()) as VerifiedPurchase & { error?: string };
 
   if (!response.ok || !data.downloadUrl) {
-    throw new Error(data.error ?? 'Could not verify purchase');
+    throw new Error(
+      safeUserMessage(
+        data.error,
+        'We could not prepare your download right now. Try refreshing, or contact support with your receipt.',
+      ),
+    );
   }
 
   return data;

@@ -1,5 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { applyCors } from './_lib/cors.js';
+import { toClientErrorMessage } from './_lib/clientError.js';
 import { getSiteUrl } from './_lib/env.js';
 import { getProduct, getStripePriceId } from './_lib/products.js';
 import { getStripe } from './_lib/stripe.js';
@@ -26,7 +27,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     const product = getProduct(productId);
     if (!product) {
-      return res.status(404).json({ error: `Unknown product: ${productId}` });
+      return res.status(404).json({ error: 'Product not found' });
     }
 
     const priceId = getStripePriceId(product);
@@ -46,13 +47,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     });
 
     if (!session.url) {
-      return res.status(500).json({ error: 'Stripe did not return a checkout URL' });
+      return res.status(500).json({ error: 'Checkout is temporarily unavailable. Please try again.' });
     }
 
     return res.status(200).json({ url: session.url, sessionId: session.id });
   } catch (err) {
     console.error('[create-checkout]', err);
-    const message = err instanceof Error ? err.message : 'Checkout failed';
-    return res.status(500).json({ error: message });
+    return res.status(500).json({
+      error: toClientErrorMessage(err, 'Checkout is temporarily unavailable. Please try again.'),
+    });
   }
 }

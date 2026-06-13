@@ -1,6 +1,10 @@
 import { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
+import { safeUserMessage } from '../lib/apiError';
 import { verifyPurchaseSession, type VerifiedPurchase } from '../lib/checkout';
+
+const VERIFY_ERROR_FALLBACK =
+  'We could not prepare your download right now. Try refreshing, or contact support with your receipt.';
 
 export function PurchaseSuccessPage() {
   const [params] = useSearchParams();
@@ -24,7 +28,8 @@ export function PurchaseSuccessPage() {
       })
       .catch((err) => {
         if (!cancelled) {
-          setError(err instanceof Error ? err.message : 'Could not verify your purchase.');
+          const raw = err instanceof Error ? err.message : undefined;
+          setError(safeUserMessage(raw, VERIFY_ERROR_FALLBACK));
         }
       })
       .finally(() => {
@@ -39,12 +44,16 @@ export function PurchaseSuccessPage() {
   return (
     <main className="container section">
       <div className="page-hero">
-        <h1>Thank you for your purchase</h1>
+        <h1>{error ? 'Almost there' : 'Thank you for your purchase'}</h1>
         {loading ? (
           <p>Verifying your payment and preparing your download…</p>
         ) : error ? (
           <>
-            <p style={{ color: '#b45309' }}>{error}</p>
+            <p className="purchase-success-error">{error}</p>
+            <p style={{ fontSize: '0.9rem', color: 'var(--muted)' }}>
+              If you were charged, your receipt email may still include a download link once processing
+              finishes.
+            </p>
             <Link to="/products" className="btn btn-primary" style={{ marginTop: '1rem' }}>
               Back to products
             </Link>

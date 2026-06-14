@@ -1,10 +1,23 @@
 import { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
+import { DownloadAccessNotice } from '../components/DownloadAccessNotice';
 import { safeUserMessage } from '../lib/apiError';
 import { getPurchaseDownloadUrl, verifyPurchaseSession, type VerifiedPurchase } from '../lib/checkout';
+import { type PurchasePolicy } from '../lib/purchasePolicy';
 
 const VERIFY_ERROR_FALLBACK =
   'We could not prepare your download right now. Try refreshing, or contact support with your receipt.';
+
+function purchasePolicyFromOrder(purchase: VerifiedPurchase): PurchasePolicy | null {
+  if (purchase.maxDownloads == null) {
+    return null;
+  }
+
+  return {
+    maxDownloads: purchase.maxDownloads,
+    accessDays: purchase.downloadAccessDays ?? 7,
+  };
+}
 
 export function PurchaseSuccessPage() {
   const [params] = useSearchParams();
@@ -55,9 +68,11 @@ export function PurchaseSuccessPage() {
     };
   }, [sessionId]);
 
+  const policy = purchase ? purchasePolicyFromOrder(purchase) : null;
+
   return (
     <main className="container section">
-      <div className="page-hero">
+      <div className="page-hero purchase-success">
         <h1>{error ? 'Almost there' : 'Thank you for your purchase'}</h1>
         {loading ? (
           <p>Verifying your payment and preparing your download…</p>
@@ -86,7 +101,7 @@ export function PurchaseSuccessPage() {
           </>
         ) : purchase ? (
           <>
-            <p>
+            <p className="purchase-success-lead">
               <strong>{purchase.productName}</strong> is ready.
               {purchase.emailed ? (
                 <>
@@ -108,23 +123,42 @@ export function PurchaseSuccessPage() {
                 </>
               )}
             </p>
-            <p style={{ fontSize: '0.9rem', color: 'var(--muted)' }}>
+
+            {policy ? (
+              <DownloadAccessNotice
+                policy={policy}
+                downloadsRemaining={purchase.downloadsRemaining}
+                accessExpiresAt={purchase.downloadAccessExpiresAt}
+                variant="success"
+              />
+            ) : null}
+
+            <p className="purchase-success-meta">
               Transaction ID: <code>{purchase.transactionId}</code>
             </p>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem', marginTop: '1.5rem' }}>
-              <a
-                href={getPurchaseDownloadUrl(sessionId)}
-                className="btn btn-primary btn-lg"
-                rel="noopener noreferrer"
-              >
-                Download your files
-              </a>
+
+            <div className="purchase-success-actions">
+              {purchase.downloadsRemaining === 0 ? (
+                <span className="btn btn-primary btn-lg" style={{ opacity: 0.6, cursor: 'not-allowed' }}>
+                  Download limit reached
+                </span>
+              ) : (
+                <a
+                  href={getPurchaseDownloadUrl(sessionId)}
+                  className="btn btn-primary btn-lg"
+                  rel="noopener noreferrer"
+                >
+                  Download your files
+                </a>
+              )}
               <Link to="/brand-wizard" className="btn btn-secondary btn-lg">
                 Open Brand Wizard
               </Link>
             </div>
-            <p style={{ marginTop: '1.25rem', fontSize: '0.85rem', color: 'var(--muted)' }}>
-              Download links expire after a limited time. Keep your receipt email for support.
+
+            <p className="purchase-success-footnote">
+              Need another copy later? Use the link in your receipt email before your access window ends.
+              Keep your transaction ID handy for support.
             </p>
           </>
         ) : null}

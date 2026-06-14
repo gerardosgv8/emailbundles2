@@ -2,8 +2,9 @@ import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import {
-  getDownloadLinkTtlSeconds,
+  getDownloadAccessDays,
   getEmailFrom,
+  getMaxDownloadsPerPurchase,
   getResendApiKey,
   getResendPurchaseTemplateId,
   getSiteUrl,
@@ -37,7 +38,7 @@ function escapeHtml(value: string): string {
 }
 
 function formatExpiryHours(): number {
-  return Math.round(getDownloadLinkTtlSeconds() / 3600);
+  return getDownloadAccessDays() * 24;
 }
 
 function renderLocalTemplate(template: string, values: Record<string, string>): string {
@@ -57,6 +58,7 @@ export function getResendTemplateVariables(payload: PostPurchaseEmailPayload): R
     SITE_URL: getSiteUrl().replace(/\/$/, ''),
     SUPPORT_EMAIL: getSupportEmail(),
     EXPIRY_HOURS: String(formatExpiryHours()),
+    MAX_DOWNLOADS: String(getMaxDownloadsPerPurchase()),
   };
 }
 
@@ -77,6 +79,7 @@ function buildLocalPurchaseEmail(payload: PostPurchaseEmailPayload): {
     SITE_URL: escapeHtml(getSiteUrl().replace(/\/$/, '')),
     SUPPORT_EMAIL: escapeHtml(supportEmail),
     EXPIRY_HOURS: String(expiryHours),
+    MAX_DOWNLOADS: String(getMaxDownloadsPerPurchase()),
   });
 
   const text = [
@@ -89,7 +92,7 @@ function buildLocalPurchaseEmail(payload: PostPurchaseEmailPayload): {
     '',
     `Open Brand Wizard: ${payload.brandWizardUrl}`,
     '',
-    `Download links expire after about ${expiryHours} hours. If the link stops working, contact ${supportEmail} with your receipt.`,
+    `Download links are valid for about ${expiryHours} hours and allow up to ${getMaxDownloadsPerPurchase()} downloads. If the link stops working, contact ${supportEmail} with your receipt.`,
     '',
     `Mailcraft Studio — ${getSiteUrl().replace(/\/$/, '')}`,
   ].join('\n');

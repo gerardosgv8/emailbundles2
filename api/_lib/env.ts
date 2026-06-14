@@ -59,6 +59,27 @@ export function getDownloadLinkTtlSeconds() {
   return Number.isFinite(parsed) && parsed > 0 ? parsed : 86400;
 }
 
+/** Short TTL for each R2 presigned redirect (seconds). Default 5 minutes. */
+export function getPresignedUrlTtlSeconds() {
+  const raw = optional('PRESIGNED_URL_TTL_SECONDS');
+  const parsed = raw ? Number.parseInt(raw, 10) : 300;
+  return Number.isFinite(parsed) && parsed > 0 ? parsed : 300;
+}
+
+/** Max successful downloads allowed per Stripe checkout session. Default 5. */
+export function getMaxDownloadsPerPurchase() {
+  const raw = optional('MAX_DOWNLOADS_PER_PURCHASE');
+  const parsed = raw ? Number.parseInt(raw, 10) : 5;
+  return Number.isFinite(parsed) && parsed > 0 ? parsed : 5;
+}
+
+/** Days after purchase that download links remain valid. Default 7. */
+export function getDownloadAccessDays() {
+  const raw = optional('DOWNLOAD_ACCESS_DAYS');
+  const parsed = raw ? Number.parseInt(raw, 10) : 7;
+  return Number.isFinite(parsed) && parsed > 0 ? parsed : 7;
+}
+
 export function getResendApiKey() {
   return optional('RESEND_API_KEY');
 }

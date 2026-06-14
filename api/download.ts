@@ -1,12 +1,12 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { applyCors } from './_lib/cors.js';
 import { toClientErrorMessage } from './_lib/clientError.js';
-import { fulfillCheckoutSession } from './_lib/delivery.js';
+import { issueDownloadForSession } from './_lib/delivery.js';
 import { getStripe } from './_lib/stripe.js';
 
 /**
- * Verifies a paid Stripe session and redirects the browser to a fresh R2 presigned URL.
- * Top-level navigation avoids cross-origin download quirks in some browsers.
+ * Verifies a paid Stripe session, enforces per-purchase download limits,
+ * and redirects the browser to a short-lived R2 presigned URL.
  */
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (applyCors(req, res)) return;
@@ -24,10 +24,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {
     const stripe = getStripe();
     const session = await stripe.checkout.sessions.retrieve(sessionId);
-    const delivery = await fulfillCheckoutSession(session, { sendEmail: false });
+    const { presignedUrl } = await issueDownloadForSession(session);
 
     res.setHeader('Cache-Control', 'no-store');
-    return res.redirect(302, delivery.downloadUrl);
+    return res.redirect(302, presignedUrl);
   } catch (err) {
     console.error('[download]', err);
     return res.status(400).json({

@@ -40,6 +40,14 @@ export function toClientErrorMessage(err: unknown, fallback: string): string {
     return 'This order is missing product details. Contact support with your receipt.';
   }
 
+  if (/Download limit reached/i.test(message)) {
+    return 'You have used all downloads included with this purchase. Contact support if you need another copy.';
+  }
+
+  if (/Download access expired/i.test(message)) {
+    return 'The download window for this purchase has ended. Contact support with your receipt if you still need your files.';
+  }
+
   if (/NoSuchKey|NotFound|AccessDenied|Failed to fetch|specified key does not exist|NoSuchBucket|InvalidAccessKeyId|SignatureDoesNotMatch|R2 object not found/i.test(message)) {
     return 'Your payment went through, but we could not prepare the download. Contact support with your receipt.';
   }

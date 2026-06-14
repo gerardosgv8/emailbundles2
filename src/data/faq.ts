@@ -131,6 +131,11 @@ export const FAQ_CATEGORIES: FaqCategory[] = [
     description: 'Updates, usage rights, and help.',
     items: [
       {
+        id: 'download-access',
+        question: 'How do downloads work after I purchase?',
+        answer: 'After checkout you receive a personal download link by email and on the success page. Each purchase includes a limited number of download attempts within a set number of days from the order date. Save the ZIP to your device — links are tied to your order and should not be shared. If you run out of attempts or the access window ends, contact support with your receipt.',
+      },
+      {
         id: 'updates',
         question: 'Do bundles include updates?',
         answer: 'Paid bundles include lifetime updates for the template version you purchased. When we ship improvements like bug fixes, client compatibility patches, or new sections, you get access to the latest files.',

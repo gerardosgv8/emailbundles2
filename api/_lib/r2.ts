@@ -1,6 +1,6 @@
 import { GetObjectCommand, HeadObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
-import { getDownloadLinkTtlSeconds, getR2Config } from './env.js';
+import { getPresignedUrlTtlSeconds, getR2Config } from './env.js';
 
 let r2Client: S3Client | null = null;
 
@@ -45,7 +45,7 @@ export async function createPresignedDownloadUrl(r2Key: string): Promise<string>
     });
 
     const url = await getSignedUrl(getR2Client(), command, {
-      expiresIn: getDownloadLinkTtlSeconds(),
+      expiresIn: getPresignedUrlTtlSeconds(),
     });
 
     console.log(`[r2] presigned url created for key="${r2Key}" bucket="${bucketName}"`);

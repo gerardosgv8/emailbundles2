@@ -1,7 +1,9 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { DownloadAccessNotice } from '../components/DownloadAccessNotice';
 import { TEMPLATE_BUNDLES } from '../data/templateBundles';
 import { startCheckout } from '../lib/checkout';
+import { describeDownloadPolicy, fetchPurchasePolicy, type PurchasePolicy } from '../lib/purchasePolicy';
 
 function BuyButton({ productId, label = 'Buy now' }: { productId: string; label?: string }) {
   const [busy, setBusy] = useState(false);
@@ -30,6 +32,24 @@ function BuyButton({ productId, label = 'Buy now' }: { productId: string; label?
 }
 
 export function ProductsPage() {
+  const [policy, setPolicy] = useState<PurchasePolicy | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    fetchPurchasePolicy()
+      .then((result) => {
+        if (!cancelled) setPolicy(result);
+      })
+      .catch(() => {
+        /* Non-blocking — footer falls back to generic copy */
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   return (
     <main className="container section">
       <div className="page-hero">
@@ -69,11 +89,20 @@ export function ProductsPage() {
             </div>
           </article>
         ))}
-
       </div>
 
-      <p className="text-center mt-8" style={{ color: 'var(--muted)', fontSize: '0.9rem' }}>
-        Secure checkout powered by Stripe. Downloads are delivered via time-limited links after payment.
+      {policy ? <DownloadAccessNotice policy={policy} variant="info" /> : null}
+
+      <p className="products-checkout-note">
+        Secure checkout powered by Stripe.
+        {policy ? (
+          <>
+            {' '}
+            After payment, downloads are delivered via personal links — {describeDownloadPolicy(policy)}.
+          </>
+        ) : (
+          <> Downloads are delivered via time-limited personal links after payment.</>
+        )}
       </p>
     </main>
   );

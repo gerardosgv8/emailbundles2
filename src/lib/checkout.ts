@@ -35,6 +35,10 @@ export type VerifiedPurchase = {
   productName: string;
   downloadUrl: string;
   emailed: boolean;
+  downloadsRemaining?: number;
+  maxDownloads?: number;
+  downloadAccessDays?: number;
+  downloadAccessExpiresAt?: string;
 };
 
 export async function verifyPurchaseSession(sessionId: string): Promise<VerifiedPurchase> {

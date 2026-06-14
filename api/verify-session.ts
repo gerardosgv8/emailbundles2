@@ -2,6 +2,7 @@ import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { applyCors } from './_lib/cors.js';
 import { toClientErrorMessage } from './_lib/clientError.js';
 import { fulfillCheckoutSession } from './_lib/delivery.js';
+import { getDownloadAccessDays } from './_lib/env.js';
 import { getStripe } from './_lib/stripe.js';
 
 /**
@@ -33,6 +34,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       productName: delivery.productName,
       downloadUrl: delivery.downloadUrl,
       emailed: delivery.emailed,
+      downloadsRemaining: delivery.downloadsRemaining,
+      maxDownloads: delivery.maxDownloads,
+      downloadAccessDays: getDownloadAccessDays(),
+      downloadAccessExpiresAt: delivery.downloadAccessExpiresAt,
     });
   } catch (err) {
     console.error('[verify-session]', err);

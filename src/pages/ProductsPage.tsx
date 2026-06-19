@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { DownloadAccessNotice } from '../components/DownloadAccessNotice';
 import { TEMPLATE_BUNDLES } from '../data/templateBundles';
 import { startCheckout } from '../lib/checkout';
-import { describeDownloadPolicy, fetchPurchasePolicy, type PurchasePolicy } from '../lib/purchasePolicy';
+import { describeDownloadPolicy, DEFAULT_PURCHASE_POLICY, fetchPurchasePolicy, type PurchasePolicy } from '../lib/purchasePolicy';
 
 function BuyButton({ productId, label = 'Buy now' }: { productId: string; label?: string }) {
   const [busy, setBusy] = useState(false);
@@ -32,7 +32,7 @@ function BuyButton({ productId, label = 'Buy now' }: { productId: string; label?
 }
 
 export function ProductsPage() {
-  const [policy, setPolicy] = useState<PurchasePolicy | null>(null);
+  const [policy, setPolicy] = useState<PurchasePolicy>(DEFAULT_PURCHASE_POLICY);
 
   useEffect(() => {
     let cancelled = false;
@@ -42,7 +42,7 @@ export function ProductsPage() {
         if (!cancelled) setPolicy(result);
       })
       .catch(() => {
-        /* Non-blocking — footer falls back to generic copy */
+        /* Keep DEFAULT_PURCHASE_POLICY */
       });
 
     return () => {
@@ -91,19 +91,14 @@ export function ProductsPage() {
         ))}
       </div>
 
-      {policy ? <DownloadAccessNotice policy={policy} variant="info" /> : null}
+      <div className="products-policy-section">
+        <DownloadAccessNotice policy={policy} variant="info" showSummary={false} />
 
-      <p className="products-checkout-note">
-        Secure checkout powered by Stripe.
-        {policy ? (
-          <>
-            {' '}
-            After payment, downloads are delivered via personal links — {describeDownloadPolicy(policy)}.
-          </>
-        ) : (
-          <> Downloads are delivered via time-limited personal links after payment.</>
-        )}
-      </p>
+        <p className="products-checkout-note">
+          Secure checkout powered by Stripe. After payment, downloads are delivered via personal
+          links — {describeDownloadPolicy(policy)}.
+        </p>
+      </div>
     </main>
   );
 }

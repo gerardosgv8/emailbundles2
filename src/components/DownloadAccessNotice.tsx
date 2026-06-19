@@ -6,6 +6,8 @@ type DownloadAccessNoticeProps = {
   downloadsRemaining?: number;
   accessExpiresAt?: string;
   variant?: 'success' | 'info';
+  /** Hide the one-line summary (e.g. when copy appears elsewhere on the page). */
+  showSummary?: boolean;
 };
 
 export function DownloadAccessNotice({
@@ -13,6 +15,7 @@ export function DownloadAccessNotice({
   downloadsRemaining,
   accessExpiresAt,
   variant = 'info',
+  showSummary = true,
 }: DownloadAccessNoticeProps) {
   const exhausted = downloadsRemaining === 0;
   const showRemaining = downloadsRemaining != null;
@@ -50,7 +53,7 @@ export function DownloadAccessNotice({
         <li>Each download click uses one attempt — save the ZIP to your device.</li>
         <li>Links are personal to your order. Please do not share them.</li>
       </ul>
-      {!showRemaining ? (
+      {!showRemaining && showSummary ? (
         <p className="download-access-notice__summary">{describeDownloadPolicy(policy)}</p>
       ) : exhausted ? (
         <p className="download-access-notice__summary">

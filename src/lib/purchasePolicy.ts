@@ -5,6 +5,12 @@ export type PurchasePolicy = {
   accessDays: number;
 };
 
+/** Shown immediately; replaced when /api/purchase-policy responds. */
+export const DEFAULT_PURCHASE_POLICY: PurchasePolicy = {
+  maxDownloads: 3,
+  accessDays: 7,
+};
+
 let cachedPolicy: PurchasePolicy | null = null;
 
 export async function fetchPurchasePolicy(): Promise<PurchasePolicy> {
@@ -15,7 +21,7 @@ export async function fetchPurchasePolicy(): Promise<PurchasePolicy> {
   const response = await fetch(`${getApiBase()}/api/purchase-policy`);
   const data = (await response.json()) as PurchasePolicy & { error?: string };
 
-  if (!response.ok || !data.maxDownloads || !data.accessDays) {
+  if (!response.ok || data.maxDownloads == null || data.accessDays == null) {
     throw new Error(data.error ?? 'Could not load purchase policy');
   }
 

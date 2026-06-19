@@ -28,14 +28,21 @@ export const TEMPLATE_BUNDLES: TemplateBundle[] = [
     checkoutProductId: 'industrial-b2b',
   },
   {
-    id: 'ecommerce',
-    name: 'eCommerce Email Bundle',
+    id: 'email-marketing-starter-kit',
+    name: 'Email Marketing Starter Kit',
     price: '$79',
-    description: 'Complete set of conversion-focused templates for online stores.',
-    features: ['Checkout & order emails', 'Promotional campaigns', 'Product recommendations', 'Lifetime updates'],
+    description:
+      'Eleven D2C templates for welcome flows, cart recovery, product launches, promos, and editorial newsletters.',
+    features: [
+      'Welcome & order confirmation',
+      'Cart abandonment & back in stock',
+      'Product recommendations & promos',
+      'Brand Design Wizard compatible',
+    ],
     imageUrl: assetUrl('images/products/ecommerce.svg'),
-    imageAlt: 'Preview of eCommerce email templates',
-    wizardAvailable: false,
+    imageAlt: 'Preview of Email Marketing Starter Kit templates',
+    templateCount: 11,
+    wizardAvailable: true,
   },
 ];
 

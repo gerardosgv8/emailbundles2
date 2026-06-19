@@ -16,8 +16,11 @@
     "deploy": "node scripts/deploy-gh-pages.mjs",
     "dev:api": "vercel dev",
     "verify:templates": "node scripts/verify-bundle-templates.mjs",
+    "verify:starter-kit": "node scripts/verify-email-marketing-starter-kit-templates.mjs",
     "sync:registry": "node scripts/sync-industrial-bundle-registry.mjs",
-    "sync:bundle": "node scripts/sync-industrial-bundle-registry.mjs && node scripts/verify-bundle-templates.mjs"
+    "sync:starter-kit": "node scripts/sync-email-marketing-starter-kit-registry.mjs",
+    "sync:bundle": "node scripts/sync-industrial-bundle-registry.mjs && node scripts/verify-bundle-templates.mjs",
+    "sync:starter-kit:bundle": "node scripts/sync-email-marketing-starter-kit-registry.mjs && node scripts/verify-email-marketing-starter-kit-templates.mjs"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.888.0",

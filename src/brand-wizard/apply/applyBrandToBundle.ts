@@ -20,12 +20,13 @@ function outputName(inputName: string): string {
 export async function applyBrandToUpload(
   file: File,
   state: DesignRulesState,
+  bundleId: string,
 ): Promise<ApplyBundleResult> {
   const lowerName = file.name.toLowerCase();
 
   if (lowerName.endsWith('.html') || lowerName.endsWith('.htm')) {
     const html = await file.text();
-    const { html: brandedHtml, fileResult } = applyBrandToHtml(html, state, file.name);
+    const { html: brandedHtml, fileResult } = applyBrandToHtml(html, state, bundleId, file.name);
     const zip = new JSZip();
     const brandedName = file.name.replace(/\.html?$/i, '-branded.html');
     zip.file(brandedName, brandedHtml);
@@ -58,7 +59,7 @@ export async function applyBrandToUpload(
 
     if (isHtmlPath(path)) {
       const html = await entry.async('string');
-      const { html: brandedHtml, fileResult } = applyBrandToHtml(html, state, path);
+      const { html: brandedHtml, fileResult } = applyBrandToHtml(html, state, bundleId, path);
       outZip.file(path, brandedHtml);
       fileResults.push(fileResult);
       continue;

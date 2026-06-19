@@ -1,6 +1,7 @@
 import { useCallback, useRef, useState, type ChangeEvent, type DragEvent } from 'react';
 import type { DesignRulesState } from '../types';
 import { applyBrandToUpload, downloadBrandedBundle, type ApplyBundleResult } from '../apply/applyBrandToBundle';
+import { isBrandApplyBundle } from '../apply/applyBrandToHtml';
 
 const ACCEPTED_EXTENSIONS = ['.html', '.htm', '.zip'];
 
@@ -74,7 +75,7 @@ export function ApplyBundlePanel({ state, bundleId }: Props) {
     setBusy(true);
     setError(null);
     try {
-      const applied = await applyBrandToUpload(selectedFile, state);
+      const applied = await applyBrandToUpload(selectedFile, state, bundleId);
       setResult(applied);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Could not apply brand to upload.');
@@ -88,7 +89,7 @@ export function ApplyBundlePanel({ state, bundleId }: Props) {
     downloadBrandedBundle(result);
   };
 
-  if (bundleId !== 'industrial-b2b') {
+  if (!isBrandApplyBundle(bundleId)) {
     return null;
   }
 

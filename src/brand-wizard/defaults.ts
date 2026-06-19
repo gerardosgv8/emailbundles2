@@ -21,18 +21,30 @@ export const WIZARD_STEPS: WizardStep[] = [
   { id: 'export', title: 'Review & export', desc: 'Checklist and download DESIGN_RULES.md' },
 ];
 
-export const CHECKLIST_ITEMS = [
+const SHARED_CHECKLIST_PREFIX = [
   'Logo URL loads over HTTPS',
   'Primary and secondary button colors meet contrast requirements',
   'Footer includes physical mailing address (CAN-SPAM)',
   'Unsubscribe link uses your ESP merge tag',
   'Support email is monitored',
   'Social and legal URLs are correct (or hidden if unused)',
+] as const;
+
+export const CHECKLIST_ITEMS = [
+  ...SHARED_CHECKLIST_PREFIX,
   'Spot-check all 9 templates after applying brand changes',
 ];
 
-export function getDefaultDesignRules(): DesignRulesState {
-  const year = new Date().getFullYear();
+export function getChecklistItems(bundleId: string): string[] {
+  const templateLine =
+    bundleId === 'email-marketing-starter-kit'
+      ? 'Spot-check all 11 templates after applying brand changes'
+      : 'Spot-check all 9 templates after applying brand changes';
+
+  return [...SHARED_CHECKLIST_PREFIX, templateLine];
+}
+
+function createIndustrialDefaults(year: number): Omit<DesignRulesState, 'checklist'> {
   return {
     brandName: 'ForgeLine Industrial',
     legalName: 'ForgeLine Industrial, Inc.',
@@ -130,6 +142,120 @@ export function getDefaultDesignRules(): DesignRulesState {
     darkBgOverride: '',
     darkTextOverride: '',
     contrastTarget: '4.5:1 (body text)',
-    checklist: CHECKLIST_ITEMS.map(() => false),
+  };
+}
+
+function createStarterKitDefaults(year: number): Omit<DesignRulesState, 'checklist'> {
+  return {
+    brandName: 'Harbor & Home',
+    legalName: 'Harbor & Home LLC',
+    tagline: 'Curated essentials for everyday living',
+    footerTrustLine: 'Secure checkout • Free shipping $75+ • Easy returns',
+    copyrightNote: `©${year} Harbor & Home *(set automatically when templates are generated)*`,
+    fromName: 'Harbor & Home',
+    replyToEmail: 'hello@harborandhome.com',
+    logoUrl: 'https://www.fmt.se/wp-content/uploads/2023/02/logo-placeholder-image.png',
+    logoAlt: 'Harbor & Home',
+    logoWidth: '160px',
+    logoHeight: 'auto',
+    logoDarkUrl: '',
+    faviconUrl: '',
+    colorPrimary: '#0f766e',
+    colorSecondary: '#14b8a6',
+    colorAccent: '#d97706',
+    colorHeadingDark: '#1f2937',
+    colorHeadingAlt: '#134e4a',
+    colorHeaderKicker: '#374151',
+    colorBody: '#4b5563',
+    colorBodyAlt: '#6b7280',
+    colorMuted: '#9ca3af',
+    colorBgEmail: '#ffffff',
+    colorBgLightGray: '#f9fafb',
+    colorBgInfo: '#ecfdf5',
+    colorBgService: '#f0fdfa',
+    colorBgServiceBorder: '#99f6e4',
+    colorBgPromoDark: '#134e4a',
+    colorBgWarning: '#fef3c7',
+    colorBgWarningBorder: '#fcd34d',
+    colorBgWarningText: '#92400e',
+    colorBgUrgency: '#fef2f2',
+    colorBgUrgencyBorder: '#fecaca',
+    colorBgUrgencyText: '#dc2626',
+    colorDivider: '#e5e7eb',
+    colorFooterDivider: '#e5e7eb',
+    colorBadgeEventBg: '#ccfbf1',
+    colorBadgeEventText: '#0f766e',
+    colorBadgeStepBg: '#fff7ed',
+    colorBadgeStepText: '#d97706',
+    colorPromoHighlight: '#fcd34d',
+    btnPrimaryBg: '#0f766e',
+    btnPrimaryText: '#ffffff',
+    btnPrimaryRadius: '8px',
+    btnPrimaryPadding: '14px 28px',
+    btnSecondaryBg: '#ffffff',
+    btnSecondaryText: '#0f766e',
+    btnSecondaryBorder: '#0f766e',
+    btnPricingBg: '#134e4a',
+    btnPricingText: '#ffffff',
+    btnPromoBg: '#d97706',
+    btnPromoText: '#ffffff',
+    linkColor: '#0f766e',
+    urlBase: 'https://www.harborandhome.com',
+    urlQuote: '',
+    urlSupport: 'https://www.harborandhome.com/support',
+    fontStack: "Georgia, 'Times New Roman', serif",
+    fontCustomUrl: '',
+    fontCustomName: '',
+    footerCompany: 'Harbor & Home',
+    footerAddress1: '4820 Market Street',
+    footerAddress2: 'Portland, OR 97205',
+    footerCountry: 'United States',
+    footerEmail: 'hello@harborandhome.com',
+    footerPhone: '',
+    footerTagline: 'Secure checkout • Free shipping $75+ • Easy returns',
+    footerTextColor: '#6b7280',
+    footerHeadingColor: '#134e4a',
+    footerLinkColor: '#0f766e',
+    socialFacebook: '',
+    socialTwitter: '',
+    socialInstagram: '',
+    socialLinkedin: '',
+    linkPrivacy: '',
+    linkTerms: '',
+    linkHelp: '',
+    linkUnsubscribe: '{{unsubscribe_url}}',
+    layoutMaxWidth: '600px',
+    layoutOuterPadding: '20px 0',
+    layoutSectionPadding: '40px 30px',
+    layoutHorizontalPadding: '30px',
+    layoutSpacerStandard: '24px',
+    layoutSpacerLarge: '32–40px',
+    layoutRadiusButtons: '8px',
+    layoutRadiusHero: '12px',
+    layoutRadiusGrid: '8px',
+    imgHeroWidth: '600px (full bleed)',
+    imgFeaturedWidth: '540px max',
+    imgGridSize: '300 × 200px',
+    imgThumbSize: '270 × 180px',
+    imgHeroAspect: '3:2 or 16:9 landscape',
+    imgHeroDefault: '',
+    imgCdnBase: '',
+    darkBgOverride: '',
+    darkTextOverride: '',
+    contrastTarget: '4.5:1 (body text)',
+  };
+}
+
+export function getDefaultDesignRules(bundleId = 'industrial-b2b'): DesignRulesState {
+  const year = new Date().getFullYear();
+  const checklistItems = getChecklistItems(bundleId);
+  const base =
+    bundleId === 'email-marketing-starter-kit'
+      ? createStarterKitDefaults(year)
+      : createIndustrialDefaults(year);
+
+  return {
+    ...base,
+    checklist: checklistItems.map(() => false),
   };
 }

@@ -1,25 +1,25 @@
 import { useCallback, useEffect, useState } from 'react';
-import { getDefaultDesignRules, getStorageKey } from './defaults';
+import { getChecklistItems, getDefaultDesignRules, getStorageKey } from './defaults';
 import type { DesignRulesField, DesignRulesState } from './types';
 
 function loadState(bundleId: string): DesignRulesState {
   try {
     const raw = localStorage.getItem(getStorageKey(bundleId));
+    const defaults = getDefaultDesignRules(bundleId);
     if (raw) {
       const parsed = JSON.parse(raw) as Partial<DesignRulesState>;
-      const defaults = getDefaultDesignRules();
+      const checklistItems = getChecklistItems(bundleId);
       return {
         ...defaults,
         ...parsed,
-        checklist: parsed.checklist?.length === defaults.checklist.length
-          ? parsed.checklist
-          : defaults.checklist,
+        checklist:
+          parsed.checklist?.length === checklistItems.length ? parsed.checklist : defaults.checklist,
       };
     }
   } catch {
     /* ignore */
   }
-  return getDefaultDesignRules();
+  return getDefaultDesignRules(bundleId);
 }
 
 export function useDesignRulesState(bundleId: string) {
@@ -49,8 +49,8 @@ export function useDesignRulesState(bundleId: string) {
   }, []);
 
   const resetDefaults = useCallback(() => {
-    setState(getDefaultDesignRules());
-  }, []);
+    setState(getDefaultDesignRules(bundleId));
+  }, [bundleId]);
 
   return { state, setField, setChecklistItem, resetDefaults, savedAt };
 }

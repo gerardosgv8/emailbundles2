@@ -1,8 +1,14 @@
 import type { DesignRulesState } from '../types';
 import {
+  EMAIL_MARKETING_STARTER_KIT_ELEMENT_REGISTRY,
+  EMAIL_MARKETING_STARTER_KIT_KNOWN_ELEMENTS,
+  EMAIL_MARKETING_STARTER_KIT_PROFILE_BY_ELEMENT,
+} from './emailMarketingStarterKitElementRegistry';
+import {
   INDUSTRIAL_B2B_ELEMENT_REGISTRY,
   INDUSTRIAL_B2B_KNOWN_ELEMENTS,
   INDUSTRIAL_B2B_PROFILE_BY_ELEMENT,
+  type ElementApplyProfile,
 } from './industrialB2bElementRegistry';
 import {
   applyElementProfile,
@@ -26,28 +32,71 @@ export type ApplyReport = {
   warnings: string[];
 };
 
-function collectUnmappedElements(doc: Document): string[] {
+type RegistryEntry = {
+  id: string;
+  profile: ElementApplyProfile;
+  templates: readonly string[];
+};
+
+type BundleApplyConfig = {
+  registry: readonly RegistryEntry[];
+  knownElements: string[];
+  profileByElement: Record<string, ElementApplyProfile>;
+};
+
+const BUNDLE_APPLY_CONFIG: Record<string, BundleApplyConfig> = {
+  'industrial-b2b': {
+    registry: INDUSTRIAL_B2B_ELEMENT_REGISTRY,
+    knownElements: INDUSTRIAL_B2B_KNOWN_ELEMENTS,
+    profileByElement: INDUSTRIAL_B2B_PROFILE_BY_ELEMENT,
+  },
+  'email-marketing-starter-kit': {
+    registry: EMAIL_MARKETING_STARTER_KIT_ELEMENT_REGISTRY,
+    knownElements: EMAIL_MARKETING_STARTER_KIT_KNOWN_ELEMENTS,
+    profileByElement: EMAIL_MARKETING_STARTER_KIT_PROFILE_BY_ELEMENT,
+  },
+};
+
+export function isBrandApplyBundle(bundleId: string): boolean {
+  return bundleId in BUNDLE_APPLY_CONFIG;
+}
+
+function getBundleApplyConfig(bundleId: string): BundleApplyConfig {
+  const config = BUNDLE_APPLY_CONFIG[bundleId];
+  if (!config) {
+    throw new Error(`Brand apply is not configured for bundle "${bundleId}".`);
+  }
+  return config;
+}
+
+function collectUnmappedElements(doc: Document, knownElements: string[]): string[] {
   const found = new Set<string>();
   doc.querySelectorAll('[data-element]').forEach((el) => {
     const name = el.getAttribute('data-element');
-    if (name && !INDUSTRIAL_B2B_KNOWN_ELEMENTS.includes(name)) {
+    if (name && !knownElements.includes(name)) {
       found.add(name);
     }
   });
   return [...found].sort();
 }
 
-export function applyBrandToHtml(html: string, state: DesignRulesState, filePath = 'template.html'): {
+export function applyBrandToHtml(
+  html: string,
+  state: DesignRulesState,
+  bundleId: string,
+  filePath = 'template.html',
+): {
   html: string;
   fileResult: FileApplyResult;
 } {
+  const { registry, knownElements, profileByElement } = getBundleApplyConfig(bundleId);
   const parser = new DOMParser();
   const doc = parser.parseFromString(html, 'text/html');
   const touched = new Set<string>();
   let updateCount = 0;
 
-  for (const entry of INDUSTRIAL_B2B_ELEMENT_REGISTRY) {
-    const profile = INDUSTRIAL_B2B_PROFILE_BY_ELEMENT[entry.id];
+  for (const entry of registry) {
+    const profile = profileByElement[entry.id];
     if (!profile) continue;
 
     for (const el of doc.querySelectorAll(`[data-element="${entry.id}"]`)) {
@@ -83,7 +132,7 @@ export function applyBrandToHtml(html: string, state: DesignRulesState, filePath
 
   doc.documentElement.setAttribute('data-mailcraft-branded', '');
 
-  const unmappedElements = collectUnmappedElements(doc);
+  const unmappedElements = collectUnmappedElements(doc, knownElements);
   const hasHtmlShell = /<html[\s>]/i.test(html);
   const serialized = hasHtmlShell
     ? `<!DOCTYPE html>\n${doc.documentElement.outerHTML}`

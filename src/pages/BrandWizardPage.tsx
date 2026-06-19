@@ -2,7 +2,7 @@ import { useCallback, useState } from 'react';
 import { Link, Navigate, useParams } from 'react-router-dom';
 import { getTemplateBundle } from '../data/templateBundles';
 import { parseWizardRoute, wizardPath } from '../brand-wizard/wizardRoute';
-import { WIZARD_STEPS } from '../brand-wizard/defaults';
+import { WIZARD_STEPS, getChecklistItems } from '../brand-wizard/defaults';
 import { downloadDesignRules } from '../brand-wizard/exportDesignRules';
 import { useDesignRulesState } from '../brand-wizard/useDesignRulesState';
 import { getFieldMeta } from '../brand-wizard/getFieldMeta';
@@ -12,15 +12,9 @@ import { ColorField, TextField, WizardCard, type SetField } from '../brand-wizar
 import type { DesignRulesField, DesignRulesState } from '../brand-wizard/types';
 import '../styles/brand-wizard.css';
 
-const EXPORT_CHECKLIST = [
-  'Logo URL loads over HTTPS',
-  'Button colors meet contrast requirements',
-  'Footer has physical mailing address (CAN-SPAM)',
-  'Unsubscribe uses ESP merge tag',
-  'Support email is monitored',
-  'Social & legal URLs are correct',
-  'All 9 templates spot-checked',
-];
+function getExportChecklist(bundleId: string): string[] {
+  return getChecklistItems(bundleId);
+}
 
 function fieldMeta(bundleId: string, fieldKey: DesignRulesField) {
   const meta = getFieldMeta(bundleId, fieldKey);
@@ -306,7 +300,7 @@ function StepContent({
         <>
           <WizardCard title="Pre-flight checklist">
             <ul className="checklist">
-              {EXPORT_CHECKLIST.map((label, i) => (
+              {getExportChecklist(bundleId).map((label, i) => (
                 <li key={label}>
                   <input
                     type="checkbox"

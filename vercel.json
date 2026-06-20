@@ -1,7 +1,7 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "installCommand": "npm install --include=dev && npm link vite || npm install -g vite@7.1.7",
-  "buildCommand": "node scripts/vercel-stub-dist.mjs",
+  "installCommand": "npm install",
+  "buildCommand": "npm run vercel-build",
   "outputDirectory": "dist",
   "framework": null,
   "rewrites": [

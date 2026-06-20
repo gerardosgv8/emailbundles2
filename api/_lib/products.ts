@@ -19,6 +19,12 @@ export const PRODUCTS: ProductDefinition[] = [
     r2Key: 'industrial-b2b.zip',
     stripePriceEnvVar: 'STRIPE_PRICE_INDUSTRIAL_B2B',
   },
+  {
+    id: 'email-marketing-starter-kit',
+    name: 'Email Marketing Starter Kit',
+    r2Key: 'EmailMarketing_StarterKit.zip',
+    stripePriceEnvVar: 'STRIPE_PRICE_EMAIL_MARKETING_STARTER_KIT',
+  },
 ];
 
 export function getProduct(productId: string): ProductDefinition | undefined {

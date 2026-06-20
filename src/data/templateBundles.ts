@@ -43,6 +43,7 @@ export const TEMPLATE_BUNDLES: TemplateBundle[] = [
     imageAlt: 'Preview of Email Marketing Starter Kit templates',
     templateCount: 11,
     wizardAvailable: true,
+    checkoutProductId: 'email-marketing-starter-kit',
   },
 ];
 

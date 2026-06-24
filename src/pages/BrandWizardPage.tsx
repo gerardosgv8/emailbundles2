@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react';
 import { Link, Navigate, useParams } from 'react-router-dom';
 import { getTemplateBundle } from '../data/templateBundles';
-import { parseWizardRoute, wizardPath } from '../brand-wizard/wizardRoute';
+import { parseWizardBundleId, isLegacyEnhancedRoute, wizardPath } from '../brand-wizard/wizardRoute';
 import { WIZARD_STEPS, getChecklistItems } from '../brand-wizard/defaults';
 import { downloadDesignRules } from '../brand-wizard/exportDesignRules';
 import { useDesignRulesState } from '../brand-wizard/useDesignRulesState';
@@ -90,7 +90,6 @@ function StepContent({
   setField,
   setChecklistItem,
   onExport,
-  enhanced,
 }: {
   bundleId: string;
   stepId: string;
@@ -98,7 +97,6 @@ function StepContent({
   setField: SetField;
   setChecklistItem: (index: number, checked: boolean) => void;
   onExport: () => void;
-  enhanced: boolean;
 }) {
   const m = (fieldKey: DesignRulesField) => fieldMeta(bundleId, fieldKey);
   const set = setField as (key: DesignRulesField, value: string) => void;
@@ -324,21 +322,9 @@ function StepContent({
               </tbody>
             </table>
           </WizardCard>
-          {enhanced ? <ApplyBundlePanel state={state} bundleId={bundleId} /> : null}
+          <ApplyBundlePanel state={state} bundleId={bundleId} />
           <div className="w-card export-cta">
             <p>Download your completed design rules as Markdown.</p>
-            {!enhanced ? (
-              <p className="card-note" style={{ marginTop: 0 }}>
-                Need to apply brand tokens directly to HTML templates?{' '}
-                <Link to={wizardPath(bundleId, true)}>Open the enhanced wizard</Link> to upload
-                .html or .zip files.
-              </p>
-            ) : (
-              <p className="card-note" style={{ marginTop: 0 }}>
-                Export-only workflow?{' '}
-                <Link to={wizardPath(bundleId, false)}>Switch to the standard wizard</Link>.
-              </p>
-            )}
             <button type="button" className="w-btn w-btn-success" style={{ fontSize: '1rem', padding: '0.75rem 1.5rem' }} onClick={onExport}>
               ↓ Export DESIGN_RULES.md
             </button>
@@ -353,22 +339,24 @@ function StepContent({
 
 export function BrandWizardPage() {
   const { bundleId: routeBundleId } = useParams<{ bundleId: string }>();
-  const route = parseWizardRoute(routeBundleId);
-  const bundle = route ? getTemplateBundle(route.bundleId) : undefined;
+  const bundleId = parseWizardBundleId(routeBundleId);
+  const bundle = bundleId ? getTemplateBundle(bundleId) : undefined;
 
-  if (!route || !bundle || !bundle.wizardAvailable) {
+  if (routeBundleId && isLegacyEnhancedRoute(routeBundleId) && bundleId && bundle?.wizardAvailable) {
+    return <Navigate to={wizardPath(bundleId)} replace />;
+  }
+
+  if (!bundleId || !bundle || !bundle.wizardAvailable) {
     return <Navigate to="/brand-wizard" replace />;
   }
 
-  return <BrandWizardEditor bundle={bundle} enhanced={route.enhanced} />;
+  return <BrandWizardEditor bundle={bundle} />;
 }
 
 function BrandWizardEditor({
   bundle,
-  enhanced,
 }: {
   bundle: NonNullable<ReturnType<typeof getTemplateBundle>>;
-  enhanced: boolean;
 }) {
   const { state, setField, setChecklistItem, resetDefaults, savedAt } = useDesignRulesState(bundle.id);
   const [currentStep, setCurrentStep] = useState(0);
@@ -414,15 +402,8 @@ function BrandWizardEditor({
           <div className="wizard-sidebar-desktop">
             <h1>{bundle.name}</h1>
             <p className="sub">
-              {enhanced
-                ? 'Define brand tokens, apply to templates, and export DESIGN_RULES.md'
-                : 'Define brand tokens, preview, and export DESIGN_RULES.md'}
+              Define brand tokens, apply to templates, and export DESIGN_RULES.md
             </p>
-            {enhanced ? (
-              <span className="wizard-mode-badge wizard-mode-badge--enhanced">Enhanced · apply to HTML</span>
-            ) : (
-              <span className="wizard-mode-badge">Standard · export .md</span>
-            )}
             <nav aria-label="Wizard steps">
               {WIZARD_STEPS.map((s, i) => {
                 const cls = i === currentStep ? 'active' : i < currentStep ? 'done' : '';
@@ -444,11 +425,6 @@ function BrandWizardEditor({
           <div className="wizard-sidebar-mobile">
             <div className="wizard-mobile-head">
               <h1>{bundle.name}</h1>
-              {enhanced ? (
-                <span className="wizard-mode-badge wizard-mode-badge--enhanced">Enhanced</span>
-              ) : (
-                <span className="wizard-mode-badge">Standard</span>
-              )}
             </div>
             <label className="wizard-step-picker">
               <span className="wizard-step-picker-label">
@@ -490,7 +466,6 @@ function BrandWizardEditor({
             setField={setField}
             setChecklistItem={setChecklistItem}
             onExport={handleExport}
-            enhanced={enhanced}
           />
 
           <div className="step-actions">

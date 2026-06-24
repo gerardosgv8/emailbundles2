@@ -1,20 +1,19 @@
 const ENHANCED_SUFFIX = '-enhanced';
 
-export type WizardRoute = {
-  bundleId: string;
-  enhanced: boolean;
-};
-
-/** Parse `/brand-wizard/:bundleId` — `industrial-b2b-enhanced` → enhanced apply mode. */
-export function parseWizardRoute(routeBundleId: string | undefined): WizardRoute | null {
+/** Strip legacy `-enhanced` suffix from route param. */
+export function parseWizardBundleId(routeBundleId: string | undefined): string | null {
   if (!routeBundleId?.trim()) return null;
   if (routeBundleId.endsWith(ENHANCED_SUFFIX)) {
     const bundleId = routeBundleId.slice(0, -ENHANCED_SUFFIX.length);
-    return bundleId ? { bundleId, enhanced: true } : null;
+    return bundleId || null;
   }
-  return { bundleId: routeBundleId, enhanced: false };
+  return routeBundleId;
 }
 
-export function wizardPath(bundleId: string, enhanced = false): string {
-  return `/brand-wizard/${bundleId}${enhanced ? ENHANCED_SUFFIX : ''}`;
+export function isLegacyEnhancedRoute(routeBundleId: string | undefined): boolean {
+  return Boolean(routeBundleId?.endsWith(ENHANCED_SUFFIX));
+}
+
+export function wizardPath(bundleId: string): string {
+  return `/brand-wizard/${bundleId}`;
 }

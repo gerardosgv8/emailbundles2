@@ -48,12 +48,7 @@ h1, h2, h3, h4, h5, h6 { color: var(--text); line-height: 1.25; }
   padding: 1rem 0;
   gap: 1rem;
 }
-.logo { display: flex; align-items: center; gap: 0.75rem; color: var(--text); font-weight: 600; }
-.logo-mark {
-  width: 2.5rem; height: 2.5rem; border-radius: 10px;
-  background: var(--primary); color: #fff;
-  display: grid; place-items: center; font-weight: 700; font-size: 0.85rem;
-}
+.logo { display: flex; align-items: center; color: var(--text); font-weight: 600; font-size: 1.05rem; }
 .nav-desktop { display: none; align-items: center; gap: 1.25rem; font-size: 0.9rem; }
 .nav-desktop a { color: var(--text-secondary); font-weight: 500; }
 .nav-desktop a:hover, .nav-desktop a.active { color: var(--primary); }
@@ -180,16 +175,6 @@ h1, h2, h3, h4, h5, h6 { color: var(--text); line-height: 1.25; }
 .email-mockup-body {
   padding: 1.5rem 1.35rem 1.65rem;
   background: transparent;
-}
-.email-mockup-logo {
-  width: 3rem; height: 3rem; border-radius: 12px;
-  background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4);
-  margin: 0 auto 1rem; display: grid; place-items: center;
-  color: var(--primary); font-weight: 700; font-size: 0.75rem;
 }
 .email-mockup h3 {
   text-align: center; font-size: 1.05rem; font-weight: 700; margin: 0 0 0.5rem;
@@ -548,7 +533,7 @@ input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px
 .product-features li::before { content: '✓ '; color: var(--primary); font-weight: 700; }
 
 .bundle-select-grid { display: grid; gap: 1.5rem; margin-top: 2rem; }
-@media (min-width: 768px) { .bundle-select-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (min-width: 640px) { .bundle-select-grid { grid-template-columns: repeat(2, 1fr); } }
 .bundle-select-card { display: flex; flex-direction: column; }
 .bundle-select-card--soon { opacity: 0.92; }
 .bundle-select-card-head {

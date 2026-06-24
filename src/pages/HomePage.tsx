@@ -47,7 +47,6 @@ export function HomePage() {
           <div className="email-mockup glass-card">
             <div className="email-mockup-bar" />
             <div className="email-mockup-body">
-              <div className="email-mockup-logo">MS</div>
               <h3>Your next campaign</h3>
               <p>ESP-ready HTML that renders consistently across clients.</p>
               <Link to="/products" className="email-mockup-cta">Start Now</Link>

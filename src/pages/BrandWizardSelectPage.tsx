@@ -8,9 +8,8 @@ export function BrandWizardSelectPage() {
       <div className="page-hero">
         <h1>Brand Design Wizard</h1>
         <p>
-          Choose the template bundle you want to brand. The <strong>standard wizard</strong> exports
-          DESIGN_RULES.md; the <strong>enhanced wizard</strong> adds HTML/.zip apply for compatible
-          bundles.
+          Choose the template bundle you want to brand. Define your tokens, apply them to your HTML
+          templates or bundle .zip, and export DESIGN_RULES.md for your team.
         </p>
       </div>
 
@@ -41,9 +40,6 @@ export function BrandWizardSelectPage() {
               <div className="bundle-select-actions">
                 <Link to={wizardPath(bundle.id)} className="btn btn-primary">
                   Open Brand Wizard
-                </Link>
-                <Link to={wizardPath(bundle.id, true)} className="btn btn-secondary btn-sm">
-                  Enhanced wizard
                 </Link>
               </div>
             ) : (

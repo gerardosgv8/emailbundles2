@@ -23,8 +23,7 @@ export function Header() {
       <header className="site-header" id="site-header">
         <div className="container header-inner">
           <Link to="/" className="logo">
-            <span className="logo-mark">MS</span>
-            <span className="logo-text">Mailcraft Studio</span>
+            Mailcraft Studio
           </Link>
           <nav className="nav-desktop" aria-label="Main">
             {NAV_LINKS.map(({ to, label, end }) => (

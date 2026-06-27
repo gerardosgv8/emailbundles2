@@ -92,6 +92,7 @@ export function ColorField({ fieldKey, label, usage, templates, elements, value,
           type="text"
           value={value}
           maxLength={7}
+          aria-label={`${label} hex value`}
           onChange={(e) => handleHex(e.target.value)}
         />
       </div>

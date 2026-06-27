@@ -204,8 +204,8 @@ function StepContent({
             </div>
           </WizardCard>
           <WizardCard title="Links">
-            <div className="field-grid">
-              <ColorField fieldKey="linkColor" label="Text link color" {...m('linkColor')} value={state.linkColor} onChange={set} />
+            <ColorField fieldKey="linkColor" label="Text link color" {...m('linkColor')} value={state.linkColor} onChange={set} />
+            <div className="field-grid" style={{ marginTop: '1rem' }}>
               <TextField fieldKey="urlBase" label="Base website URL" type="url" full {...m('urlBase')} value={state.urlBase} onChange={set} />
               <TextField fieldKey="urlQuote" label="Quote / contact URL" type="url" {...m('urlQuote')} value={state.urlQuote} onChange={set} />
               <TextField fieldKey="urlSupport" label="Support URL" type="url" {...m('urlSupport')} value={state.urlSupport} onChange={set} />

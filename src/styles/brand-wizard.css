@@ -171,8 +171,9 @@
   }
 
   .wizard-app .color-row input[type="text"] {
-    min-width: 0;
-    flex: 1;
+    width: 8.5rem;
+    min-width: 8.5rem;
+    flex: 0 0 auto;
   }
 
   .wizard-app .ref-table {
@@ -431,6 +432,10 @@
   gap: 1.1rem;
 }
 
+.wizard-app .field-grid > .color-token {
+  grid-column: 1 / -1;
+}
+
 .wizard-app .field { display: flex; flex-direction: column; gap: 0.4rem; }
 .wizard-app .field.full { grid-column: 1 / -1; }
 .wizard-app .field label {
@@ -462,17 +467,21 @@
 
 .wizard-app .field textarea { min-height: 88px; resize: vertical; line-height: 1.5; }
 
-.wizard-app .color-row { display: flex; align-items: center; gap: 0.5rem; }
+.wizard-app .color-row { display: flex; align-items: center; gap: 0.5rem; flex-shrink: 0; }
 .wizard-app .color-row input[type="color"] {
   width: 44px; height: 38px; padding: 3px;
   border: 1px solid var(--border-strong); border-radius: 8px;
   background: var(--surface); cursor: pointer;
+  flex-shrink: 0;
 }
 .wizard-app .color-row input[type="text"] {
-  flex: 1;
+  flex: 0 0 auto;
+  width: 8.5rem;
+  min-width: 8.5rem;
+  box-sizing: border-box;
   font-family: ui-monospace, 'SF Mono', Menlo, monospace;
-  font-size: 0.85rem;
-  padding: 0.5rem 0.65rem;
+  font-size: 0.9rem;
+  padding: 0.6rem 0.75rem;
   border-radius: 8px;
   border: 1px solid var(--border-strong);
   background: var(--surface);
@@ -480,10 +489,10 @@
 }
 
 .wizard-app .color-token {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 1rem;
-  align-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.65rem;
   padding: 0.75rem 0;
   border-bottom: 1px solid var(--border);
 }

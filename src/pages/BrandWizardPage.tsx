@@ -7,7 +7,9 @@ import { downloadDesignRules } from '../brand-wizard/exportDesignRules';
 import { useDesignRulesState } from '../brand-wizard/useDesignRulesState';
 import { getFieldMeta } from '../brand-wizard/getFieldMeta';
 import { ApplyBundlePanel } from '../brand-wizard/components/ApplyBundlePanel';
+import { ImportDesignRulesPanel } from '../brand-wizard/components/ImportDesignRulesPanel';
 import { WizardConfirmModal } from '../brand-wizard/components/WizardConfirmModal';
+import type { ImportDesignRulesResult } from '../brand-wizard/importDesignRules';
 import { ColorField, TextField, WizardCard, type SetField } from '../brand-wizard/WizardFields';
 import type { DesignRulesField, DesignRulesState } from '../brand-wizard/types';
 import '../styles/brand-wizard.css';
@@ -90,6 +92,7 @@ function StepContent({
   setField,
   setChecklistItem,
   onExport,
+  onImportReady,
 }: {
   bundleId: string;
   stepId: string;
@@ -97,6 +100,7 @@ function StepContent({
   setField: SetField;
   setChecklistItem: (index: number, checked: boolean) => void;
   onExport: () => void;
+  onImportReady: (result: ImportDesignRulesResult, fileName: string) => void;
 }) {
   const m = (fieldKey: DesignRulesField) => fieldMeta(bundleId, fieldKey);
   const set = setField as (key: DesignRulesField, value: string) => void;
@@ -323,6 +327,7 @@ function StepContent({
             </table>
           </WizardCard>
           <ApplyBundlePanel state={state} bundleId={bundleId} />
+          <ImportDesignRulesPanel onReadyToImport={onImportReady} />
           <div className="w-card export-cta">
             <p>Download your completed design rules as Markdown.</p>
             <button type="button" className="w-btn w-btn-success" style={{ fontSize: '1rem', padding: '0.75rem 1.5rem' }} onClick={onExport}>
@@ -358,10 +363,16 @@ function BrandWizardEditor({
 }: {
   bundle: NonNullable<ReturnType<typeof getTemplateBundle>>;
 }) {
-  const { state, setField, setChecklistItem, resetDefaults, savedAt } = useDesignRulesState(bundle.id);
+  const { state, setField, setChecklistItem, resetDefaults, importDesignRulesState, savedAt } =
+    useDesignRulesState(bundle.id);
   const [currentStep, setCurrentStep] = useState(0);
   const [toast, setToast] = useState<string | null>(null);
   const [resetModalOpen, setResetModalOpen] = useState(false);
+  const [importModalOpen, setImportModalOpen] = useState(false);
+  const [pendingImport, setPendingImport] = useState<{
+    result: ImportDesignRulesResult;
+    fileName: string;
+  } | null>(null);
 
   const step = WIZARD_STEPS[currentStep];
 
@@ -374,6 +385,21 @@ function BrandWizardEditor({
     downloadDesignRules(state);
     showToast('DESIGN_RULES.md downloaded');
   }, [state, showToast]);
+
+  const handleImportReady = useCallback((result: ImportDesignRulesResult, fileName: string) => {
+    setPendingImport({ result, fileName });
+    setImportModalOpen(true);
+  }, []);
+
+  const confirmImport = () => {
+    if (!pendingImport) return;
+    importDesignRulesState(pendingImport.result.partial, pendingImport.result.checklist);
+    setImportModalOpen(false);
+    showToast(
+      `Imported ${pendingImport.result.stats.fieldsMatched} fields from ${pendingImport.fileName}`,
+    );
+    setPendingImport(null);
+  };
 
   const handleReset = () => {
     setResetModalOpen(true);
@@ -466,6 +492,7 @@ function BrandWizardEditor({
             setField={setField}
             setChecklistItem={setChecklistItem}
             onExport={handleExport}
+            onImportReady={handleImportReady}
           />
 
           <div className="step-actions">
@@ -482,6 +509,35 @@ function BrandWizardEditor({
       </div>
 
       <div className={`wizard-toast${toast ? ' show' : ''}`}>{toast}</div>
+
+      <WizardConfirmModal
+        open={importModalOpen}
+        title="Import design rules?"
+        confirmLabel="Import settings"
+        cancelLabel="Cancel"
+        onCancel={() => {
+          setImportModalOpen(false);
+          setPendingImport(null);
+        }}
+        onConfirm={confirmImport}
+        description={
+          pendingImport ? (
+            <>
+              <p>
+                Replace your current wizard values with{' '}
+                <strong>{pendingImport.result.stats.fieldsMatched}</strong> token
+                {pendingImport.result.stats.fieldsMatched === 1 ? '' : 's'} from{' '}
+                <strong>{pendingImport.fileName}</strong>?
+              </p>
+              <p className="wizard-modal-note">
+                Fields not found in the file keep their current values. Pricing and promo button
+                colors are not in DESIGN_RULES.md yet and stay at bundle defaults unless you set
+                them manually.
+              </p>
+            </>
+          ) : null
+        }
+      />
 
       <WizardConfirmModal
         open={resetModalOpen}

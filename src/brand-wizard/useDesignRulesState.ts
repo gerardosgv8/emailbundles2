@@ -52,5 +52,18 @@ export function useDesignRulesState(bundleId: string) {
     setState(getDefaultDesignRules(bundleId));
   }, [bundleId]);
 
-  return { state, setField, setChecklistItem, resetDefaults, savedAt };
+  const importDesignRulesState = useCallback(
+    (imported: Partial<DesignRulesState>, checklist?: boolean[]) => {
+      const checklistItems = getChecklistItems(bundleId);
+      setState((prev) => ({
+        ...prev,
+        ...imported,
+        checklist:
+          checklist?.length === checklistItems.length ? checklist : prev.checklist,
+      }));
+    },
+    [bundleId],
+  );
+
+  return { state, setField, setChecklistItem, resetDefaults, importDesignRulesState, savedAt };
 }

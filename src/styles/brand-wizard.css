@@ -954,3 +954,29 @@
 .wizard-app .apply-bundle-file-list strong { font-size: 0.85rem; }
 .wizard-app .apply-bundle-hooks { color: var(--muted); font-size: 0.78rem; line-height: 1.4; }
 .wizard-app .apply-bundle-warning { margin: 0 0 0.5rem; font-size: 0.8rem; color: #b45309; line-height: 1.45; }
+
+.wizard-app .import-design-rules-panel code {
+  font-size: 0.85em;
+  padding: 0.1em 0.35em;
+  border-radius: 4px;
+  background: var(--surface-2);
+}
+
+.wizard-app .import-design-rules-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.wizard-app .import-design-rules-filename {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.wizard-app .import-design-rules-preview {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+}

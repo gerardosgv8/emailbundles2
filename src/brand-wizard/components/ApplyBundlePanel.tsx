@@ -98,8 +98,8 @@ export function ApplyBundlePanel({ state, bundleId }: Props) {
       <h3>Apply brand to templates</h3>
       <p className="card-note">
         Drop or upload a single .html template or a full bundle .zip. Mailcraft maps your wizard
-        tokens to elements marked with <code>data-element</code> and returns a branded download.
-        Filled CTAs use <strong>Primary bg</strong> and <strong>Primary text</strong> (one button per
+        tokens to elements marked with <code>data-element</code> and returns a branded download
+        with <code>DESIGN_RULES.md</code> included. Filled CTAs use <strong>Primary bg</strong> and <strong>Primary text</strong> (one button per
         template). Templates with two buttons also use <strong>Secondary</strong> tokens for the
         outline button.
       </p>
@@ -175,7 +175,7 @@ export function ApplyBundlePanel({ state, bundleId }: Props) {
             <p key={warning} className="apply-bundle-warning">{warning}</p>
           ))}
           <button type="button" className="w-btn w-btn-success" onClick={handleDownload}>
-            ↓ Download {result.filename}
+            ↓ Download {result.filename} (includes DESIGN_RULES.md)
           </button>
         </div>
       ) : null}

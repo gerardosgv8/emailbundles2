@@ -23,7 +23,13 @@ function fieldMeta(bundleId: string, fieldKey: DesignRulesField) {
   return meta ? { usage: meta.usage, templates: meta.templates, elements: meta.elements } : {};
 }
 
-function WizardPreview({ state }: { state: DesignRulesState }) {
+function WizardPreview({
+  state,
+  onImportReady,
+}: {
+  state: DesignRulesState;
+  onImportReady: (result: ImportDesignRulesResult, fileName: string) => void;
+}) {
   const d = state;
   const swatches: { label: string; color: string }[] = [
     { label: 'Primary', color: d.colorPrimary },
@@ -39,6 +45,7 @@ function WizardPreview({ state }: { state: DesignRulesState }) {
 
   return (
     <aside className="preview-panel">
+      <ImportDesignRulesPanel onReadyToImport={onImportReady} />
       <h3>Live preview</h3>
       <div className="preview-email">
         <div className="p-header" style={{ background: d.colorBgEmail }}>
@@ -92,7 +99,6 @@ function StepContent({
   setField,
   setChecklistItem,
   onExport,
-  onImportReady,
 }: {
   bundleId: string;
   stepId: string;
@@ -100,7 +106,6 @@ function StepContent({
   setField: SetField;
   setChecklistItem: (index: number, checked: boolean) => void;
   onExport: () => void;
-  onImportReady: (result: ImportDesignRulesResult, fileName: string) => void;
 }) {
   const m = (fieldKey: DesignRulesField) => fieldMeta(bundleId, fieldKey);
   const set = setField as (key: DesignRulesField, value: string) => void;
@@ -327,7 +332,6 @@ function StepContent({
             </table>
           </WizardCard>
           <ApplyBundlePanel state={state} bundleId={bundleId} />
-          <ImportDesignRulesPanel onReadyToImport={onImportReady} />
           <div className="w-card export-cta">
             <p>Download your completed design rules as Markdown.</p>
             <button type="button" className="w-btn w-btn-success" style={{ fontSize: '1rem', padding: '0.75rem 1.5rem' }} onClick={onExport}>
@@ -473,6 +477,9 @@ function BrandWizardEditor({
         </aside>
 
         <main className="wizard-main">
+          <div className="wizard-import-mobile">
+            <ImportDesignRulesPanel onReadyToImport={handleImportReady} />
+          </div>
           <div className="main-header">
             <div>
               <h2>{step.title}</h2>
@@ -492,7 +499,6 @@ function BrandWizardEditor({
             setField={setField}
             setChecklistItem={setChecklistItem}
             onExport={handleExport}
-            onImportReady={handleImportReady}
           />
 
           <div className="step-actions">
@@ -505,7 +511,7 @@ function BrandWizardEditor({
           </div>
         </main>
 
-        <WizardPreview state={state} />
+        <WizardPreview state={state} onImportReady={handleImportReady} />
       </div>
 
       <div className={`wizard-toast${toast ? ' show' : ''}`}>{toast}</div>

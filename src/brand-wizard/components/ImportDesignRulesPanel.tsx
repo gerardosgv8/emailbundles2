@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState, type ChangeEvent } from 'react';
+import { useCallback, useState, type ChangeEvent } from 'react';
 import { importDesignRules, type ImportDesignRulesResult } from '../importDesignRules';
 
 type Props = {
@@ -6,57 +6,52 @@ type Props = {
 };
 
 export function ImportDesignRulesPanel({ onReadyToImport }: Props) {
-  const inputRef = useRef<HTMLInputElement>(null);
   const [fileName, setFileName] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [preview, setPreview] = useState<ImportDesignRulesResult | null>(null);
   const [busy, setBusy] = useState(false);
 
-  const parseFile = useCallback(
-    async (file: File) => {
-      if (!file.name.toLowerCase().endsWith('.md')) {
-        setFileName(null);
+  const parseFile = useCallback(async (file: File) => {
+    if (!file.name.toLowerCase().endsWith('.md')) {
+      setFileName(null);
+      setPreview(null);
+      setError('Use a .md file (e.g. DESIGN_RULES.md).');
+      return;
+    }
+
+    setBusy(true);
+    setError(null);
+    try {
+      const markdown = await file.text();
+      if (!/design rules|brand identity/i.test(markdown)) {
         setPreview(null);
-        setError('Choose a Markdown file (.md), such as DESIGN_RULES.md.');
+        setFileName(file.name);
+        setError('Not a Mailcraft DESIGN_RULES.md export.');
         return;
       }
 
-      setBusy(true);
-      setError(null);
-      try {
-        const markdown = await file.text();
-        if (!/design rules|brand identity/i.test(markdown)) {
-          setPreview(null);
-          setFileName(file.name);
-          setError('This file does not look like a Mailcraft DESIGN_RULES.md export.');
-          return;
-        }
-
-        const result = importDesignRules(markdown);
-        if (result.stats.fieldsMatched === 0) {
-          setPreview(null);
-          setFileName(file.name);
-          setError(result.stats.warnings[0] ?? 'No design tokens could be imported from this file.');
-          return;
-        }
-
-        setFileName(file.name);
-        setPreview(result);
-      } catch {
-        setError('Could not read that file.');
+      const result = importDesignRules(markdown);
+      if (result.stats.fieldsMatched === 0) {
         setPreview(null);
-        setFileName(null);
-      } finally {
-        setBusy(false);
+        setFileName(file.name);
+        setError(result.stats.warnings[0] ?? 'No tokens found in this file.');
+        return;
       }
-    },
-    [],
-  );
+
+      setFileName(file.name);
+      setPreview(result);
+    } catch {
+      setError('Could not read that file.');
+      setPreview(null);
+      setFileName(null);
+    } finally {
+      setBusy(false);
+    }
+  }, []);
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) void parseFile(file);
-    event.target.value = '';
   };
 
   const handleImportClick = () => {
@@ -65,52 +60,42 @@ export function ImportDesignRulesPanel({ onReadyToImport }: Props) {
   };
 
   return (
-    <div className="w-card import-design-rules-panel">
-      <h3>Import existing design rules</h3>
-      <p className="card-note">
-        Upload a <code>DESIGN_RULES.md</code> file (from a previous export or from a branded bundle
-        zip) to fill every wizard field automatically instead of starting from scratch.
+    <div className="preview-import-block">
+      <p className="preview-import-label">Import DESIGN_RULES.md</p>
+      <p className="preview-import-hint">
+        Load a previous export or the .md from a branded bundle zip to fill all wizard fields.
       </p>
 
-      <div className="import-design-rules-controls">
+      <label className="preview-import-file-label">
+        <span className="preview-import-file-button">{busy ? 'Reading…' : 'Choose file'}</span>
         <input
-          ref={inputRef}
           type="file"
           accept=".md,text/markdown"
-          onChange={handleFileChange}
-          className="apply-bundle-file"
-          tabIndex={-1}
-          aria-hidden="true"
-        />
-        <button
-          type="button"
-          className="w-btn"
+          className="preview-import-file-input"
           disabled={busy}
-          onClick={() => inputRef.current?.click()}
-        >
-          {busy ? 'Reading…' : 'Choose DESIGN_RULES.md'}
-        </button>
-        {fileName ? <span className="import-design-rules-filename">{fileName}</span> : null}
-      </div>
+          onChange={handleFileChange}
+        />
+        <span className="preview-import-file-name">
+          {fileName ?? 'No file chosen'}
+        </span>
+      </label>
 
-      {error ? <p className="apply-bundle-error">{error}</p> : null}
+      {error ? <p className="preview-import-error">{error}</p> : null}
 
       {preview ? (
-        <div className="import-design-rules-preview">
-          <p className="apply-bundle-summary">
-            Found <strong>{preview.stats.fieldsMatched}</strong> design token
-            {preview.stats.fieldsMatched === 1 ? '' : 's'}
+        <div className="preview-import-ready">
+          <p className="preview-import-summary">
+            <strong>{preview.stats.fieldsMatched}</strong> tokens ready
             {preview.checklist?.length
-              ? ` and ${preview.checklist.filter(Boolean).length} of ${preview.checklist.length} checklist items`
+              ? ` · ${preview.checklist.filter(Boolean).length}/${preview.checklist.length} checklist`
               : ''}
-            .
           </p>
           {preview.stats.warnings.map((warning) => (
-            <p key={warning} className="apply-bundle-warning">
+            <p key={warning} className="preview-import-warning">
               {warning}
             </p>
           ))}
-          <button type="button" className="w-btn w-btn-primary" onClick={handleImportClick}>
+          <button type="button" className="w-btn w-btn-primary preview-import-btn" onClick={handleImportClick}>
             Import into wizard
           </button>
         </div>

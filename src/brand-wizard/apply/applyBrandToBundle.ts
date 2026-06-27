@@ -1,6 +1,9 @@
 import JSZip from 'jszip';
 import type { DesignRulesState } from '../types';
+import { exportDesignRules } from '../exportDesignRules';
 import { applyBrandToHtml, summarizeReport, type ApplyReport } from './applyBrandToHtml';
+
+export const DESIGN_RULES_FILENAME = 'DESIGN_RULES.md';
 
 export type ApplyBundleResult = {
   blob: Blob;
@@ -17,6 +20,10 @@ function outputName(inputName: string): string {
   return `${base}-branded.zip`;
 }
 
+function appendDesignRules(zip: JSZip, state: DesignRulesState): void {
+  zip.file(DESIGN_RULES_FILENAME, exportDesignRules(state));
+}
+
 export async function applyBrandToUpload(
   file: File,
   state: DesignRulesState,
@@ -30,6 +37,7 @@ export async function applyBrandToUpload(
     const zip = new JSZip();
     const brandedName = file.name.replace(/\.html?$/i, '-branded.html');
     zip.file(brandedName, brandedHtml);
+    appendDesignRules(zip, state);
     const blob = await zip.generateAsync({ type: 'blob' });
     return {
       blob,
@@ -65,10 +73,15 @@ export async function applyBrandToUpload(
       continue;
     }
 
+    if (path.replace(/\\/g, '/').endsWith(DESIGN_RULES_FILENAME)) {
+      continue;
+    }
+
     const binary = await entry.async('uint8array');
     outZip.file(path, binary);
   }
 
+  appendDesignRules(outZip, state);
   const blob = await outZip.generateAsync({ type: 'blob' });
   return {
     blob,

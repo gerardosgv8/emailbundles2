@@ -6,7 +6,7 @@
   "homepage": "https://gerardosgv8.github.io/emailbundles2",
   "scripts": {
     "dev": "vite --config config/vite.config.ts",
-    "build": "npx tsc --noEmit && vite --config config/vite.config.ts build",
+    "build": "node scripts/build.mjs",
     "vercel-build": "node scripts/vercel-stub-dist.mjs",
     "postinstall": "node scripts/ensure-vercel-vite.mjs",
     "build:gh-pages": "npx tsc --noEmit && vite --config config/vite.config.ts build --base=/emailbundles2/ && cp dist/index.html dist/404.html",

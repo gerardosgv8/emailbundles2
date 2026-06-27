@@ -1,9 +1,9 @@
 /**
  * Vercel dashboard overrides sometimes run raw `vite build` (not npm scripts).
- * That fails with exit 127 when `vite` is not on PATH — link it during install on Vercel.
+ * Symlink node_modules/.bin/vite onto PATH so that command succeeds if triggered.
  */
 import { execSync } from 'node:child_process';
-import { readFileSync } from 'node:fs';
+import { accessSync, chmodSync, constants, copyFileSync, existsSync, mkdirSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -12,19 +12,43 @@ if (process.env.VERCEL !== '1') {
 }
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
-const pkg = JSON.parse(readFileSync(join(root, 'package.json'), 'utf8'));
-const viteRange = pkg.dependencies?.vite ?? pkg.devDependencies?.vite;
-const version = viteRange?.replace(/^[^\d]*/, '') ?? '7.1.7';
-const spec = `vite@${version}`;
+const localVite = join(root, 'node_modules', '.bin', 'vite');
+
+if (!existsSync(localVite)) {
+  console.warn('ensure-vercel-vite: node_modules/.bin/vite missing after install');
+  process.exit(0);
+}
+
+try {
+  chmodSync(localVite, 0o755);
+} catch {
+  /* ignore */
+}
+
+const pathTargets = ['/usr/local/bin/vite', '/usr/bin/vite'].filter((target) => {
+  try {
+    const dir = dirname(target);
+    accessSync(dir, constants.W_OK);
+    return true;
+  } catch {
+    return false;
+  }
+});
+
+for (const target of pathTargets) {
+  try {
+    copyFileSync(localVite, target);
+    chmodSync(target, 0o755);
+    console.log(`ensure-vercel-vite: installed vite shim at ${target}`);
+    process.exit(0);
+  } catch {
+    /* try next */
+  }
+}
 
 try {
   execSync('npm link vite', { cwd: root, stdio: 'inherit' });
-  console.log('ensure-vercel-vite: linked vite for shell PATH');
-} catch {
-  try {
-    execSync(`npm install -g ${spec}`, { stdio: 'inherit' });
-    console.log(`ensure-vercel-vite: installed ${spec} globally`);
-  } catch (err) {
-    console.warn('ensure-vercel-vite: could not expose vite on PATH:', err?.message ?? err);
-  }
+  console.log('ensure-vercel-vite: linked vite via npm link');
+} catch (err) {
+  console.warn('ensure-vercel-vite: could not expose vite on PATH:', err?.message ?? err);
 }

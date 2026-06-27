@@ -1,7 +1,7 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "installCommand": "npm install --include=dev && node scripts/ensure-vercel-vite.mjs",
-  "buildCommand": "node scripts/vercel-stub-dist.mjs",
+  "buildCommand": "bash scripts/vercel-build.sh",
   "outputDirectory": "dist",
   "framework": null,
   "rewrites": [

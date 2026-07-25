@@ -15,7 +15,7 @@ export function ImportDesignRulesPanel({ onReadyToImport }: Props) {
     if (!file.name.toLowerCase().endsWith('.md')) {
       setFileName(null);
       setPreview(null);
-      setError('Use a .md file (e.g. DESIGN_RULES.md).');
+      setError('Use a Design Rules file (.md).');
       return;
     }
 
@@ -26,7 +26,7 @@ export function ImportDesignRulesPanel({ onReadyToImport }: Props) {
       if (!/design rules|brand identity/i.test(markdown)) {
         setPreview(null);
         setFileName(file.name);
-        setError('Not a Mailcraft DESIGN_RULES.md export.');
+        setError('Not a Mailcraft Design Rules export.');
         return;
       }
 
@@ -61,7 +61,7 @@ export function ImportDesignRulesPanel({ onReadyToImport }: Props) {
 
   return (
     <div className="preview-import-block">
-      <p className="preview-import-label">Import DESIGN_RULES.md</p>
+      <p className="preview-import-label">Import Design Rules</p>
       <p className="preview-import-hint">
         Load a previous export or the .md from a branded bundle zip to fill all wizard fields.
       </p>

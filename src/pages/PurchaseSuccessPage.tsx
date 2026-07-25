@@ -106,7 +106,7 @@ export function PurchaseSuccessPage() {
               {purchase.emailed ? (
                 <>
                   {' '}
-                  We sent a download link to <strong>{purchase.email}</strong> — check your inbox
+                  We sent a download link to <strong>{purchase.email}</strong>. Check your inbox
                   (and spam folder).
                 </>
               ) : (

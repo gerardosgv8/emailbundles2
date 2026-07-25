@@ -1,7 +1,14 @@
+export interface FaqRelatedLink {
+  label: string;
+  to: string;
+}
+
 export interface FaqItem {
   id: string;
   question: string;
+  /** Lead with a direct answer in the first sentence. */
   answer: string;
+  related?: FaqRelatedLink[];
 }
 
 export interface FaqCategory {
@@ -11,152 +18,225 @@ export interface FaqCategory {
   items: FaqItem[];
 }
 
+/**
+ * Curated top FAQs (~18). Prefer real friction points over exhaustive coverage.
+ * Deep docs live under /docs. Link out instead of duplicating long guides.
+ */
 export const FAQ_CATEGORIES: FaqCategory[] = [
   {
     id: 'getting-started',
     title: 'Getting started',
-    description: 'Downloads, setup, and your first send.',
+    description: 'First download, setup, and what to expect.',
     items: [
       {
-        id: 'what-is-mailcraft',
-        question: 'What is Mailcraft Studio?',
-        answer: 'Mailcraft Studio is a collection of production-ready HTML email templates and design tools built for marketers and developers. Each bundle includes table-based, ESP-compatible templates with inline CSS, modular sections, and documentation to help you ship campaigns faster.',
-      },
-      {
-        id: 'how-to-start',
-        question: 'How do I get started with a template bundle?',
-        answer: 'Download the bundle, open the HTML file for your campaign type, customize text and images to match your brand, then paste the full HTML into your ESP template editor. Our docs walk through each step, from asset hosting to test sends.',
+        id: 'how-do-i-start',
+        question: 'How do I get started after I download a bundle?',
+        answer:
+          'You can brand and fill the whole pack at once, or edit a single HTML file by hand. For the pack path: open Brand Wizard to apply logo, colors, and footer across the zip, then use Content Wizard to drop in campaign copy and download filled HTML. Prefer manual edits? Extract the zip, open the file that matches your campaign, swap copy and images, and paste the full HTML into your ESP. Host images on HTTPS and send a test before your full list.',
+        related: [
+          { label: 'Brand Design Wizard', to: '/brand-wizard' },
+          { label: 'Content Wizard', to: '/content-wizard' },
+          { label: 'Getting started guide', to: '/docs#getting-started' },
+        ],
       },
       {
         id: 'need-html',
         question: 'Do I need to know HTML to use these templates?',
-        answer: 'Basic familiarity helps, but it is not required. Copy and image swaps are straightforward. Styles are inlined and commented, and the Brand Design Wizard helps you define colors, fonts, and footer details without hunting through the code.',
+        answer:
+          'A little HTML familiarity helps, but you can update most text and images without writing code. Styles are inlined and commented. For brand colors and logos across a whole pack, use the Brand Design Wizard. For campaign copy, use the Content Wizard.',
+        related: [
+          { label: 'Brand Design Wizard', to: '/brand-wizard' },
+          { label: 'Content Wizard', to: '/content-wizard' },
+        ],
+      },
+      {
+        id: 'brand-vs-content',
+        question: 'What’s the difference between Brand Wizard and Content Wizard?',
+        answer:
+          'Brand Wizard sets look and feel (logo, colors, buttons, footer identity) and can apply those tokens to a template zip. Content Wizard fills headings, body, CTAs, and images for one layout at a time. Best order: brand first, then content.',
+        related: [
+          { label: 'Brand Wizard docs', to: '/docs#brand-wizard' },
+          { label: 'Content Wizard docs', to: '/docs#content-wizard' },
+        ],
       },
       {
         id: 'test-before-send',
-        question: 'Should I test before sending to my list?',
-        answer: 'Always. Send tests to Gmail, Outlook, and Apple Mail at minimum. For high-stakes campaigns, use Litmus or Email on Acid for broader client coverage. Our templates are pre-tested, but your ESP and image URLs can introduce client-specific quirks.',
+        question: 'Should I test before I send to my list?',
+        answer:
+          'Yes, always. Send tests to Gmail, Outlook, and Apple Mail at minimum. For high-stakes campaigns, use Litmus or Email on Acid. Templates are pre-tested, but your images, merge tags, and ESP can still introduce quirks.',
+        related: [{ label: 'ESP integration tips', to: '/docs#esp' }],
       },
     ],
   },
   {
     id: 'templates',
-    title: 'Templates & customization',
-    description: 'Editing, branding, and layout flexibility.',
+    title: 'Templates & branding',
+    description: 'Customization, mobile, Outlook, and images.',
     items: [
       {
-        id: 'customize-colors',
-        question: 'Can I customize colors and fonts?',
-        answer: 'Yes. Search for hex values in the HTML or apply tokens from your DESIGN_RULES.md file. The Brand Design Wizard exports a complete brand spec with primary colors, button styles, typography, and footer details that maps to data-element regions in each template.',
-      },
-      {
-        id: 'modular-sections',
-        question: 'Are templates modular?',
-        answer: 'Yes. Sections are marked with HTML comments (e.g. Component start Header) and data-element attributes. You can reorder, duplicate, or remove blocks like hero sections, feature lists, product grids, CTAs, and footers without rebuilding from scratch.',
+        id: 'customize-brand',
+        question: 'Can I change colors and fonts to match my brand?',
+        answer:
+          'Yes. Search for hex values in the HTML, or define tokens in the Brand Design Wizard and apply them to your zip. Export Design Rules so your team shares one brand reference.',
+        related: [
+          { label: 'Open Brand Wizard', to: '/brand-wizard' },
+          { label: 'Customization overview', to: '/docs#customization' },
+        ],
       },
       {
         id: 'mobile',
-        question: 'Will templates work on mobile devices?',
-        answer: 'Yes. Templates use responsive, mobile-first patterns with fluid widths, stacked columns, and touch-friendly button sizing. We test across common mobile clients including iOS Mail and the Gmail app.',
+        question: 'Will these emails work on mobile?',
+        answer:
+          'Yes. Templates use responsive, mobile-first patterns with fluid widths and stacked columns. Still send a phone test. Your ESP and image sizes can affect real devices.',
       },
       {
-        id: 'outlook',
-        question: 'How do you handle Outlook rendering?',
-        answer: 'Outlook desktop uses Word’s rendering engine, which breaks many modern CSS patterns. Our templates use hybrid table layouts, inline styles, and VML fallbacks for bulletproof buttons so CTAs look consistent in Outlook and other clients.',
+        id: 'outlook-buttons',
+        question: 'Why do my buttons look wrong in Outlook?',
+        answer:
+          'Outlook desktop uses a different rendering engine than most clients. Keep the VML fallback blocks in the HTML. Those “bulletproof” buttons are what make CTAs look consistent. Don’t strip them when editing.',
+        related: [{ label: 'Troubleshooting', to: '/docs#troubleshooting' }],
       },
       {
-        id: 'images',
-        question: 'What about images, sizes, and hosting?',
-        answer: 'Use absolute HTTPS URLs hosted on your ESP CDN or a reliable asset server. Hero images work best at 600px wide (3:2 or 16:9 landscape). Keep logos under ~100 KB. Relative paths break in most ESPs.',
+        id: 'images-not-showing',
+        question: 'Why aren’t my images showing?',
+        answer:
+          'Use absolute HTTPS URLs. Relative paths break in almost every ESP. Host assets on your ESP CDN or a reliable HTTPS server, and keep logos lean (under ~100 KB).',
+        related: [{ label: 'Troubleshooting', to: '/docs#troubleshooting' }],
+      },
+    ],
+  },
+  {
+    id: 'wizards',
+    title: 'Brand & Content wizards',
+    description: 'Applying design tokens and campaign copy.',
+    items: [
+      {
+        id: 'apply-brand-zip',
+        question: 'How do I apply my brand to a whole zip of templates?',
+        answer:
+          'Open Brand Wizard, choose your bundle, fill the token steps, then on Review & export upload the zip and click Apply brand. Download the branded package. It includes your Design Rules file.',
+        related: [
+          { label: 'Apply brand guide', to: '/docs#bw-apply' },
+          { label: 'Open Brand Wizard', to: '/brand-wizard' },
+        ],
+      },
+      {
+        id: 'wizard-storage',
+        question: 'Where does the Brand Wizard save my progress?',
+        answer:
+          'In your browser only (localStorage), keyed by bundle. Nothing is uploaded to a server. Clearing site data or using Reset defaults wipes those values, so keep an exported Design Rules file as backup.',
+        related: [{ label: 'Import Design Rules', to: '/docs#bw-import' }],
+      },
+      {
+        id: 'fill-copy',
+        question: 'How do I fill campaign copy without editing HTML by hand?',
+        answer:
+          'Use Content Wizard: pick the layout, edit fields, upload the matching HTML, then download the filled file. Toggle Shown / Hidden in email to drop optional blocks for this send.',
+        related: [
+          { label: 'Content Wizard guide', to: '/docs#content-wizard' },
+          { label: 'Open Content Wizard', to: '/content-wizard' },
+        ],
+      },
+      {
+        id: 'content-needs-brand',
+        question: 'Can I use the Content Wizard on branded HTML?',
+        answer:
+          'Yes, and that’s the recommended path. Apply brand tokens first, then upload that branded HTML in Content Wizard so copy updates keep your colors and logo.',
+        related: [{ label: 'Brand vs Content', to: '/docs#cw-vs-brand' }],
       },
     ],
   },
   {
     id: 'esp',
-    title: 'ESP & delivery',
-    description: 'Platform compatibility and merge tags.',
+    title: 'ESP & sending',
+    description: 'Platforms, merge tags, compliance, and inbox placement.',
     items: [
       {
-        id: 'compatible-platforms',
-        question: 'Which email platforms are supported?',
-        answer: 'Templates work with any ESP that accepts custom HTML, including Salesforce Marketing Cloud, Klaviyo, Mailchimp, HubSpot, Braze, and Customer.io. Paste the full HTML into the template editor and replace merge tags with your platform’s syntax.',
+        id: 'which-esp',
+        question: 'Which email platforms can I use these with?',
+        answer:
+          'Any ESP that accepts custom HTML, including Salesforce Marketing Cloud, Klaviyo, Mailchimp, HubSpot, Braze, and Customer.io. Paste the full HTML, update image URLs, and swap merge tags for your platform’s syntax.',
+        related: [{ label: 'ESP integration', to: '/docs#esp' }],
       },
       {
-        id: 'merge-tags',
-        question: 'How do unsubscribe and merge tags work?',
-        answer: 'Placeholders like {{unsubscribe_url}} are included in footers. Swap them for your ESP’s merge syntax before sending (e.g. Klaviyo’s {% unsubscribe %} or Mailchimp’s *|UNSUB|*). Never hard-code unsubscribe links.',
+        id: 'unsubscribe',
+        question: 'How do I set up unsubscribe links?',
+        answer:
+          'Replace footer placeholders like {{unsubscribe_url}} with your ESP’s merge tag (for example Klaviyo or Mailchimp unsubscribe tags). Never hard-code a static unsubscribe URL.',
+        related: [{ label: 'ESP integration', to: '/docs#esp' }],
       },
       {
         id: 'can-spam',
-        question: 'Are templates CAN-SPAM compliant?',
-        answer: 'Footers include placeholders for physical mailing address, company name, and unsubscribe links. Those are required for CAN-SPAM and GDPR-friendly sends. Fill in your real business address and wire the correct unsubscribe merge tags.',
+        question: 'Are these templates CAN-SPAM compliant?',
+        answer:
+          'They include the right placeholders for physical address, company name, and unsubscribe, but you must fill in real business details and wire correct merge tags. Compliance depends on your completed footer and list practices.',
       },
       {
         id: 'deliverability',
-        question: 'Will these templates hurt deliverability?',
-        answer: 'Template HTML alone does not determine inbox placement, but clean code helps. Avoid excessive image-only emails, keep total HTML size reasonable, host images on reputable domains, and maintain list hygiene. Our templates use text/HTML balance-friendly structures.',
+        question: 'Will these templates hurt my deliverability?',
+        answer:
+          'Clean HTML alone doesn’t determine inbox placement. Keep a healthy text/image balance, host images on reputable domains, avoid huge file sizes, and maintain list hygiene. Authentication (SPF/DKIM/DMARC) still matters more than layout.',
       },
     ],
   },
   {
-    id: 'brand-wizard',
-    title: 'Brand Design Wizard',
-    description: 'Defining and exporting your brand tokens.',
+    id: 'purchases',
+    title: 'Purchases & support',
+    description: 'Downloads, licensing, refunds, and getting help.',
     items: [
       {
-        id: 'what-is-wizard',
-        question: 'What does the Brand Design Wizard do?',
-        answer: 'It is a step-by-step tool for defining your baseline brand identity: logo URL, color palette, button styles, typography, footer details, and layout tokens. Progress auto-saves locally, and you can export a complete DESIGN_RULES.md file for your team.',
-      },
-      {
-        id: 'wizard-storage',
-        question: 'Where is my wizard progress saved?',
-        answer: 'In your browser’s localStorage, keyed by bundle. Data stays on your device and nothing is sent to a server. Clear browser data or use Reset defaults to start fresh.',
-      },
-      {
-        id: 'wizard-export',
-        question: 'How do I use the exported DESIGN_RULES.md?',
-        answer: 'Share it with designers and developers as the single source of truth for brand tokens. When editing templates, map each token to matching data-element regions in the HTML. The export includes an element mapping reference and a pre-flight checklist.',
-      },
-      {
-        id: 'wizard-bundles',
-        question: 'Is the wizard tied to a specific bundle?',
-        answer: 'Each bundle gets its own wizard. Pick your bundle on the Brand Wizard page before you start. The Industrial B2B wizard is live now, and more bundles are on the way.',
-      },
-    ],
-  },
-  {
-    id: 'support',
-    title: 'Support & licensing',
-    description: 'Updates, usage rights, and help.',
-    items: [
-      {
-        id: 'download-access',
+        id: 'downloads',
         question: 'How do downloads work after I purchase?',
-        answer: 'After checkout you receive a personal download link by email and on the success page. Each purchase includes a limited number of download attempts within a set number of days from the order date. Save the ZIP to your device — links are tied to your order and should not be shared. If you run out of attempts or the access window ends, contact support with your receipt.',
-      },
-      {
-        id: 'updates',
-        question: 'Do bundles include updates?',
-        answer: 'Paid bundles include lifetime updates for the template version you purchased. When we ship improvements like bug fixes, client compatibility patches, or new sections, you get access to the latest files.',
+        answer:
+          'You get a personal download link by email and on the success page. Each order includes a limited number of attempts within a set window. Save the zip locally and don’t share the link. If access expires, contact support with your receipt.',
       },
       {
         id: 'client-work',
         question: 'Can I use templates for client projects?',
-        answer: 'Yes, for agencies and freelancers building campaigns for clients. You may not redistribute the raw template files as a competing product or resell the bundle itself. Each license covers your organization’s use.',
+        answer:
+          'Yes, for agencies and freelancers building client campaigns. You may not redistribute raw template files as a competing product or resell the bundle itself. One license covers your organization’s use.',
       },
       {
         id: 'refunds',
-        question: 'What is your refund policy?',
-        answer: 'If templates do not meet the documented compatibility standards and we cannot resolve the issue, contact support within 14 days of purchase for a review. Digital product terms are outlined in our Refund Policy page.',
+        question: 'What if I need a refund?',
+        answer:
+          'If templates don’t meet the documented compatibility standards and we can’t resolve it, contact support within 14 days of purchase for a review. Digital product terms are covered in our Refund Policy.',
       },
       {
-        id: 'get-help',
-        question: 'Where can I get help if I am stuck?',
-        answer: 'Start with the Documentation page. It covers structure, customization, ESP integration, and troubleshooting. For Outlook spacing, broken images, and button issues, see the troubleshooting section. Community support is available for Free Flow Starter users.',
+        id: 'still-stuck',
+        question: 'Where do I go if I’m still stuck?',
+        answer:
+          'Start with Documentation for step-by-step wizard and ESP guides, then this FAQ for quick answers. If you still need help, use the contact path below with your order number and what you already tried.',
+        related: [
+          { label: 'Documentation', to: '/docs' },
+          { label: 'Brand Wizard troubleshooting', to: '/docs#bw-faq' },
+          { label: 'Content Wizard troubleshooting', to: '/docs#cw-faq' },
+        ],
       },
     ],
   },
 ];
 
+/** High-friction questions featured on the homepage FAQ preview. */
+export const FAQ_HOME_PREVIEW_IDS = [
+  'how-do-i-start',
+  'brand-vs-content',
+  'which-esp',
+  'outlook-buttons',
+] as const;
+
 export const FAQ_QUICK_LINKS = FAQ_CATEGORIES.map(({ id, title }) => ({ id, title }));
+
+export function findFaqItem(id: string): FaqItem | undefined {
+  for (const category of FAQ_CATEGORIES) {
+    const match = category.items.find((item) => item.id === id);
+    if (match) return match;
+  }
+  return undefined;
+}
+
+export function getFaqHomePreview(): FaqItem[] {
+  return FAQ_HOME_PREVIEW_IDS.map((id) => findFaqItem(id)).filter(
+    (item): item is FaqItem => Boolean(item),
+  );
+}

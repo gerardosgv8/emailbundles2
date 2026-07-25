@@ -161,25 +161,7 @@ require __DIR__ . '/includes/header.php';
     </div>
   </section>
 
-  <section class="section" id="testimonials">
-    <div class="container">
-      <h2 class="section-title">What customers say</h2>
-      <div class="grid-3" style="margin-top:1.5rem">
-        <?php
-        $testimonials = [
-          ['The templates imported flawlessly into Salesforce. Our CTR went up 18%.', 'Marcos, eCommerce Manager'],
-          ['No more Outlook nightmares. The VML buttons are rock-solid.', 'Priya, Marketing Lead'],
-          ['Fast to implement and look polished. Perfect for our small team.', 'Jorge, Founder'],
-        ];
-        foreach ($testimonials as [$quote, $author]): ?>
-        <blockquote class="card">
-          <p>&ldquo;<?= e($quote) ?>&rdquo;</p>
-          <footer style="margin-top:0.75rem;font-size:0.85rem;color:var(--muted)"><?= e($author) ?></footer>
-        </blockquote>
-        <?php endforeach; ?>
-      </div>
-    </div>
-  </section>
+  <?php // Testimonials homepage block saved for later — see src/pages/TestimonialsPage.tsx ?>
 
   <section class="section section-white" id="faq">
     <div class="container faq-list">

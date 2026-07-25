@@ -7,16 +7,22 @@ export function Footer() {
     <footer className="site-footer">
       <div className="container footer-grid">
         <div>
-          <h5>Mailcraft Studio</h5>
-          <p>Production-ready HTML email templates and brand design tools.</p>
+          <h5 className="footer-brand">
+            <span className="logo-mark" aria-hidden="true" />
+            Mailcraft Studio
+          </h5>
+          <p>
+            Brand the pack once. Fill the send. Paste into your ESP. Production HTML plus Brand and
+            Content Wizards.
+          </p>
         </div>
         <div>
           <h6>Resources</h6>
           <ul>
             <li><Link to="/docs">Documentation</Link></li>
             <li><Link to="/brand-wizard">Brand Design Wizard</Link></li>
+            <li><Link to="/content-wizard">Content Wizard</Link></li>
             <li><Link to="/faq">FAQ</Link></li>
-            <li><Link to="/testimonials">Testimonials</Link></li>
           </ul>
         </div>
         <div>

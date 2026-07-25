@@ -2,6 +2,8 @@ import type { DesignRulesField } from '../types';
 
 export type WizardFieldMeta = {
   usage: string;
+  /** Contextual placeholder shown when the field is empty. */
+  placeholder?: string;
   /** Where this token appears in the Industrial B2B HTML files (omit when shared across all 9 templates). */
   templates?: string;
   /** data-element hooks this token applies to (from bundle registry). */
@@ -25,7 +27,6 @@ export const INDUSTRIAL_B2B_FIELD_META: Partial<Record<DesignRulesField, WizardF
   logoHeight: { usage: 'Logo display height in header' },
   logoDarkUrl: {
     usage: 'Optional logo for dark backgrounds',
-    templates: '08_Promotion: dark promo band when logo sits on dark surface',
   },
   faviconUrl: { usage: 'Optional small mark URL' },
 
@@ -38,7 +39,7 @@ export const INDUSTRIAL_B2B_FIELD_META: Partial<Record<DesignRulesField, WizardF
   },
 
   // Text colors
-  colorHeadingDark: { usage: 'Section titles and H1–H4 headings' },
+  colorHeadingDark: { usage: 'Section titles and H1-H4 headings' },
   colorHeadingAlt: { usage: 'Hero titles and footer company name' },
   colorHeaderKicker: { usage: 'Top-of-email kicker headline' },
   colorBody: { usage: 'Long-form body copy' },
@@ -48,36 +49,21 @@ export const INDUSTRIAL_B2B_FIELD_META: Partial<Record<DesignRulesField, WizardF
   // Surfaces
   colorBgEmail: { usage: 'Outer email body and card background' },
   colorBgLightGray: {
-    usage: 'Alternate section background for tier and pricing rows',
-    templates: '08_Promotion: pricing tier rows',
+    usage: 'Alternate section background for pricing panels',
+    templates: '01_Product_Launch: pricing-container',
   },
   colorBgInfo: {
-    usage: 'Info callout and download banner background',
-    templates: '07_Product_Enablement_Guide: download banner; insight callout panels',
+    usage: 'Info callout panel background',
+    templates: '09_Company_Update: insight callout panels',
   },
   colorBgService: {
     usage: 'Service tier panel background',
-    templates: '06_Service_Launch: service tier panel',
+    templates: '06_Service_Launch: pricing-title (service tier panel)',
   },
   colorBgServiceBorder: {
     usage: 'Border on service tier panel',
-    templates: '06_Service_Launch: service tier panel border',
+    templates: '06_Service_Launch: pricing-title (service tier panel border)',
   },
-  colorBgPromoDark: {
-    usage: 'Dark promotional band background',
-    templates: '08_Promotion: promo code band and dark CTA section',
-  },
-  colorBgWarning: { usage: 'Important note callout background' },
-  colorBgWarningBorder: { usage: 'Border on warning callout panels' },
-  colorBgWarningText: { usage: 'Text on warning callout panels' },
-  colorBgUrgency: { usage: 'Limited-time alert background' },
-  colorBgUrgencyBorder: { usage: 'Border on urgency alert panels' },
-  colorBgUrgencyText: { usage: 'Text on urgency alert panels' },
-  colorDivider: {
-    usage: 'In-content section divider',
-    templates: '04_Products_Catalog_Grid: divider between featured hero and product grid',
-  },
-  colorFooterDivider: { usage: 'Line above footer block' },
 
   // Badges
   colorBadgeEventBg: {

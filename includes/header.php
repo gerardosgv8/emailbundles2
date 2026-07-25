@@ -27,7 +27,6 @@ $bodyClass = $bodyClass ?? '';
         <a href="<?= e(url('docs.php')) ?>"<?= is_active('docs.php') ? ' class="active"' : '' ?>>Docs</a>
         <a href="<?= e(url('products.php')) ?>"<?= is_active('products.php') ? ' class="active"' : '' ?>>Products</a>
         <a href="<?= e(url('brand-wizard/')) ?>">Brand Wizard</a>
-        <a href="<?= e(url('index.php')) ?>#testimonials">Testimonials</a>
         <a href="<?= e(url('index.php')) ?>#faq">FAQ</a>
         <a href="<?= e(url('login.php')) ?>" class="btn btn-ghost btn-sm">Login</a>
         <a href="<?= e(url('register.php')) ?>" class="btn btn-primary btn-sm">Register</a>
@@ -47,7 +46,6 @@ $bodyClass = $bodyClass ?? '';
       <a href="<?= e(url('docs.php')) ?>">Docs</a>
       <a href="<?= e(url('products.php')) ?>">Products</a>
       <a href="<?= e(url('brand-wizard/')) ?>">Brand Wizard</a>
-      <a href="<?= e(url('index.php')) ?>#testimonials">Testimonials</a>
       <a href="<?= e(url('index.php')) ?>#faq">FAQ</a>
       <a href="<?= e(url('login.php')) ?>" class="btn btn-ghost">Login</a>
       <a href="<?= e(url('register.php')) ?>" class="btn btn-primary">Register</a>

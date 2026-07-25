@@ -54,7 +54,10 @@ export function ProductsPage() {
     <main className="container section">
       <div className="page-hero">
         <h1>Products</h1>
-        <p>Template bundles and tools for teams who ship email campaigns without reinventing the wheel.</p>
+        <p>
+          Each pack is production HTML plus Brand and Content Wizards. Brand the zip once. Fill the
+          send. Download HTML you paste into your ESP. $79.99 per bundle.
+        </p>
       </div>
 
       <div className="product-grid">
@@ -96,7 +99,7 @@ export function ProductsPage() {
 
         <p className="products-checkout-note">
           Secure checkout powered by Stripe. After payment, downloads are delivered via personal
-          links — {describeDownloadPolicy(policy)}.
+          links. {describeDownloadPolicy(policy)}.
         </p>
       </div>
     </main>

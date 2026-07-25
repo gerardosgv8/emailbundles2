@@ -1,0 +1,8 @@
+/* Mailcraft Studio — 2026 design system fonts */
+@font-face {
+  font-family: 'Geist Sans';
+  src: url('../assets/fonts/Geist-Variable.woff2') format('woff2');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}

@@ -7,8 +7,8 @@ import {
   applyPrimaryCta,
   applyPromoHighlightSpan,
   applySecondaryCta,
+  applySurfaceLightPanel,
   findAncestorTable,
-  findAncestorTd,
   setBackground,
   setBorderColor,
   setColor,
@@ -43,25 +43,6 @@ function primaryButtonBg(state: DesignRulesState): string {
 
 function primaryButtonText(state: DesignRulesState): string {
   return state.btnPrimaryText.trim() || '#ffffff';
-}
-
-function applyParentUrgencySurface(el: Element, state: DesignRulesState) {
-  const table = findAncestorTable(el);
-  if (!table) return;
-  setBackground(table, state.colorBgUrgency);
-  setBorderColor(table, state.colorBgUrgencyBorder);
-}
-
-function applyParentPromoBand(el: Element, state: DesignRulesState) {
-  const table = findAncestorTable(el);
-  if (!table) return;
-  setBackground(table, state.colorBgPromoDark);
-}
-
-function applyParentTierRow(el: Element, state: DesignRulesState) {
-  const td = findAncestorTd(el);
-  if (!td) return;
-  setBackground(td, state.colorBgLightGray);
 }
 
 function applyServiceTierPanel(el: Element, state: DesignRulesState, ctx: ApplyContext) {
@@ -183,16 +164,13 @@ export function applyElementProfile(
 
     case 'BODY_WARNING_TEXT':
       if (ctx.elementId === 'featured-insight') {
-        setColor(el, state.colorSecondary);
-      } else {
-        setColor(el, state.colorBgWarningText);
+        setColor(el, state.linkColor);
+        return true;
       }
-      return true;
+      return false;
 
     case 'BODY_URGENCY_TEXT':
-      setColor(el, state.colorBgUrgencyText);
-      applyParentUrgencySurface(el, state);
-      return true;
+      return false;
 
     case 'BODY_INFO_TEXT':
       setColor(el, state.colorSecondary);
@@ -200,33 +178,36 @@ export function applyElementProfile(
 
     case 'TIER_TEXT':
       setColor(el, state.colorBody);
-      applyParentTierRow(el, state);
       applyAccentStrong(el, state.colorAccent);
       return true;
 
     case 'PROMO_HEADING':
       setColor(el, '#ffffff');
-      applyParentPromoBand(el, state);
       applyPromoHighlightSpan(el, state.colorPromoHighlight);
       return true;
 
-    case 'CTA_PRIMARY':
-      applyPrimaryCta(
-        el,
-        primaryButtonBg(state),
-        primaryButtonText(state),
-      );
+    case 'CTA_PRIMARY': {
+      let bg = primaryButtonBg(state);
+      const text = primaryButtonText(state);
+      if (ctx.elementId === 'pricing-cta' || ctx.elementId === 'pricing-cta-button') {
+        bg = state.btnPricingBg.trim() || bg;
+      } else if (ctx.elementId === 'featured-cta') {
+        bg = state.btnPromoBg.trim() || bg;
+      }
+      applyPrimaryCta(el, bg, text);
       if (state.urlBase.trim()) setHref(el, state.urlBase.trim());
       return true;
+    }
 
-    case 'CTA_PRIMARY_TD':
-      applyPrimaryCta(
-        el,
-        primaryButtonBg(state),
-        primaryButtonText(state),
-        'primary',
-      );
+    case 'CTA_PRIMARY_TD': {
+      let bg = primaryButtonBg(state);
+      const text = primaryButtonText(state);
+      if (ctx.elementId === 'pricing-cta-button') {
+        bg = state.btnPricingBg.trim() || bg;
+      }
+      applyPrimaryCta(el, bg, text, 'primary');
       return true;
+    }
 
     case 'CTA_SECONDARY':
       applySecondaryCta(
@@ -278,17 +259,12 @@ export function applyElementProfile(
       return true;
 
     case 'SURFACE_LIGHT':
-      setBackground(el, state.colorBgLightGray);
+      applySurfaceLightPanel(el, state.colorBgLightGray);
       return true;
 
     case 'SURFACE_INFO':
       setBackground(el, state.colorBgInfo);
       setBorderColor(el, state.colorBgServiceBorder);
-      return true;
-
-    case 'SURFACE_WARNING':
-      setBackground(el, state.colorBgWarning);
-      setBorderColor(el, state.colorBgWarningBorder);
       return true;
 
     default:

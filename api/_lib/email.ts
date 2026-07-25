@@ -67,7 +67,7 @@ function buildLocalPurchaseEmail(payload: PostPurchaseEmailPayload): {
   html: string;
   text: string;
 } {
-  const subject = `Your ${payload.productName} download — Mailcraft Studio`;
+  const subject = `Your ${payload.productName} download | Mailcraft Studio`;
   const supportEmail = getSupportEmail();
   const expiryHours = formatExpiryHours();
 
@@ -94,7 +94,7 @@ function buildLocalPurchaseEmail(payload: PostPurchaseEmailPayload): {
     '',
     `Download links are valid for about ${expiryHours} hours and allow up to ${getMaxDownloadsPerPurchase()} downloads. If the link stops working, contact ${supportEmail} with your receipt.`,
     '',
-    `Mailcraft Studio — ${getSiteUrl().replace(/\/$/, '')}`,
+    `Mailcraft Studio | ${getSiteUrl().replace(/\/$/, '')}`,
   ].join('\n');
 
   return { subject, html, text };
@@ -109,7 +109,7 @@ export async function sendPostPurchaseEmail(payload: PostPurchaseEmailPayload): 
 
   const supportEmail = getSupportEmail();
   const templateId = getResendPurchaseTemplateId();
-  const subject = `Your ${payload.productName} download — Mailcraft Studio`;
+  const subject = `Your ${payload.productName} download | Mailcraft Studio`;
 
   const useLocalTemplate = templateId.toLowerCase() === 'local';
 

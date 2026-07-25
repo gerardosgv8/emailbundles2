@@ -8,8 +8,9 @@ export function BrandWizardSelectPage() {
       <div className="page-hero">
         <h1>Brand Design Wizard</h1>
         <p>
-          Choose the template bundle you want to brand. Define your tokens, apply them to your HTML
-          templates or bundle .zip, and export DESIGN_RULES.md for your team.
+          Step one of the Mailcraft path. Define logo, colors, buttons, and footer tokens, apply
+          them across your templates or bundle zip, and export your Design Rules. One brand pass. Whole
+          pack updated.
         </p>
       </div>
 
@@ -52,6 +53,9 @@ export function BrandWizardSelectPage() {
       </div>
 
       <p className="text-center mt-8" style={{ color: 'var(--muted)', fontSize: '0.9rem' }}>
+        Need copy instead of colors?{' '}
+        <Link to="/content-wizard">Open Content Wizard</Link>
+        {' · '}
         Don&apos;t have a bundle yet?{' '}
         <Link to="/products">Browse products</Link>
       </p>

@@ -1,6 +1,6 @@
 import type { DesignRulesState, WizardStep } from './types';
 
-const STORAGE_KEY = 'mailcraft-studio-design-rules-v1';
+const STORAGE_KEY = 'mailcraft-studio-design-rules-v2';
 
 export function getStorageKey(bundleId: string): string {
   return `${STORAGE_KEY}-${bundleId}`;
@@ -18,7 +18,7 @@ export const WIZARD_STEPS: WizardStep[] = [
   { id: 'footer', title: 'Footer', desc: 'Address, social, and legal links' },
   { id: 'layout', title: 'Layout & spacing', desc: 'Width, padding, and radii' },
   { id: 'imagery', title: 'Imagery', desc: 'Image sizes and asset URLs' },
-  { id: 'export', title: 'Review & export', desc: 'Checklist and download DESIGN_RULES.md' },
+  { id: 'export', title: 'Review & export', desc: 'Checklist and download Design Rules' },
 ];
 
 const SHARED_CHECKLIST_PREFIX = [
@@ -35,6 +35,19 @@ export const CHECKLIST_ITEMS = [
   'Spot-check all 9 templates after applying brand changes',
 ];
 
+export function getWizardSteps(bundleId: string): WizardStep[] {
+  return WIZARD_STEPS.map((step) => {
+    if (bundleId !== 'email-marketing-starter-kit' || step.id !== 'colors-badge') {
+      return step;
+    }
+    return {
+      ...step,
+      title: 'Step badges',
+      desc: 'Onboarding step numbers in Welcome & Onboarding',
+    };
+  });
+}
+
 export function getChecklistItems(bundleId: string): string[] {
   const templateLine =
     bundleId === 'email-marketing-starter-kit'
@@ -44,75 +57,157 @@ export function getChecklistItems(bundleId: string): string[] {
   return [...SHARED_CHECKLIST_PREFIX, templateLine];
 }
 
-function createIndustrialDefaults(year: number): Omit<DesignRulesState, 'checklist'> {
+/** Colors and layout tokens shared across FinalBundles HTML templates. */
+const SHARED_TEMPLATE_TOKENS: Omit<
+  DesignRulesState,
+  | 'checklist'
+  | 'brandName'
+  | 'legalName'
+  | 'tagline'
+  | 'footerTrustLine'
+  | 'copyrightNote'
+  | 'fromName'
+  | 'replyToEmail'
+  | 'logoUrl'
+  | 'logoAlt'
+  | 'logoWidth'
+  | 'logoHeight'
+  | 'logoDarkUrl'
+  | 'faviconUrl'
+  | 'footerCompany'
+  | 'footerAddress1'
+  | 'footerAddress2'
+  | 'footerCountry'
+  | 'footerEmail'
+  | 'footerPhone'
+  | 'footerTagline'
+  | 'socialFacebook'
+  | 'socialTwitter'
+  | 'socialInstagram'
+  | 'socialLinkedin'
+  | 'linkPrivacy'
+  | 'linkTerms'
+  | 'linkHelp'
+  | 'linkUnsubscribe'
+  | 'urlBase'
+  | 'urlQuote'
+  | 'urlSupport'
+  | 'imgHeroDefault'
+  | 'imgCdnBase'
+  | 'colorPrimary'
+  | 'colorSecondary'
+  | 'colorAccent'
+  | 'colorHeadingAlt'
+  | 'colorBgLightGray'
+  | 'colorBgInfo'
+  | 'colorBgService'
+  | 'colorBgServiceBorder'
+  | 'colorBgWarningText'
+  | 'colorBadgeEventBg'
+  | 'colorBadgeEventText'
+  | 'colorBadgeStepBg'
+  | 'colorBadgeStepText'
+  | 'btnPrimaryBg'
+  | 'btnPrimaryText'
+  | 'btnSecondaryBg'
+  | 'btnSecondaryText'
+  | 'btnSecondaryBorder'
+  | 'btnPricingBg'
+  | 'btnPromoBg'
+  | 'linkColor'
+  | 'footerHeadingColor'
+  | 'footerLinkColor'
+  | 'btnPrimaryPadding'
+> = {
+  colorHeadingDark: '#1f2937',
+  colorHeaderKicker: '#1a1a1a',
+  colorBody: '#666666',
+  colorBodyAlt: '#6b7280',
+  colorMuted: '#64748b',
+  colorBgEmail: '#ffffff',
+  colorBgPromoDark: '#1e293b',
+  colorBgWarning: '#fef3c7',
+  colorBgWarningBorder: '#fbbf24',
+  colorBgUrgency: '#fef2f2',
+  colorBgUrgencyBorder: '#fecaca',
+  colorBgUrgencyText: '#dc2626',
+  colorDivider: '#e5e5e5',
+  colorFooterDivider: '#e2e8f0',
+  colorPromoHighlight: '#fbbf24',
+  btnPrimaryRadius: '8px',
+  btnPricingText: '#ffffff',
+  btnPromoText: '#ffffff',
+  fontStack: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+  fontCustomUrl: '',
+  fontCustomName: '',
+  footerTextColor: '#64748b',
+  layoutMaxWidth: '600px',
+  layoutOuterPadding: '20px 0',
+  layoutSectionPadding: '40px 30px',
+  layoutHorizontalPadding: '30px',
+  layoutSpacerStandard: '24px',
+  layoutSpacerLarge: '32-40px',
+  layoutRadiusButtons: '8px',
+  layoutRadiusHero: '12px',
+  layoutRadiusGrid: '8px',
+  imgHeroWidth: '600px (full bleed)',
+  imgFeaturedWidth: '540px max',
+  imgGridSize: '250 × 150px',
+  imgThumbSize: '150 × 150px',
+  imgHeroAspect: '3:2 or 16:9 landscape',
+  darkBgOverride: '',
+  darkTextOverride: '',
+  contrastTarget: '4.5:1 (body text)',
+};
+
+function createIndustrialDefaults(): Omit<DesignRulesState, 'checklist'> {
   return {
-    brandName: 'ForgeLine Industrial',
-    legalName: 'ForgeLine Industrial, Inc.',
-    tagline: 'Engineered for demanding environments',
-    footerTrustLine: 'ISO 9001 certified • 24/7 field support • Nationwide parts delivery',
-    copyrightNote: `©${year} ForgeLine Industrial *(set automatically when templates are generated)*`,
-    fromName: 'ForgeLine Industrial',
-    replyToEmail: 'support@forgeline-industrial.com',
-    logoUrl: 'https://www.fmt.se/wp-content/uploads/2023/02/logo-placeholder-image.png',
-    logoAlt: 'ForgeLine Industrial',
+    ...SHARED_TEMPLATE_TOKENS,
+    brandName: '',
+    legalName: '',
+    tagline: '',
+    footerTrustLine: '',
+    copyrightNote: '',
+    fromName: '',
+    replyToEmail: '',
+    logoUrl: '',
+    logoAlt: '',
     logoWidth: '180px',
     logoHeight: 'auto',
     logoDarkUrl: '',
     faviconUrl: '',
-    colorPrimary: '#1e40af',
+    colorPrimary: '#000000',
     colorSecondary: '#2563eb',
     colorAccent: '#ea580c',
-    colorHeadingDark: '#1f2937',
     colorHeadingAlt: '#1e293b',
-    colorHeaderKicker: '#1a1a1a',
-    colorBody: '#666666',
-    colorBodyAlt: '#6b7280',
-    colorMuted: '#64748b',
-    colorBgEmail: '#ffffff',
     colorBgLightGray: '#f8fafc',
     colorBgInfo: '#e0e7ff',
     colorBgService: '#f0f9ff',
     colorBgServiceBorder: '#bae6fd',
-    colorBgPromoDark: '#1e293b',
-    colorBgWarning: '#fef3c7',
-    colorBgWarningBorder: '#fbbf24',
     colorBgWarningText: '#92400e',
-    colorBgUrgency: '#fef2f2',
-    colorBgUrgencyBorder: '#fecaca',
-    colorBgUrgencyText: '#dc2626',
-    colorDivider: '#e5e5e5',
-    colorFooterDivider: '#e2e8f0',
     colorBadgeEventBg: '#e0e7ff',
     colorBadgeEventText: '#1e40af',
     colorBadgeStepBg: '#fff7ed',
     colorBadgeStepText: '#ea580c',
-    colorPromoHighlight: '#fbbf24',
-    btnPrimaryBg: '#1e40af',
+    btnPrimaryBg: '#000000',
     btnPrimaryText: '#ffffff',
-    btnPrimaryRadius: '8px',
     btnPrimaryPadding: '16px 32px',
     btnSecondaryBg: '#ffffff',
-    btnSecondaryText: '#1e40af',
-    btnSecondaryBorder: '#1e40af',
-    btnPricingBg: '#1a1a1a',
-    btnPricingText: '#ffffff',
-    btnPromoBg: '#ea580c',
-    btnPromoText: '#ffffff',
-    linkColor: '#2563eb',
-    urlBase: 'https://www.forgeline-industrial.com',
+    btnSecondaryText: '#000000',
+    btnSecondaryBorder: '#000000',
+    btnPricingBg: '#000000',
+    btnPromoBg: '#000000',
+    linkColor: '#1f2937',
+    urlBase: '',
     urlQuote: '',
     urlSupport: '',
-    fontStack: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
-    fontCustomUrl: '',
-    fontCustomName: '',
-    footerCompany: 'ForgeLine Industrial',
-    footerAddress1: '2800 Industrial Parkway',
-    footerAddress2: 'Cleveland, OH 44114',
-    footerCountry: 'United States',
-    footerEmail: 'support@forgeline-industrial.com',
+    footerCompany: '',
+    footerAddress1: '',
+    footerAddress2: '',
+    footerCountry: '',
+    footerEmail: '',
     footerPhone: '',
-    footerTagline: 'ISO 9001 certified • 24/7 field support • Nationwide parts delivery',
-    footerTextColor: '#64748b',
+    footerTagline: '',
     footerHeadingColor: '#1e293b',
     footerLinkColor: '#2563eb',
     socialFacebook: '',
@@ -123,99 +218,67 @@ function createIndustrialDefaults(year: number): Omit<DesignRulesState, 'checkli
     linkTerms: '',
     linkHelp: '',
     linkUnsubscribe: '{{unsubscribe_url}}',
-    layoutMaxWidth: '600px',
-    layoutOuterPadding: '20px 0',
-    layoutSectionPadding: '40px 30px',
-    layoutHorizontalPadding: '30px',
-    layoutSpacerStandard: '24px',
-    layoutSpacerLarge: '32–40px',
-    layoutRadiusButtons: '8px',
-    layoutRadiusHero: '12px',
-    layoutRadiusGrid: '8px',
-    imgHeroWidth: '600px (full bleed)',
-    imgFeaturedWidth: '540px max',
     imgGridSize: '250 × 150px',
     imgThumbSize: '150 × 150px',
-    imgHeroAspect: '3:2 or 16:9 landscape',
     imgHeroDefault: '',
     imgCdnBase: '',
-    darkBgOverride: '',
-    darkTextOverride: '',
-    contrastTarget: '4.5:1 (body text)',
   };
 }
 
-function createStarterKitDefaults(year: number): Omit<DesignRulesState, 'checklist'> {
+function createStarterKitDefaults(): Omit<DesignRulesState, 'checklist'> {
   return {
-    brandName: 'Harbor & Home',
-    legalName: 'Harbor & Home LLC',
-    tagline: 'Curated essentials for everyday living',
-    footerTrustLine: 'Secure checkout • Free shipping $75+ • Easy returns',
-    copyrightNote: `©${year} Harbor & Home *(set automatically when templates are generated)*`,
-    fromName: 'Harbor & Home',
-    replyToEmail: 'hello@harborandhome.com',
-    logoUrl: 'https://www.fmt.se/wp-content/uploads/2023/02/logo-placeholder-image.png',
-    logoAlt: 'Harbor & Home',
+    ...SHARED_TEMPLATE_TOKENS,
+    brandName: '',
+    legalName: '',
+    tagline: '',
+    footerTrustLine: '',
+    copyrightNote: '',
+    fromName: '',
+    replyToEmail: '',
+    logoUrl: '',
+    logoAlt: '',
     logoWidth: '160px',
     logoHeight: 'auto',
     logoDarkUrl: '',
     faviconUrl: '',
-    colorPrimary: '#0f766e',
-    colorSecondary: '#14b8a6',
-    colorAccent: '#d97706',
-    colorHeadingDark: '#1f2937',
-    colorHeadingAlt: '#134e4a',
-    colorHeaderKicker: '#374151',
-    colorBody: '#4b5563',
-    colorBodyAlt: '#6b7280',
-    colorMuted: '#9ca3af',
-    colorBgEmail: '#ffffff',
-    colorBgLightGray: '#f9fafb',
-    colorBgInfo: '#ecfdf5',
-    colorBgService: '#f0fdfa',
-    colorBgServiceBorder: '#99f6e4',
-    colorBgPromoDark: '#134e4a',
-    colorBgWarning: '#fef3c7',
-    colorBgWarningBorder: '#fcd34d',
-    colorBgWarningText: '#92400e',
+    colorPrimary: '#2563eb',
+    colorSecondary: '#2563eb',
+    colorAccent: '#2563eb',
+    colorHeadingAlt: '#1f2937',
+    colorBody: '#64748b',
+    colorBodyAlt: '#666666',
+    colorMuted: '#1f2937',
+    colorBgLightGray: '#f1f5f9',
+    colorBgInfo: '#e0e7ff',
+    colorBgService: '#f1f5f9',
+    colorBgServiceBorder: '#e2e8f0',
+    colorBgWarningText: '#1f2937',
     colorBgUrgency: '#fef2f2',
-    colorBgUrgencyBorder: '#fecaca',
-    colorBgUrgencyText: '#dc2626',
-    colorDivider: '#e5e7eb',
-    colorFooterDivider: '#e5e7eb',
-    colorBadgeEventBg: '#ccfbf1',
-    colorBadgeEventText: '#0f766e',
-    colorBadgeStepBg: '#fff7ed',
-    colorBadgeStepText: '#d97706',
-    colorPromoHighlight: '#fcd34d',
-    btnPrimaryBg: '#0f766e',
+    colorBadgeEventBg: '#e6e6e6',
+    colorBadgeEventText: '#1e293b',
+    colorBadgeStepBg: '#2563eb',
+    colorBadgeStepText: '#ffffff',
+    btnPrimaryBg: '#2563eb',
     btnPrimaryText: '#ffffff',
-    btnPrimaryRadius: '8px',
     btnPrimaryPadding: '14px 28px',
     btnSecondaryBg: '#ffffff',
-    btnSecondaryText: '#0f766e',
-    btnSecondaryBorder: '#0f766e',
-    btnPricingBg: '#134e4a',
-    btnPricingText: '#ffffff',
-    btnPromoBg: '#d97706',
-    btnPromoText: '#ffffff',
-    linkColor: '#0f766e',
-    urlBase: 'https://www.harborandhome.com',
+    btnSecondaryText: '#2563eb',
+    btnSecondaryBorder: '#2563eb',
+    btnPricingBg: '#1a1a1a',
+    btnPromoBg: '#1e40af',
+    linkColor: '#2563eb',
+    urlBase: '',
     urlQuote: '',
-    urlSupport: 'https://www.harborandhome.com/support',
-    fontStack: "Georgia, 'Times New Roman', serif",
-    fontCustomUrl: '',
-    fontCustomName: '',
-    footerCompany: 'Harbor & Home',
-    footerAddress1: '4820 Market Street',
-    footerAddress2: 'Portland, OR 97205',
-    footerCountry: 'United States',
-    footerEmail: 'hello@harborandhome.com',
+    urlSupport: '',
+    footerCompany: '',
+    footerAddress1: '',
+    footerAddress2: '',
+    footerCountry: '',
+    footerEmail: '',
     footerPhone: '',
-    footerTagline: 'Secure checkout • Free shipping $75+ • Easy returns',
-    footerTextColor: '#6b7280',
-    footerHeadingColor: '#134e4a',
-    footerLinkColor: '#0f766e',
+    footerTagline: '',
+    footerHeadingColor: '#1e293b',
+    footerLinkColor: '#2563eb',
     socialFacebook: '',
     socialTwitter: '',
     socialInstagram: '',
@@ -224,35 +287,19 @@ function createStarterKitDefaults(year: number): Omit<DesignRulesState, 'checkli
     linkTerms: '',
     linkHelp: '',
     linkUnsubscribe: '{{unsubscribe_url}}',
-    layoutMaxWidth: '600px',
-    layoutOuterPadding: '20px 0',
-    layoutSectionPadding: '40px 30px',
-    layoutHorizontalPadding: '30px',
-    layoutSpacerStandard: '24px',
-    layoutSpacerLarge: '32–40px',
-    layoutRadiusButtons: '8px',
-    layoutRadiusHero: '12px',
-    layoutRadiusGrid: '8px',
-    imgHeroWidth: '600px (full bleed)',
-    imgFeaturedWidth: '540px max',
     imgGridSize: '300 × 200px',
     imgThumbSize: '270 × 180px',
-    imgHeroAspect: '3:2 or 16:9 landscape',
     imgHeroDefault: '',
     imgCdnBase: '',
-    darkBgOverride: '',
-    darkTextOverride: '',
-    contrastTarget: '4.5:1 (body text)',
   };
 }
 
 export function getDefaultDesignRules(bundleId = 'industrial-b2b'): DesignRulesState {
-  const year = new Date().getFullYear();
   const checklistItems = getChecklistItems(bundleId);
   const base =
     bundleId === 'email-marketing-starter-kit'
-      ? createStarterKitDefaults(year)
-      : createIndustrialDefaults(year);
+      ? createStarterKitDefaults()
+      : createIndustrialDefaults();
 
   return {
     ...base,

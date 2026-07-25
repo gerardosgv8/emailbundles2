@@ -16,6 +16,7 @@ import {
   applyGlobalTypography,
   applyHeaderLogo,
 } from './industrialB2bApplyEngine';
+import { applyVmlBranding } from './applyVmlBranding';
 import { injectBrandStyleOverrides } from './injectBrandStyles';
 import { applyLinkDecorationPass } from './styleUtils';
 
@@ -134,9 +135,22 @@ export function applyBrandToHtml(
 
   const unmappedElements = collectUnmappedElements(doc, knownElements);
   const hasHtmlShell = /<html[\s>]/i.test(html);
-  const serialized = hasHtmlShell
+  let serialized = hasHtmlShell
     ? `<!DOCTYPE html>\n${doc.documentElement.outerHTML}`
     : doc.body.innerHTML;
+
+  if (bundleId === 'email-marketing-starter-kit') {
+    const { html: withVml, updateCount: vmlUpdates } = applyVmlBranding(
+      serialized,
+      state,
+      profileByElement,
+    );
+    serialized = withVml;
+    if (vmlUpdates > 0) {
+      updateCount += vmlUpdates;
+      touched.add('vml-roundrect');
+    }
+  }
 
   return {
     html: serialized,

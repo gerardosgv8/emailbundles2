@@ -65,7 +65,7 @@ require __DIR__ . '/includes/header.php';
       <section class="doc-section" id="customization">
         <h2>Customization</h2>
         <div class="card">
-          <p>Colors and fonts are applied via inline styles. Search for hex values or swap brand tokens from your <code>DESIGN_RULES.md</code> file.</p>
+          <p>Colors and fonts are applied via inline styles. Search for hex values or swap brand tokens from your Design Rules file.</p>
           <p style="margin-top:1rem">Use the <a href="<?= e(url('brand-wizard/')) ?>">Brand Design Wizard</a> to define primary colors, logo URL, footer info, and button styles, then export a markdown spec for your team.</p>
         </div>
       </section>
@@ -105,7 +105,7 @@ require __DIR__ . '/includes/header.php';
       <section class="doc-section" id="brand-wizard">
         <h2>Brand Design Wizard</h2>
         <div class="card card-muted">
-          <p>Define your baseline brand identity with color pickers, logo settings, footer details, and typography, then export <code>DESIGN_RULES.md</code>.</p>
+          <p>Define your baseline brand identity with color pickers, logo settings, footer details, and typography, then export Design Rules.</p>
           <a href="<?= e(url('brand-wizard/')) ?>" class="btn btn-primary" style="margin-top:1rem">Open Brand Wizard</a>
         </div>
       </section>

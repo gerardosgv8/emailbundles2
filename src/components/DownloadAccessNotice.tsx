@@ -50,7 +50,7 @@ export function DownloadAccessNotice({
             </>
           ) : null}
         </li>
-        <li>Each download click uses one attempt — save the ZIP to your device.</li>
+        <li>Each download click uses one attempt. Save the ZIP to your device.</li>
         <li>Links are personal to your order. Please do not share them.</li>
       </ul>
       {!showRemaining && showSummary ? (

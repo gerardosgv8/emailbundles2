@@ -488,7 +488,7 @@
   <div class="app">
     <aside class="sidebar">
       <h1>Brand Design Wizard</h1>
-      <p class="sub">Mailcraft Studio: define brand tokens, preview, and export DESIGN_RULES.md</p>
+      <p class="sub">Mailcraft Studio: define brand tokens, preview, and export Design Rules</p>
       <p class="sub" style="margin-top:-0.75rem"><a href="../index.php" style="color:var(--accent);font-weight:600">← Back to site</a></p>
       <nav id="nav"></nav>
     </aside>
@@ -537,7 +537,7 @@
       { id: 'footer', title: 'Footer', desc: 'Address, social, and legal links' },
       { id: 'layout', title: 'Layout & spacing', desc: 'Width, padding, and radii' },
       { id: 'imagery', title: 'Imagery', desc: 'Image sizes and asset URLs' },
-      { id: 'export', title: 'Review & export', desc: 'Checklist and download DESIGN_RULES.md' },
+      { id: 'export', title: 'Review & export', desc: 'Checklist and download Design Rules' },
     ];
 
     function defaults() {
@@ -983,7 +983,7 @@ ${[
       a.download = 'DESIGN_RULES.md';
       a.click();
       URL.revokeObjectURL(a.href);
-      showToast('DESIGN_RULES.md downloaded');
+      showToast('Design Rules downloaded');
     }
 
     function showToast(msg) {
@@ -1221,7 +1221,7 @@ ${[
           </div>
           <div class="card export-cta">
             <p>Download your completed design rules as Markdown.</p>
-            <button type="button" class="btn btn-success" id="btn-export-main" style="font-size:1rem;padding:0.75rem 1.5rem">↓ Export DESIGN_RULES.md</button>
+            <button type="button" class="btn btn-success" id="btn-export-main" style="font-size:1rem;padding:0.75rem 1.5rem">↓ Export Design Rules</button>
           </div>`;
           break;
       }

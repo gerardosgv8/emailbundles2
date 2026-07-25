@@ -14,7 +14,6 @@ $year = (int) date('Y');
           <li><a href="<?= e(url('docs.php')) ?>">Documentation</a></li>
           <li><a href="<?= e(url('brand-wizard/')) ?>">Brand Design Wizard</a></li>
           <li><a href="<?= e(url('index.php')) ?>#faq">FAQ</a></li>
-          <li><a href="<?= e(url('index.php')) ?>#testimonials">Testimonials</a></li>
         </ul>
       </div>
       <div>

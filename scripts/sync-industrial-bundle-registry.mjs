@@ -82,13 +82,22 @@ function classifyElement(id) {
 const files = fs.readdirSync(bundleDir).filter((f) => f.endsWith('.html')).sort();
 /** @type {Record<string, { id: string, profile: string, templates: string[] }>} */
 const registry = {};
+/** @type {Record<string, string[]>} */
+const domOrderByTemplate = {};
 
 for (const file of files) {
   const html = fs.readFileSync(path.join(bundleDir, file), 'utf8');
   const re = /data-element="([^"]+)"/g;
   let match;
+  const seenInFile = new Set();
+  const fileOrder = [];
+
   while ((match = re.exec(html))) {
     const id = match[1];
+    if (!seenInFile.has(id)) {
+      seenInFile.add(id);
+      fileOrder.push(id);
+    }
     if (!registry[id]) {
       registry[id] = { id, profile: classifyElement(id), templates: [] };
     }
@@ -96,6 +105,8 @@ for (const file of files) {
       registry[id].templates.push(file);
     }
   }
+
+  domOrderByTemplate[file] = fileOrder;
 }
 
 const elements = Object.values(registry).sort((a, b) => a.id.localeCompare(b.id));
@@ -164,12 +175,7 @@ export const INDUSTRIAL_B2B_PROFILE_BY_ELEMENT: Record<string, ElementApplyProfi
   INDUSTRIAL_B2B_ELEMENT_REGISTRY.map((entry) => [entry.id, entry.profile]),
 );
 
-export const INDUSTRIAL_B2B_ELEMENTS_BY_TEMPLATE = Object.fromEntries(
-  INDUSTRIAL_B2B_TEMPLATE_FILES.map((file) => [
-    file,
-    INDUSTRIAL_B2B_ELEMENT_REGISTRY.filter((entry) => entry.templates.includes(file)).map((entry) => entry.id),
-  ]),
-) as Record<IndustrialB2bTemplateFile, string[]>;
+export const INDUSTRIAL_B2B_ELEMENTS_BY_TEMPLATE = ${JSON.stringify(domOrderByTemplate, null, 2)} as Record<IndustrialB2bTemplateFile, string[]>;
 `;
 
 fs.writeFileSync(outFile, body);

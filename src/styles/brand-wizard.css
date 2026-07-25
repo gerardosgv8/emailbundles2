@@ -1,28 +1,17 @@
 .wizard-app {
-  --bg: #f1f5f9;
-  --surface: #ffffff;
   --surface-2: #f8fafc;
-  --border: #e2e8f0;
-  --border-strong: #cbd5e1;
-  --text: #0f172a;
-  --text-secondary: #334155;
-  --muted: #64748b;
-  --accent: #2563eb;
-  --accent-hover: #1d4ed8;
-  --accent-soft: #eff6ff;
+  --accent: var(--primary);
+  --accent-hover: var(--primary-hover);
+  --accent-soft: var(--primary-soft);
   --success: #16a34a;
   --success-soft: #f0fdf4;
-  --radius: 12px;
-  --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.05);
-  --shadow-md: 0 4px 12px rgba(15, 23, 42, 0.06);
-  --shadow-lg: 0 8px 24px rgba(15, 23, 42, 0.08);
 
   display: grid;
   grid-template-columns: 272px 1fr 340px;
   min-height: calc(100vh - 4.5rem);
   max-width: 1600px;
   margin: 0 auto;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family: var(--font);
   background: var(--bg);
   color: var(--text);
 }
@@ -388,7 +377,8 @@
 
 .wizard-app .w-btn {
   padding: 0.55rem 1rem;
-  border-radius: 8px;
+  min-height: 44px;
+  border-radius: var(--radius-sm);
   border: 1px solid var(--border-strong);
   background: var(--surface);
   color: var(--text-secondary);
@@ -396,11 +386,25 @@
   font-weight: 600;
   cursor: pointer;
   box-shadow: var(--shadow-sm);
-  transition: background 0.15s, border-color 0.15s;
+  transition:
+    background var(--duration) var(--ease-out),
+    border-color var(--duration) var(--ease-out),
+    box-shadow var(--duration) var(--ease-out),
+    transform var(--duration) var(--ease-out);
 }
 
-.wizard-app .w-btn:hover { background: var(--surface-2); }
-.wizard-app .w-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+.wizard-app .w-btn:hover {
+  background: var(--surface-2);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+.wizard-app .w-btn:active { transform: scale(0.98); }
+.wizard-app .w-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: var(--shadow-sm) !important;
+}
 .wizard-app .w-btn-primary {
   background: var(--accent);
   border-color: var(--accent);
@@ -485,7 +489,7 @@
   width: 8.5rem;
   min-width: 8.5rem;
   box-sizing: border-box;
-  font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+  font-family: var(--font-mono);
   font-size: 0.9rem;
   padding: 0.6rem 0.75rem;
   border-radius: 8px;
@@ -509,19 +513,46 @@
 .wizard-app .field-template-ref {
   display: block;
   margin-top: 0.2rem;
-  color: var(--accent);
+  color: var(--text-secondary);
   font-size: 0.74rem;
-  line-height: 1.45;
-  font-weight: 500;
+  line-height: 1.55;
+  font-weight: 400;
 }
-.wizard-app .field-template-ref::before { content: 'Template: '; font-weight: 600; }
+.wizard-app .field-template-ref-label {
+  color: var(--accent);
+  font-weight: 600;
+}
+.wizard-app .field-template-ref--compact {
+  margin-top: 0.15rem;
+}
+.wizard-app .template-ref-link {
+  display: inline;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--accent);
+  font: inherit;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+}
+.wizard-app .template-ref-link:hover {
+  color: var(--accent-hover);
+}
+.wizard-app .template-ref-link:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
 .wizard-app .field-element-ref {
   display: block;
   margin-top: 0.15rem;
   color: var(--muted);
   font-size: 0.72rem;
   line-height: 1.45;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-family: var(--font-mono);
 }
 .wizard-app .field-usage {
   margin: 0.15rem 0 0.35rem;
@@ -747,7 +778,7 @@
 .wizard-app .swatch-hex {
   font-size: 0.65rem;
   color: var(--muted);
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-family: var(--font-mono);
   line-height: 1.2;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -774,19 +805,10 @@
 
 .wizard-toast.show { opacity: 1; transform: translateY(0); }
 
-/* Confirm modal (portal-style overlay; shares wizard CSS variables) */
+/* Confirm modal (portal-style overlay; inherits shared site tokens) */
 .wizard-modal-root {
-  --bg: #f1f5f9;
-  --surface: #ffffff;
-  --border: #e2e8f0;
-  --border-strong: #cbd5e1;
-  --text: #0f172a;
-  --text-secondary: #334155;
-  --muted: #64748b;
-  --accent: #2563eb;
-  --accent-hover: #1d4ed8;
-  --radius: 12px;
-  --shadow-lg: 0 8px 24px rgba(15, 23, 42, 0.08);
+  --accent: var(--primary);
+  --accent-hover: var(--primary-hover);
 
   position: fixed;
   inset: 0;
@@ -805,10 +827,10 @@
   max-width: 420px;
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: var(--radius);
+  border-radius: var(--radius-md);
   padding: 1.5rem 1.5rem 1.35rem;
   box-shadow: var(--shadow-lg);
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family: var(--font);
   color: var(--text);
   animation: wizard-modal-slide-in 0.22s ease-out;
 }
@@ -1064,3 +1086,361 @@
 .wizard-app .apply-bundle-file-list strong { font-size: 0.85rem; }
 .wizard-app .apply-bundle-hooks { color: var(--muted); font-size: 0.78rem; line-height: 1.4; }
 .wizard-app .apply-bundle-warning { margin: 0 0 0.5rem; font-size: 0.8rem; color: #b45309; line-height: 1.45; }
+
+/* Content Wizard */
+.content-wizard-picker .content-template-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1rem;
+}
+
+.content-template-card {
+  display: block;
+  padding: 1.25rem;
+  text-decoration: none;
+  color: inherit;
+  transition: box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+.content-template-card:hover {
+  box-shadow: var(--shadow-md);
+  border-color: var(--accent);
+}
+
+.content-template-card h3 {
+  margin: 0 0 0.35rem;
+  font-size: 1.05rem;
+}
+
+.content-template-file {
+  margin: 0;
+  font-size: 0.78rem;
+  color: var(--muted);
+  font-family: var(--font-mono);
+}
+
+.content-template-meta {
+  margin: 0.5rem 0 0;
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+}
+
+.wizard-app .nav-item-link {
+  text-decoration: none;
+  color: inherit;
+  text-align: left;
+}
+
+.wizard-app .content-field-list {
+  display: grid;
+  gap: 1rem;
+}
+
+.wizard-app .content-field label {
+  display: block;
+  font-weight: 600;
+  font-size: 0.88rem;
+  margin-bottom: 0.35rem;
+}
+
+.wizard-app .content-field .field-element-ref {
+  display: block;
+  margin-top: 0.2rem;
+  font-weight: 400;
+  font-size: 0.72rem;
+  color: var(--muted);
+  font-family: var(--font-mono);
+}
+
+.wizard-app .content-field textarea {
+  width: 100%;
+  min-height: 5.5rem;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font: inherit;
+  resize: vertical;
+}
+
+.wizard-app .content-section-card + .content-section-card {
+  margin-top: 1rem;
+}
+
+.wizard-app .content-progress {
+  color: var(--text-secondary);
+}
+
+.wizard-app .content-apply-actions {
+  margin-top: 1rem;
+}
+
+.wizard-app .apply-bundle-success {
+  margin: 0.75rem 0 0;
+  color: var(--success);
+  font-size: 0.85rem;
+}
+
+.wizard-app .content-wizard-tip {
+  margin-top: 1rem;
+}
+
+.bundle-select-actions--dual {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.wizard-app .content-field-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.35rem;
+}
+
+.wizard-app .content-field-head > label {
+  margin-bottom: 0;
+}
+
+.wizard-app .content-visibility-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+}
+
+.wizard-app .content-visibility-toggle input {
+  width: auto;
+  margin: 0;
+  accent-color: var(--accent);
+}
+
+.wizard-app .content-field--hidden {
+  opacity: 0.72;
+}
+
+.wizard-app .content-field--hidden .field-grid,
+.wizard-app .content-field--hidden textarea,
+.wizard-app .content-field--hidden input:not([type='checkbox']) {
+  border-style: dashed;
+}
+
+.wizard-app .content-hidden-note {
+  margin-top: 0.75rem;
+  color: var(--muted);
+}
+
+.wizard-app .content-html-preview {
+  margin-top: 1rem;
+}
+
+.wizard-app .content-preview-note {
+  margin-bottom: 0;
+  font-size: 0.78rem;
+}
+
+.wizard-app .content-preview-open-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  width: 100%;
+  margin-top: 0.75rem;
+  padding: 1.1rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: linear-gradient(180deg, var(--surface-2) 0%, var(--surface) 100%);
+  color: var(--text);
+  cursor: pointer;
+  transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
+}
+
+.wizard-app .content-preview-open-btn:hover {
+  border-color: var(--accent);
+  box-shadow: var(--shadow-sm);
+  background: var(--accent-soft);
+}
+
+.wizard-app .content-preview-open-icon {
+  display: flex;
+  color: var(--accent);
+}
+
+.wizard-app .content-preview-open-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.wizard-app .content-preview-open-hint {
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.wizard-app .content-preview-placeholder {
+  margin-top: 0.75rem;
+  height: 96px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px dashed var(--border-strong);
+  border-radius: 8px;
+  background: var(--surface-2);
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+/* Full-size preview modal */
+.content-preview-modal-root {
+  padding: 1rem;
+}
+
+.content-preview-modal {
+  max-width: 680px;
+  width: 100%;
+  padding: 1rem 1rem 1.15rem;
+  display: flex;
+  flex-direction: column;
+  max-height: min(92vh, 960px);
+}
+
+.content-preview-modal-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.content-preview-modal-title {
+  margin: 0;
+  flex: 1;
+}
+
+.content-preview-modal-close {
+  flex-shrink: 0;
+  width: 2rem;
+  height: 2rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--text-secondary);
+  font-size: 1.25rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.content-preview-modal-close:hover {
+  background: var(--surface-2);
+  color: var(--text);
+}
+
+.content-preview-modal-note {
+  margin: 0.35rem 0 0.75rem;
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+.content-preview-modal-body {
+  flex: 1;
+  min-height: 0;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  background: #e2e8f0;
+}
+
+.content-preview-modal-frame {
+  display: block;
+  width: 100%;
+  height: min(72vh, 780px);
+  border: 0;
+  background: #ffffff;
+}
+
+@media (max-width: 768px) {
+  .content-preview-modal {
+    max-width: none;
+    max-height: 94vh;
+  }
+
+  .content-preview-modal-frame {
+    height: min(68vh, 720px);
+  }
+}
+
+/* Template screenshot preview modal (brand wizard) */
+.template-preview-modal-root {
+  padding: 1rem;
+}
+
+.template-preview-modal {
+  max-width: 720px;
+  width: 100%;
+  padding: 1rem 1rem 1.15rem;
+  display: flex;
+  flex-direction: column;
+  max-height: min(92vh, 960px);
+}
+
+.template-preview-modal-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.template-preview-modal-title {
+  margin: 0;
+  flex: 1;
+}
+
+.template-preview-modal-close {
+  flex-shrink: 0;
+  width: 2rem;
+  height: 2rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--text-secondary);
+  font-size: 1.25rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.template-preview-modal-close:hover {
+  background: var(--surface-2);
+  color: var(--text);
+}
+
+.template-preview-modal-note {
+  margin: 0.35rem 0 0.75rem;
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.template-preview-modal-body {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface-2);
+}
+
+.template-preview-modal-image {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+@media (max-width: 768px) {
+  .template-preview-modal {
+    max-width: none;
+    max-height: 94vh;
+  }
+}

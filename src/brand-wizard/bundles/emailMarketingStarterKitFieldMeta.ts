@@ -18,7 +18,6 @@ export const EMAIL_MARKETING_STARTER_KIT_FIELD_META: Partial<Record<DesignRulesF
   logoHeight: { usage: 'Logo display height in header' },
   logoDarkUrl: {
     usage: 'Optional logo for dark promo bands',
-    templates: 'Promotional_Campaign: sale banner when logo sits on dark surface',
   },
   faviconUrl: { usage: 'Optional small mark URL' },
 
@@ -34,38 +33,18 @@ export const EMAIL_MARKETING_STARTER_KIT_FIELD_META: Partial<Record<DesignRulesF
   colorHeaderKicker: { usage: 'Top-of-email kicker and pre-header lines' },
   colorBody: { usage: 'Long-form body copy and product descriptions' },
   colorBodyAlt: { usage: 'Subtitles, summaries, and secondary copy' },
-  colorMuted: { usage: 'Prices, order summary labels, and footer address text' },
+  colorMuted: { usage: 'Prices, order summary labels, and deal compare-at text' },
 
   colorBgEmail: { usage: 'Outer email body and card background' },
   colorBgLightGray: {
-    usage: 'Order summary and pricing panel backgrounds',
-    templates: 'Order_Confirmation_Email: totals panel; Promotional_Campaign: deal rows',
+    usage: 'Order summary, support panel, and pricing panel backgrounds',
+    templates: 'Order_Confirmation_Email: totals panel; Welcome_&_Onboarding: support panel',
   },
   colorBgInfo: {
-    usage: 'Support and insight callout backgrounds',
-    templates: 'Welcome_&_Onboarding: support panel; Feature_Announcement insight blocks',
+    usage: 'Insight callout panel backgrounds',
+    templates: 'Newsletter_Editorial: featured insight block',
   },
-  colorBgPromoDark: {
-    usage: 'Dark promotional band background',
-    templates: 'Promotional_Campaign: header sale banner',
-  },
-  colorBgWarning: { usage: 'Limited stock and alert callout background' },
-  colorBgWarningBorder: { usage: 'Border on alert callout panels' },
-  colorBgWarningText: { usage: 'Text on insight and alert callout panels' },
-  colorBgUrgency: { usage: 'Scarcity and limited-time alert background' },
-  colorBgUrgencyBorder: { usage: 'Border on urgency alert panels' },
-  colorBgUrgencyText: { usage: 'Text on urgency alert panels' },
-  colorDivider: { usage: 'In-content section divider' },
-  colorFooterDivider: { usage: 'Line above footer block' },
 
-  colorBadgeEventBg: {
-    usage: 'Feature icon badge background',
-    templates: 'Feature_Announcement: feature icon circles',
-  },
-  colorBadgeEventText: {
-    usage: 'Feature icon badge label text',
-    templates: 'Feature_Announcement: feature icon labels',
-  },
   colorBadgeStepBg: {
     usage: 'Numbered step badge background',
     templates: 'Welcome_&_Onboarding: onboarding step numbers',
@@ -81,6 +60,14 @@ export const EMAIL_MARKETING_STARTER_KIT_FIELD_META: Partial<Record<DesignRulesF
 
   btnPrimaryBg: { usage: 'Filled CTA background (shop now, complete order, survey, etc.)' },
   btnPrimaryText: { usage: 'Filled CTA label on primary buttons' },
+  btnPricingBg: {
+    usage: 'Product launch pricing CTA background',
+    templates: 'Product_Launch: pricing-cta button',
+  },
+  btnPromoBg: {
+    usage: 'Newsletter featured article CTA background',
+    templates: 'Newsletter_Editorial: featured-cta button',
+  },
   btnPrimaryRadius: { usage: 'Corner radius on primary and secondary buttons' },
   btnPrimaryPadding: { usage: 'Padding on primary and secondary buttons' },
   btnSecondaryBg: { usage: 'Outline secondary CTA background' },

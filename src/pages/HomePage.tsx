@@ -1,33 +1,84 @@
 import { Link } from 'react-router-dom';
-import { TESTIMONIALS } from '../data/testimonials';
-import { FAQ_CATEGORIES } from '../data/faq';
+import { getFaqHomePreview } from '../data/faq';
 
-const PREVIEW_TESTIMONIALS = TESTIMONIALS.slice(0, 3);
-const PREVIEW_FAQS = FAQ_CATEGORIES[0].items.slice(0, 2).concat(FAQ_CATEGORIES[1].items.slice(0, 2));
+const PREVIEW_FAQS = getFaqHomePreview();
 
-const FEATURES = [
-  ['Save time', 'Launch campaigns in minutes instead of days. Skip the long design and QA cycles.'],
-  ['Look professional', 'Modern, conversion-focused designs that elevate your brand.'],
-  ['Easy implementation', 'Clean code, commented, and ESP-ready for Salesforce, Klaviyo, Mailchimp.'],
-  ['Fully responsive', 'Mobile-first layouts tested across devices and clients.'],
+const AUDIENCE = [
+  [
+    'Agencies',
+    'Onboard a client brand once, apply it across the pack, then fill each send without rebuilding markup from scratch.',
+  ],
+  [
+    'Freelancers & designers',
+    'Deliver branded HTML faster. Export Design Rules so the client (or your future self) has one brand reference.',
+  ],
+  [
+    'In-house marketers',
+    'Keep logo, colors, and footer consistent while campaign copy changes every week. Brand and content stay separate on purpose.',
+  ],
 ];
 
-const TUTORIALS = [
-  'Interior design company email',
-  'Ecommerce store email',
-  'Product launch email',
+const WORKFLOW = [
+  [
+    '1',
+    'Pick a bundle',
+    'Choose Industrial B2B (9 templates) or the Email Marketing Starter Kit (11 templates) for the campaigns you actually send.',
+  ],
+  [
+    '2',
+    'Brand the pack',
+    'Enter logo, colors, buttons, and footer in the Brand Wizard. Apply those tokens to a template zip in one pass.',
+  ],
+  [
+    '3',
+    'Fill the send',
+    'Open the Content Wizard. Drop in headlines, body, CTAs, and images for one layout. Brand tokens stay untouched.',
+  ],
+  [
+    '4',
+    'Export & Send',
+    'Grab your production-ready HTML, paste it into your ESP, and launch with total confidence across Gmail, Outlook, and Apple Mail.',
+  ],
+];
+
+const MECHANISM = [
+  [
+    'Production HTML, not a mock',
+    'Table-based layouts with inline styles and Outlook-friendly button fallbacks. What you customize is what you send.',
+  ],
+  [
+    'Brand Wizard',
+    'Define design tokens once. Apply them across the zip. Export Design Rules as your team’s brand handoff.',
+  ],
+  [
+    'Content Wizard',
+    'Fill campaign fields through forms. Hide optional blocks for this send. Download filled .html without hunting through markup.',
+  ],
+  [
+    'ESP-ready output',
+    'Paste the full file into Klaviyo, Mailchimp, HubSpot, Salesforce, or any platform that accepts custom HTML.',
+  ],
 ];
 
 const HIGHLIGHTS = [
-  ['Bulletproof buttons', 'VML buttons for Outlook and standard anchors for other clients so CTAs look consistent everywhere.'],
-  ['Table-based layout', 'Hybrid table layout & inline CSS to maximize compatibility across ESPs and clients.'],
-  ['ESP compatibility', 'Copy-paste ready for Salesforce Marketing Cloud, Klaviyo, Mailchimp, HubSpot, and more.'],
+  [
+    'Outlook-aware CTAs',
+    'VML fallbacks stay in the markup so primary buttons keep their shape in desktop Outlook.',
+  ],
+  [
+    'Hooks the wizards understand',
+    'Commented sections and data-element attributes let Brand and Content Wizards target the right nodes.',
+  ],
+  [
+    'Clear split: design vs copy',
+    'Brand tokens and campaign fields never fight each other. Change one without undoing the other.',
+  ],
 ];
 
 const DOCS = [
-  ['Getting started', 'Open the template, edit copy & images, and upload to your ESP.'],
-  ['Customization', 'Change colors, fonts, and sections. All styles are inlined and commented.'],
-  ['Troubleshooting', 'Common fixes for images, spacing, and Outlook rendering quirks.'],
+  ['Brand Design Wizard', 'Set tokens, apply a zip, export Design Rules.'],
+  ['Content Wizard', 'Fill headings, body, and CTAs, then download filled HTML.'],
+  ['ESP & troubleshooting', 'Upload tips, merge tags, images, and client quirks.'],
 ];
 
 export function HomePage() {
@@ -36,10 +87,20 @@ export function HomePage() {
       <section className="hero-split">
         <div className="hero-copy">
           <div className="hero-copy-inner">
-            <h1>Craft Beautiful Email Templates in Minutes</h1>
-            <p>Professional email templates that work everywhere. No coding required. Build, customize, and export stunning emails that convert.</p>
+            <p className="hero-eyebrow">Mailcraft Studio</p>
+            <h1>Ship high-quality emails in minutes</h1>
+            <p>
+              Production HTML templates plus Brand and Content Wizards. Brand the pack once, fill
+              your campaign copy through forms, and download ESP-ready HTML. What used to take an
+              afternoon of markup edits becomes a short, repeatable path.
+            </p>
             <div className="hero-actions">
-              <Link to="/products" className="btn btn-primary btn-lg">Browse template bundles</Link>
+              <Link to="/products" className="btn btn-primary btn-lg">
+                Browse bundles
+              </Link>
+              <Link to="/brand-wizard" className="btn btn-secondary btn-lg">
+                Try Brand Wizard
+              </Link>
             </div>
           </div>
         </div>
@@ -47,9 +108,13 @@ export function HomePage() {
           <div className="email-mockup glass-card">
             <div className="email-mockup-bar" />
             <div className="email-mockup-body">
-              <h3>Your next campaign</h3>
-              <p>ESP-ready HTML that renders consistently across clients.</p>
-              <Link to="/products" className="email-mockup-cta">Start Now</Link>
+              <h3>Minutes, not markup marathons</h3>
+              <p>
+                Brand once. Fill the send. Paste into your ESP. Same three steps every campaign.
+              </p>
+              <Link to="/docs#brand-wizard" className="email-mockup-cta">
+                See how it works
+              </Link>
             </div>
           </div>
         </div>
@@ -58,48 +123,77 @@ export function HomePage() {
       <section className="section section-white">
         <div className="container grid-2">
           <div>
-            <h2 className="section-title">Stop wasting hours designing emails from scratch</h2>
-            <p>Outlook breaks designs, inconsistent branding dilutes trust, and slow QA cycles stall campaigns. Our bundle solves those problems with pre-tested templates tailored for eCommerce and B2B use cases.</p>
+            <h2 className="section-title">The Plug-and-Play System for Professional Email Templates</h2>
+            <p>
+              You know the loop: open nine HTML files, paste the logo, chase hex codes, rewrite the
+              footer, fix the button Outlook broke, and repeat it all next week.
+            </p>
+            <p>
+              Templates alone don’t fix that. A repeatable brand and content engine does.
+            </p>
             <ul className="feature-list">
-              <li>Pre-tested across major clients (Outlook, Gmail, Apple Mail)</li>
-              <li>Modular sections for flexible layouts</li>
-              <li>Inline CSS &amp; table-based structure for ESP compatibility</li>
+              <li>
+                <strong>One-Click Brand Pass:</strong> Update your brand system across the entire
+                bundle, skipping the one-file-at-a-time grind.
+              </li>
+              <li>
+                <strong>Structured Campaign Copy:</strong> Drop copy into dedicated fields. No
+                fragile find-and-replace in messy HTML markup.
+              </li>
+              <li>
+                <strong>Launch-Ready Frameworks:</strong> Production-ready layouts engineered for
+                product launches, lifecycles, promos, and updates.
+              </li>
             </ul>
           </div>
           <div className="card card-muted">
-            <h4>Templates included</h4>
+            <h4>What’s in a bundle</h4>
             <ul className="feature-list">
-              <li>Welcome series • Abandoned cart • Product launch</li>
-              <li>Sale / Promotion • Order confirmation • Shipping update</li>
-              <li>Re-engagement • Feedback request • Holiday campaigns</li>
+              <li>9 or 11 production HTML templates (by pack)</li>
+              <li>Brand Design Wizard with zip apply and Design Rules export</li>
+              <li>Content Wizard with filled .html download</li>
+              <li>Docs for ESP upload, merge tags, and common fixes</li>
             </ul>
-            <Link to="#templates" className="btn btn-primary" style={{ marginTop: '1.25rem' }}>View gallery</Link>
+            <Link to="/products" className="btn btn-primary" style={{ marginTop: '1.25rem' }}>
+              See pricing and packs
+            </Link>
           </div>
         </div>
       </section>
 
       <section className="section section-muted">
-        <div className="container grid-2">
-          <div>
-            <p className="showcase-badge">See it in action</p>
-            <h2 className="section-title">The experience of building a template, end to end</h2>
-            <p>Watch teams go from a blank canvas to a polished, client-ready email. Structure, styling, and checks all happen in one builder.</p>
-            <ul className="feature-list">
-              <li>Interior design company email · <Link to="/docs">Watch tutorial</Link></li>
-              <li>Ecommerce store email · <Link to="/docs">Watch tutorial</Link></li>
-              <li>Product launch email · <Link to="/docs">Watch tutorial</Link></li>
-            </ul>
+        <div className="container">
+          <h2 className="section-title">How the system works</h2>
+          <p className="section-lead">
+            Four steps. Design and content stay separate on purpose, so branding stays consistent
+            while each campaign stays quick to assemble.
+          </p>
+          <div className="grid-4 mc-stagger" style={{ marginTop: '1.5rem' }}>
+            {WORKFLOW.map(([num, title, desc]) => (
+              <div key={title} className="card card-quiet">
+                <span className="workflow-step-num" aria-hidden="true">{num}</span>
+                <h4>{title}</h4>
+                <p>{desc}</p>
+              </div>
+            ))}
           </div>
-          <div className="video-frame">Template builder preview</div>
+          <div className="hero-actions mt-8" style={{ justifyContent: 'center' }}>
+            <Link to="/brand-wizard" className="btn btn-primary">
+              Start with Brand Wizard
+            </Link>
+            <Link to="/content-wizard" className="btn btn-secondary">
+              Or open Content Wizard
+            </Link>
+          </div>
         </div>
       </section>
 
       <section className="section">
         <div className="container">
-          <h2 className="section-title">Key benefits</h2>
-          <div className="grid-4 mt-8" style={{ marginTop: '1.5rem' }}>
-            {FEATURES.map(([title, desc]) => (
-              <div key={title} className="card">
+          <h2 className="section-title">Built for people who ship email for a living</h2>
+          <div className="grid-3 mc-stagger" style={{ marginTop: '1.5rem' }}>
+            {AUDIENCE.map(([title, desc]) => (
+              <div key={title} className="card card-quiet">
                 <h4>{title}</h4>
                 <p>{desc}</p>
               </div>
@@ -108,30 +202,58 @@ export function HomePage() {
         </div>
       </section>
 
-      <section className="section" id="templates">
+      <section className="section section-white" id="templates">
         <div className="container">
-          <h2 className="section-title">View Tutorials</h2>
-          <p className="section-lead">All templates come as editable HTML files with modular sections.</p>
-          <div className="grid-3">
-            {TUTORIALS.map((name) => (
-              <article key={name} className="card template-card">
-                <div className="template-thumb">{name}</div>
-                <div className="card-body">
-                  <h5>{name}</h5>
-                  <p>Watch tutorial</p>
-                </div>
-              </article>
+          <h2 className="section-title">The pieces that make the mechanism work</h2>
+          <p className="section-lead">
+            Every feature maps to a concrete outcome: fewer markup edits, consistent brand, faster
+            path from brief to ESP.
+          </p>
+          <div className="grid-4 mc-stagger" style={{ marginTop: '1.5rem' }}>
+            {MECHANISM.map(([title, desc]) => (
+              <div key={title} className="card card-quiet">
+                <h4>{title}</h4>
+                <p>{desc}</p>
+              </div>
             ))}
           </div>
-          <p className="text-center mt-8">
-            <Link to="/products" className="btn btn-primary btn-lg">Browse products</Link>
-          </p>
         </div>
       </section>
 
       <section className="section">
+        <div className="container grid-2">
+          <div>
+            <p className="showcase-badge">Wizards</p>
+            <h2 className="section-title">Brand Styles and Campaign Copy, Engineered by Design</h2>
+            <p>
+              The Brand Design Wizard locks logo, palette, buttons, and footer, then applies them
+              to your templates. The Content Wizard handles headlines, body, CTAs, and images for
+              the send you’re shipping next. You don’t undo brand work when copy changes.
+            </p>
+            <ul className="feature-list">
+              <li>
+                Brand Wizard guide · <Link to="/docs#brand-wizard">Read it</Link>
+              </li>
+              <li>
+                Content Wizard guide · <Link to="/docs#content-wizard">Read it</Link>
+              </li>
+              <li>
+                Full documentation · <Link to="/docs">Open docs</Link>
+              </li>
+            </ul>
+          </div>
+          <div className="video-frame" aria-hidden="true">
+            Brand once. Fill copy. ESP.
+          </div>
+        </div>
+      </section>
+
+      <section className="section section-white">
         <div className="container">
-          <h2 className="section-title">Technical highlights</h2>
+          <h2 className="section-title">Under the hood</h2>
+          <p className="section-lead">
+            The wizards sit on real production HTML. No throwaway mockups between you and the send.
+          </p>
           <div className="grid-3" style={{ marginTop: '1.5rem' }}>
             {HIGHLIGHTS.map(([title, desc]) => (
               <div key={title} className="card">
@@ -143,10 +265,12 @@ export function HomePage() {
         </div>
       </section>
 
-      <section className="section section-white" id="docs-preview">
+      <section className="section" id="docs-preview">
         <div className="container">
-          <h2 className="section-title">Documentation &amp; Support</h2>
-          <p className="section-lead">Step-by-step guides to import, edit, and send templates. Includes screenshots and troubleshooting tips.</p>
+          <h2 className="section-title">Docs that follow the same path</h2>
+          <p className="section-lead">
+            Branding, filling copy, ESP upload, and the fixes you’ll hit on day two.
+          </p>
           <div className="grid-3">
             {DOCS.map(([title, desc]) => (
               <div key={title} className="card card-muted">
@@ -155,43 +279,36 @@ export function HomePage() {
               </div>
             ))}
           </div>
-          <p className="text-center mt-8">
-            <Link to="/docs" className="btn btn-secondary">Full documentation</Link>
-            <Link to="/brand-wizard" className="btn btn-primary" style={{ marginLeft: '0.5rem' }}>Brand Design Wizard</Link>
-          </p>
+          <div className="hero-actions mt-8" style={{ justifyContent: 'center' }}>
+            <Link to="/docs" className="btn btn-secondary">
+              Full documentation
+            </Link>
+            <Link to="/faq" className="btn btn-primary">
+              Browse FAQs
+            </Link>
+          </div>
         </div>
       </section>
 
-      <section className="section" id="testimonials">
-        <div className="container">
-          <div className="section-head-inline">
-            <h2 className="section-title" style={{ margin: 0 }}>What customers say</h2>
-            <Link to="/testimonials" className="btn btn-secondary btn-sm">View all stories</Link>
-          </div>
-          <div className="grid-3" style={{ marginTop: '1.5rem' }}>
-            {PREVIEW_TESTIMONIALS.map((item) => (
-              <blockquote key={item.id} className="card">
-                <p>&ldquo;{item.quote.length > 120 ? `${item.quote.slice(0, 120)}…` : item.quote}&rdquo;</p>
-                <footer style={{ marginTop: '0.75rem', fontSize: '0.85rem', color: 'var(--muted)' }}>
-                  {item.name}, {item.role}
-                </footer>
-              </blockquote>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* Testimonials section saved for later. See TestimonialsPage + data/testimonials.ts */}
 
       <section className="section section-white" id="faq">
         <div className="container faq-list">
           <div className="section-head-inline">
-            <h2 className="section-title" style={{ margin: 0 }}>Frequently asked questions</h2>
-            <Link to="/faq" className="btn btn-secondary btn-sm">View all FAQs</Link>
+            <h2 className="section-title" style={{ margin: 0 }}>
+              Frequently asked questions
+            </h2>
+            <Link to="/faq" className="btn btn-secondary btn-sm">
+              View all FAQs
+            </Link>
           </div>
           <dl style={{ marginTop: '1.5rem' }}>
             {PREVIEW_FAQS.map((item) => (
               <div key={item.id} className="faq-item">
-                <dt>{item.question}</dt>
-                <dd>{item.answer.length > 160 ? `${item.answer.slice(0, 160)}…` : item.answer}</dd>
+                <dt>
+                  <Link to={`/faq#${item.id}`}>{item.question}</Link>
+                </dt>
+                <dd>{item.answer.length > 140 ? `${item.answer.slice(0, 140)}…` : item.answer}</dd>
               </div>
             ))}
           </dl>
@@ -201,13 +318,20 @@ export function HomePage() {
       <section className="section" id="get-started">
         <div className="container">
           <div className="card cta-card text-center">
-            <h3 className="section-title" style={{ fontSize: '1.25rem' }}>Ready to define your brand?</h3>
+            <h3 className="section-title" style={{ fontSize: '1.25rem' }}>
+              Ready to ship your next email in minutes?
+            </h3>
             <p style={{ margin: '0 0 1.5rem', color: 'var(--muted)', fontSize: '0.9rem' }}>
-              Use the Brand Design Wizard to set colors, logo, footer details, and typography, then export DESIGN_RULES.md for your team.
+              Pick a pack, brand it once, fill the send, and download ESP-ready HTML. Industrial B2B
+              or Email Marketing Starter Kit. $79.99 per bundle.
             </p>
             <div className="hero-actions" style={{ justifyContent: 'center' }}>
-              <Link to="/brand-wizard" className="btn btn-primary btn-lg">Open Brand Wizard</Link>
-              <Link to="/products" className="btn btn-secondary btn-lg">Browse products</Link>
+              <Link to="/products" className="btn btn-primary btn-lg">
+                Browse bundles
+              </Link>
+              <Link to="/brand-wizard" className="btn btn-secondary btn-lg">
+                Try Brand Wizard
+              </Link>
             </div>
           </div>
         </div>

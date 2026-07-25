@@ -1,13 +1,14 @@
 import type { ReactNode } from 'react';
+import { TemplateRef } from './components/TemplateRef';
 import type { DesignRulesField, DesignRulesState } from '../brand-wizard/types';
 
 interface TextFieldProps {
+  bundleId: string;
   fieldKey: DesignRulesField;
   label: string;
   hint?: string;
   usage?: string;
   templates?: string;
-  elements?: string;
   full?: boolean;
   type?: 'text' | 'email' | 'url';
   placeholder?: string;
@@ -16,12 +17,12 @@ interface TextFieldProps {
 }
 
 export function TextField({
+  bundleId,
   fieldKey,
   label,
   hint,
   usage,
   templates,
-  elements,
   full,
   type = 'text',
   placeholder,
@@ -35,8 +36,7 @@ export function TextField({
         {hint ? <span className="hint"> {hint}</span> : null}
       </label>
       {usage ? <p className="field-usage">{usage}</p> : null}
-      {templates ? <p className="field-template-ref">{templates}</p> : null}
-      {elements ? <p className="field-element-ref">Hooks: {elements}</p> : null}
+      {templates ? <TemplateRef bundleId={bundleId} templates={templates} /> : null}
       <input
         id={fieldKey}
         type={type}
@@ -49,16 +49,16 @@ export function TextField({
 }
 
 interface ColorFieldProps {
+  bundleId: string;
   fieldKey: DesignRulesField;
   label: string;
   usage?: string;
   templates?: string;
-  elements?: string;
   value: string;
   onChange: (key: DesignRulesField, value: string) => void;
 }
 
-export function ColorField({ fieldKey, label, usage, templates, elements, value, onChange }: ColorFieldProps) {
+export function ColorField({ bundleId, fieldKey, label, usage, templates, value, onChange }: ColorFieldProps) {
   const normalized = value || '#000000';
 
   const handleColor = (hex: string) => {
@@ -79,8 +79,7 @@ export function ColorField({ fieldKey, label, usage, templates, elements, value,
       <div className="color-token-info">
         <strong>{label}</strong>
         {usage ? <small>{usage}</small> : null}
-        {templates ? <small className="field-template-ref">{templates}</small> : null}
-        {elements ? <small className="field-element-ref">Hooks: {elements}</small> : null}
+        {templates ? <TemplateRef bundleId={bundleId} templates={templates} className="field-template-ref field-template-ref--compact" /> : null}
       </div>
       <div className="color-row">
         <input

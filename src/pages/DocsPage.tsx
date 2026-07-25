@@ -1,10 +1,23 @@
 import { Link } from 'react-router-dom';
+import { BrandWizardGuide } from '../docs/BrandWizardGuide';
+import { ContentWizardGuide } from '../docs/ContentWizardGuide';
+import { DocCallout } from '../docs/DocPrimitives';
 
 const STEPS = [
-  [1, 'Download and extract', 'Download the template bundle and extract all files to your local machine.'],
-  [2, 'Choose your template', 'Browse the gallery and select the template that best fits your campaign.'],
-  [3, 'Customize content', 'Edit text, images, and colors to match your brand guidelines.'],
-  [4, 'Upload to ESP', 'Copy the HTML code and paste it into your email service provider.'],
+  [1, 'Download and extract', 'Get your bundle and unzip the production HTML templates on your machine.'],
+  [2, 'Brand the pack', 'Use the Brand Design Wizard to set tokens and apply them across the zip.'],
+  [3, 'Fill the send', 'Use the Content Wizard to update headlines, body, CTAs, and images for one layout.'],
+  [4, 'Paste into your ESP', 'Paste the filled HTML, wire merge tags, and send a test before launch.'],
+] as const;
+
+const NAV = [
+  { href: '#getting-started', label: 'Getting started' },
+  { href: '#brand-wizard', label: 'Brand Design Wizard' },
+  { href: '#content-wizard', label: 'Content Wizard' },
+  { href: '#structure', label: 'Template structure' },
+  { href: '#customization', label: 'Customization' },
+  { href: '#esp', label: 'ESP integration' },
+  { href: '#troubleshooting', label: 'Troubleshooting' },
 ] as const;
 
 export function DocsPage() {
@@ -12,18 +25,20 @@ export function DocsPage() {
     <main className="container">
       <div className="page-hero">
         <h1>Documentation</h1>
-        <p>Complete guide to implementing, customizing, and troubleshooting your email templates.</p>
+        <p>
+          Follow the Mailcraft path: Brand Wizard, Content Wizard, ESP upload, and common fixes.
+          Expand a section when you’re ready to work through it step by step.
+        </p>
       </div>
 
       <div className="docs-layout">
         <aside className="docs-nav">
-          <strong style={{ display: 'block', marginBottom: '0.75rem', fontSize: '0.8rem', color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>On this page</strong>
-          <a href="#getting-started">Getting started</a>
-          <a href="#structure">Template structure</a>
-          <a href="#customization">Customization</a>
-          <a href="#esp">ESP integration</a>
-          <a href="#troubleshooting">Troubleshooting</a>
-          <a href="#brand-wizard">Brand wizard</a>
+          <strong className="docs-nav-label">On this page</strong>
+          {NAV.map((item) => (
+            <a key={item.href} href={item.href}>
+              {item.label}
+            </a>
+          ))}
         </aside>
 
         <div>
@@ -40,16 +55,24 @@ export function DocsPage() {
                 </div>
               ))}
             </div>
-            <div className="tip-box">
-              <strong>Pro tip</strong>
-              <p style={{ margin: '0.35rem 0 0', fontSize: '0.9rem', color: '#1e40af' }}>Always test templates in multiple email clients before sending. Use Litmus or Email on Acid for comprehensive QA.</p>
-            </div>
+            <DocCallout tone="tip">
+              Always test templates in multiple email clients before sending. Use Litmus or Email
+              on Acid for comprehensive QA.
+            </DocCallout>
           </section>
+
+          <BrandWizardGuide />
+          <ContentWizardGuide />
 
           <section className="doc-section" id="structure">
             <h2>Template structure</h2>
             <div className="card">
-              <p>Each template uses a <strong>600px table-based layout</strong> with modular sections marked by HTML comments (e.g. <code>Component start Header</code>). Editable regions use <code>data-element</code> attributes for the visual builder.</p>
+              <p>
+                Each template uses a <strong>600px table-based layout</strong> with modular
+                sections marked by HTML comments (e.g. <code>Component start Header</code>).
+                Editable regions use <code>data-element</code> attributes for the wizards and
+                visual builder.
+              </p>
               <ul className="feature-list" style={{ marginTop: '1rem' }}>
                 <li>Header with logo and kicker</li>
                 <li>Hero image or product block</li>
@@ -62,8 +85,13 @@ export function DocsPage() {
           <section className="doc-section" id="customization">
             <h2>Customization</h2>
             <div className="card">
-              <p>Colors and fonts are applied via inline styles. Search for hex values or swap brand tokens from your <code>DESIGN_RULES.md</code> file.</p>
-              <p style={{ marginTop: '1rem' }}>Use the <Link to="/brand-wizard">Brand Design Wizard</Link> to define primary colors, logo URL, footer info, and button styles, then export a markdown spec for your team.</p>
+              <p>
+                Colors and fonts ship as inline styles. For one-off edits, search for hex values
+                in the HTML. For team-wide branding, use the{' '}
+                <a href="#brand-wizard">Brand Design Wizard</a> and export{' '}
+                Design Rules file. For campaign copy only, use the{' '}
+                <a href="#content-wizard">Content Wizard</a>.
+              </p>
             </div>
           </section>
 
@@ -89,7 +117,10 @@ export function DocsPage() {
                 </div>
                 <div className="faq-item">
                   <dt>Extra spacing in Outlook</dt>
-                  <dd>Avoid margins on table rows; use padding on <code>&lt;td&gt;</code> cells instead.</dd>
+                  <dd>
+                    Avoid margins on table rows; use padding on <code>&lt;td&gt;</code> cells
+                    instead.
+                  </dd>
                 </div>
                 <div className="faq-item">
                   <dt>Buttons look wrong in Outlook</dt>
@@ -97,13 +128,31 @@ export function DocsPage() {
                 </div>
               </dl>
             </div>
+            <p className="doc-cross-links">
+              Wizard-specific fixes live under{' '}
+              <a href="#bw-faq">Brand Design Wizard → Troubleshooting</a> and{' '}
+              <a href="#cw-faq">Content Wizard → Troubleshooting</a>.
+            </p>
           </section>
 
-          <section className="doc-section" id="brand-wizard">
-            <h2>Brand Design Wizard</h2>
+          <section className="doc-section doc-section-feedback" id="docs-feedback">
             <div className="card card-muted">
-              <p>Define your baseline brand identity with color pickers, logo settings, footer details, and typography, then export <code>DESIGN_RULES.md</code>.</p>
-              <Link to="/brand-wizard" className="btn btn-primary" style={{ marginTop: '1rem' }}>Open Brand Wizard</Link>
+              <h2 style={{ fontSize: '1.15rem', margin: '0 0 0.5rem' }}>Was this helpful?</h2>
+              <p style={{ margin: '0 0 1rem', color: 'var(--muted)', fontSize: '0.9rem' }}>
+                Feedback widgets will land here so we can improve outdated steps. For now, start
+                from the wizards or browse the FAQ.
+              </p>
+              <div className="doc-feedback-actions">
+                <button type="button" className="btn btn-secondary btn-sm" disabled title="Coming soon">
+                  👍 Helpful
+                </button>
+                <button type="button" className="btn btn-secondary btn-sm" disabled title="Coming soon">
+                  👎 Not helpful
+                </button>
+                <Link to="/faq" className="btn btn-primary btn-sm">
+                  Browse FAQ
+                </Link>
+              </div>
             </div>
           </section>
         </div>

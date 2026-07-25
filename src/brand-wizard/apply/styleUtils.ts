@@ -56,18 +56,20 @@ export function upsertStylePropertyOnElement(
   el.setAttribute('style', style.trim());
 }
 
-export function setColor(el: Element, color: string, important = false) {
+export function setColor(el: Element, color: string, important = true) {
   if (!color) return;
+  markUserStyled(el, { text: true });
   upsertStylePropertyOnElement(el, 'color', color, important);
 }
 
-export function setBackground(el: Element, color: string, important = false) {
+export function setBackground(el: Element, color: string, important = true) {
   if (!color) return;
+  markUserStyled(el, { bg: true });
   upsertStylePropertyOnElement(el, 'background-color', color, important);
   el.setAttribute('bgcolor', color);
 }
 
-export function setBorderColor(el: Element, color: string, important = false) {
+export function setBorderColor(el: Element, color: string, important = true) {
   if (!color) return;
   upsertStylePropertyOnElement(el, 'border-color', color, important);
 }
@@ -131,7 +133,12 @@ export function applyFontFamily(root: Document | Element, fontStack: string) {
 
 function isCtaButtonWrapperTd(td: HTMLTableCellElement): boolean {
   const hook = td.getAttribute('data-element') ?? '';
-  return hook.endsWith('-cta-button');
+  if (!hook.endsWith('-button')) return false;
+  return (
+    hook.endsWith('-cta-button') ||
+    hook.startsWith('cta-') ||
+    hook.includes('-cta-')
+  );
 }
 
 function isAnchorInButtonWrapperTd(node: HTMLElement): boolean {
@@ -197,16 +204,17 @@ function applyStyleToNode(
     upsertStylePropertyOnElement(node, 'color', opts.color, true);
   }
 
-  if (anchorInButtonTd) {
-    stripLegacyAnchorPillStyles(node);
-  }
-
   if (!isTd) {
     upsertStylePropertyOnElement(node, 'text-decoration', 'none', true);
   }
 
   if (opts.borderColor && (isTd || !anchorInButtonTd)) {
+    upsertStylePropertyOnElement(node, 'border', `2px solid ${opts.borderColor}`, true);
     upsertStylePropertyOnElement(node, 'border-color', opts.borderColor, true);
+  }
+
+  if (anchorInButtonTd && !isTd) {
+    stripLegacyAnchorPillStyles(node);
   }
 }
 
@@ -246,6 +254,40 @@ export function applyLinkDecorationPass(doc: Document) {
   doc.querySelectorAll('a[data-element]').forEach((anchor) => {
     upsertStylePropertyOnElement(anchor, 'text-decoration', 'none', true);
   });
+}
+
+export function applySurfaceLightPanel(el: Element, color: string) {
+  if (!color) return;
+
+  const hook = el.getAttribute('data-element') ?? '';
+  setBackground(el, color);
+
+  if (el.tagName === 'TABLE' && hook.endsWith('-container')) {
+    el.querySelectorAll(':scope > tbody > tr > td, :scope > tr > td').forEach((td) => {
+      setBackground(td, color);
+    });
+    el.querySelectorAll('tr, tbody').forEach((row) => {
+      markUserStyled(row, { bg: true });
+      upsertStylePropertyOnElement(row, 'background-color', 'transparent', true);
+    });
+    el.querySelectorAll('table td').forEach((td) => {
+      if (td.getAttribute('data-brand-btn-variant')) return;
+      markUserStyled(td, { bg: true });
+      upsertStylePropertyOnElement(td, 'background-color', 'transparent', true);
+    });
+  }
+
+  if (el.tagName === 'TD' && hook.endsWith('-container-td')) {
+    el.querySelectorAll('tr, tbody').forEach((row) => {
+      markUserStyled(row, { bg: true });
+      upsertStylePropertyOnElement(row, 'background-color', 'transparent', true);
+    });
+    el.querySelectorAll('table td').forEach((td) => {
+      if (td.getAttribute('data-brand-btn-variant')) return;
+      markUserStyled(td, { bg: true });
+      upsertStylePropertyOnElement(td, 'background-color', 'transparent', true);
+    });
+  }
 }
 
 export function applyLogo(el: Element, src: string, alt: string, width: string, height: string) {

@@ -18,7 +18,6 @@ const PRIMARY_CTA_IDS = new Set([
   'featured-cta',
   'cta-primary',
   'cta-track-order',
-  'cta-view-details',
   'survey-cta',
   'view-all-cta',
   'checkout-button',
@@ -106,20 +105,25 @@ function classifyElement(id) {
     id.endsWith('-price') ||
     id.endsWith('-compare') ||
     id.endsWith('-discount') ||
-    id.endsWith('-note') ||
     id.endsWith('-label') ||
     id.endsWith('-amount') ||
     id === 'pricing-note' ||
     id === 'pricing-compare' ||
     id === 'order-date' ||
-    id.includes('deal-') && (id.endsWith('-price') || id.endsWith('-compare') || id.endsWith('-discount'))
+    (id.includes('deal-') && (id.endsWith('-price') || id.endsWith('-compare') || id.endsWith('-discount')))
   ) {
     return 'BODY_MUTED';
   }
 
-  if (id === 'important-note' || id === 'featured-insight') return 'BODY_WARNING_TEXT';
-  if (id === 'urgency-note' || id === 'limited-stock-message') return 'BODY_URGENCY_TEXT';
+  if (id === 'important-note' || id === 'featured-insight' || id === 'limited-stock-message') {
+    return 'BODY_WARNING_TEXT';
+  }
+  if (id === 'urgency-note') return 'BODY_URGENCY_TEXT';
   if (id === 'guide-download') return 'BODY_INFO_TEXT';
+
+  if (id.endsWith('-note')) {
+    return 'BODY_MUTED';
+  }
 
   if (id.startsWith('tier-')) return 'TIER_TEXT';
 
@@ -129,6 +133,7 @@ function classifyElement(id) {
   }
 
   if (id === 'cta-secondary') return 'CTA_SECONDARY';
+  if (id === 'cta-view-details') return 'CTA_SECONDARY';
   if (PRIMARY_CTA_IDS.has(id)) return 'CTA_PRIMARY';
 
   if (id.endsWith('-cta')) {
@@ -152,10 +157,15 @@ function classifyElement(id) {
   if (id === 'hero-image') return 'IMAGE_HERO';
   if (id.endsWith('-image')) return 'IMAGE_PRODUCT';
 
-  if (id === 'pricing-container' || id === 'order-total-container' || id === 'order-total-container-td') {
+  if (
+    id === 'pricing-container' ||
+    id === 'order-total-container' ||
+    id === 'order-total-container-td' ||
+    id === 'support-container'
+  ) {
     return 'SURFACE_LIGHT';
   }
-  if (id === 'featured-insight-container' || id === 'support-container') return 'SURFACE_INFO';
+  if (id === 'featured-insight-container') return 'SURFACE_INFO';
   if (id === 'limited-stock-container') return 'SURFACE_WARNING';
 
   return 'BODY';
@@ -164,13 +174,22 @@ function classifyElement(id) {
 const files = fs.readdirSync(bundleDir).filter((f) => f.endsWith('.html')).sort();
 /** @type {Record<string, { id: string, profile: string, templates: string[] }>} */
 const registry = {};
+/** @type {Record<string, string[]>} */
+const domOrderByTemplate = {};
 
 for (const file of files) {
   const html = fs.readFileSync(path.join(bundleDir, file), 'utf8');
   const re = /data-element="([^"]+)"/g;
   let match;
+  const seenInFile = new Set();
+  const fileOrder = [];
+
   while ((match = re.exec(html))) {
     const id = match[1];
+    if (!seenInFile.has(id)) {
+      seenInFile.add(id);
+      fileOrder.push(id);
+    }
     if (!registry[id]) {
       registry[id] = { id, profile: classifyElement(id), templates: [] };
     }
@@ -178,6 +197,8 @@ for (const file of files) {
       registry[id].templates.push(file);
     }
   }
+
+  domOrderByTemplate[file] = fileOrder;
 }
 
 const elements = Object.values(registry).sort((a, b) => a.id.localeCompare(b.id));
@@ -246,12 +267,7 @@ export const EMAIL_MARKETING_STARTER_KIT_PROFILE_BY_ELEMENT: Record<string, Elem
   EMAIL_MARKETING_STARTER_KIT_ELEMENT_REGISTRY.map((entry) => [entry.id, entry.profile]),
 );
 
-export const EMAIL_MARKETING_STARTER_KIT_ELEMENTS_BY_TEMPLATE = Object.fromEntries(
-  EMAIL_MARKETING_STARTER_KIT_TEMPLATE_FILES.map((file) => [
-    file,
-    EMAIL_MARKETING_STARTER_KIT_ELEMENT_REGISTRY.filter((entry) => entry.templates.includes(file)).map((entry) => entry.id),
-  ]),
-) as Record<EmailMarketingStarterKitTemplateFile, string[]>;
+export const EMAIL_MARKETING_STARTER_KIT_ELEMENTS_BY_TEMPLATE = ${JSON.stringify(domOrderByTemplate, null, 2)} as Record<EmailMarketingStarterKitTemplateFile, string[]>;
 `;
 
 fs.writeFileSync(outFile, body);

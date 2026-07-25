@@ -70,7 +70,7 @@ Define your baseline brand settings here before customizing templates. Generated
 
 | Token | Hex | Usage |
 |-------|-----|-------|
-| **Heading dark** | \`${d.colorHeadingDark}\` | H1–H4, section titles |
+| **Heading dark** | \`${d.colorHeadingDark}\` | H1-H4, section titles |
 | **Heading alt** | \`${d.colorHeadingAlt}\` | Hero titles, footer company name |
 | **Header kicker** | \`${d.colorHeaderKicker}\` | Top-of-email kicker headlines |
 | **Body text** | \`${d.colorBody}\` | Long-form body copy |
@@ -82,14 +82,9 @@ Define your baseline brand settings here before customizing templates. Generated
 | Token | Hex | Usage |
 |-------|-----|-------|
 | **Email background** | \`${d.colorBgEmail}\` | Outer body and card |
-| **Section: light gray** | \`${d.colorBgLightGray}\` | Pricing blocks, tier rows |
+| **Section: light gray** | \`${d.colorBgLightGray}\` | Pricing blocks |
 | **Section: info blue** | \`${d.colorBgInfo}\` | Insight callouts, download banners |
 | **Section: service blue** | \`${d.colorBgService}\` | Service tier panels *(with border \`${d.colorBgServiceBorder}\`)* |
-| **Section: promo dark** | \`${d.colorBgPromoDark}\` | Promo code / dark CTA bands |
-| **Section: warning** | \`${d.colorBgWarning}\` | Important notes *(border \`${d.colorBgWarningBorder}\`, text \`${d.colorBgWarningText}\`)* |
-| **Section: urgency** | \`${d.colorBgUrgency}\` | Limited-time alerts *(border \`${d.colorBgUrgencyBorder}\`, text \`${d.colorBgUrgencyText}\`)* |
-| **Divider** | \`${d.colorDivider}\` | In-content section breaks |
-| **Footer divider** | \`${d.colorFooterDivider}\` | Above footer block |
 
 ### Badge & icon colors
 

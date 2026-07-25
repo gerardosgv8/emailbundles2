@@ -304,7 +304,7 @@ export function importDesignRules(markdown: string): ImportDesignRulesResult {
   }
 
   if (fieldsMatched === 0) {
-    warnings.push('No recognizable design tokens were found. Use a DESIGN_RULES.md exported from Mailcraft Studio.');
+    warnings.push('No recognizable design tokens were found. Use a Design Rules file exported from Mailcraft Studio.');
   } else if (skipped.length > 0) {
     warnings.push(`${skipped.length} table row${skipped.length === 1 ? '' : 's'} could not be mapped (template notes and reference sections are ignored).`);
   }

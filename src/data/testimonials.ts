@@ -1,3 +1,4 @@
+/** Customer stories — page/route currently hidden; restore via App + Header/Footer. */
 export interface Testimonial {
   id: string;
   quote: string;
@@ -47,7 +48,7 @@ export const TESTIMONIALS: Testimonial[] = [
   },
   {
     id: 'elena',
-    quote: 'The Industrial B2B bundle matched our brand tone out of the box. The Brand Design Wizard gave us a DESIGN_RULES.md our whole team could follow without guessing hex codes.',
+    quote: 'The Industrial B2B bundle matched our brand tone out of the box. The Brand Design Wizard gave us Design Rules our whole team could follow without guessing hex codes.',
     name: 'Elena Whitfield',
     role: 'Director of Communications',
     company: 'ForgeLine Industrial',

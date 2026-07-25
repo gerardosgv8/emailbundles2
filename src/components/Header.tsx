@@ -5,7 +5,8 @@ const NAV_LINKS = [
   { to: '/', label: 'Home', end: true },
   { to: '/products', label: 'Products' },
   { to: '/brand-wizard', label: 'Brand Wizard' },
-  { to: '/testimonials', label: 'Testimonials' },
+  { to: '/content-wizard', label: 'Content Wizard' },
+  // { to: '/testimonials', label: 'Testimonials' }, // saved for later
   { to: '/faq', label: 'FAQ' },
   { to: '/docs', label: 'Docs' },
 ];
@@ -23,6 +24,7 @@ export function Header() {
       <header className="site-header" id="site-header">
         <div className="container header-inner">
           <Link to="/" className="logo">
+            <span className="logo-mark" aria-hidden="true" />
             Mailcraft Studio
           </Link>
           <nav className="nav-desktop" aria-label="Main">
@@ -36,6 +38,9 @@ export function Header() {
                 {label}
               </NavLink>
             ))}
+            <Link to="/products" className="btn btn-primary btn-sm">
+              Browse bundles
+            </Link>
           </nav>
           <button
             type="button"
@@ -65,6 +70,9 @@ export function Header() {
           {NAV_LINKS.map(({ to, label }) => (
             <Link key={to} to={to}>{label}</Link>
           ))}
+          <Link to="/products" className="btn btn-primary">
+            Browse bundles
+          </Link>
         </nav>
       </aside>
     </>

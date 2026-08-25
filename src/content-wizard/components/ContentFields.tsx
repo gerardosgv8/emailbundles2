@@ -19,11 +19,22 @@ function ctaValue(value: ContentFieldValue): { text: string; href: string } {
   return { text: '', href: '' };
 }
 
-function imageValue(value: ContentFieldValue): { src: string; alt: string } {
+function imageValue(value: ContentFieldValue): { src: string; alt: string; href: string } {
   if (typeof value === 'object' && value !== null && 'src' in value && 'alt' in value) {
+    return {
+      src: value.src,
+      alt: value.alt,
+      href: 'href' in value ? value.href : '',
+    };
+  }
+  return { src: '', alt: '', href: '' };
+}
+
+function labelValue(value: ContentFieldValue): { label: string; value: string } {
+  if (typeof value === 'object' && value !== null && 'label' in value && 'value' in value) {
     return value;
   }
-  return { src: '', alt: '' };
+  return { label: '', value: '' };
 }
 
 function FieldVisibilityToggle({
@@ -35,15 +46,25 @@ function FieldVisibilityToggle({
   visible: boolean;
   onVisibleChange: (fieldId: string, visible: boolean) => void;
 }) {
+  const inputId = `${fieldId}-visible`;
+
   return (
-    <label className="content-visibility-toggle" htmlFor={`${fieldId}-visible`}>
+    <label
+      className={`content-visibility-toggle${visible ? ' is-on' : ' is-off'}`}
+      htmlFor={inputId}
+    >
       <input
-        id={`${fieldId}-visible`}
+        id={inputId}
         type="checkbox"
+        role="switch"
         checked={visible}
+        aria-checked={visible}
         onChange={(e) => onVisibleChange(fieldId, e.target.checked)}
       />
-      <span>{visible ? 'Shown in email' : 'Hidden in email'}</span>
+      <span className="content-visibility-switch" aria-hidden="true">
+        <span className="content-visibility-switch-thumb" />
+      </span>
+      <span className="content-visibility-label">{visible ? 'Shown in email' : 'Hidden in email'}</span>
     </label>
   );
 }
@@ -114,6 +135,50 @@ export function ContentFieldInput({ field, value, visible, onChange, onVisibleCh
               onChange={(e) => onChange(field.id, { ...v, alt: e.target.value })}
             />
           </div>
+          <div className="field full">
+            <label htmlFor={`${field.id}-href`}>Link URL</label>
+            <input
+              id={`${field.id}-href`}
+              type="url"
+              value={v.href}
+              placeholder="https:// (opens when the image is clicked)"
+              onChange={(e) => onChange(field.id, { ...v, href: e.target.value })}
+            />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (field.kind === 'labelValue') {
+    const v = labelValue(value);
+    return (
+      <div className={`content-field content-field--label-value${hiddenClass}`}>
+        <div className="content-field-head">
+          <label>{field.label}</label>
+          <FieldVisibilityToggle fieldId={field.id} visible={visible} onVisibleChange={onVisibleChange} />
+        </div>
+        <div className="field-grid">
+          <div className="field full">
+            <label htmlFor={`${field.id}-label`}>Label</label>
+            <input
+              id={`${field.id}-label`}
+              type="text"
+              value={v.label}
+              placeholder="Subtotal:"
+              onChange={(e) => onChange(field.id, { ...v, label: e.target.value })}
+            />
+          </div>
+          <div className="field full">
+            <label htmlFor={`${field.id}-value`}>Value</label>
+            <input
+              id={`${field.id}-value`}
+              type="text"
+              value={v.value}
+              placeholder="$0.00"
+              onChange={(e) => onChange(field.id, { ...v, value: e.target.value })}
+            />
+          </div>
         </div>
       </div>
     );
@@ -151,7 +216,8 @@ export function ContentFieldInput({ field, value, visible, onChange, onVisibleCh
 
 function defaultValue(field: ContentFieldDef): ContentFieldValue {
   if (field.kind === 'text' || field.kind === 'rich') return '';
-  if (field.kind === 'image') return { src: '', alt: '' };
+  if (field.kind === 'image') return { src: '', alt: '', href: '' };
+  if (field.kind === 'labelValue') return { label: '', value: '' };
   return { text: '', href: '' };
 }
 
@@ -162,6 +228,7 @@ export function ContentSectionCard({
   visibility,
   onChange,
   onVisibleChange,
+  warning,
 }: {
   title: string;
   fields: ContentFieldDef[];
@@ -169,12 +236,14 @@ export function ContentSectionCard({
   visibility: TemplateVisibilityState;
   onChange: (fieldId: string, value: ContentFieldValue) => void;
   onVisibleChange: (fieldId: string, visible: boolean) => void;
+  warning?: string;
 }) {
   if (fields.length === 0) return null;
 
   return (
     <div className="w-card content-section-card">
       <h3>{title}</h3>
+      {warning ? <p className="content-section-warning">{warning}</p> : null}
       <div className="content-field-list">
         {fields.map((field) => (
           <ContentFieldInput

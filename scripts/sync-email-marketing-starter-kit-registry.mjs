@@ -60,7 +60,12 @@ function classifyElement(id) {
 
   if (HERO_TITLE_IDS.has(id)) return 'HEADING_HERO';
 
-  if (id.endsWith('-heading') || id === 'checkout-subheading' || id.endsWith('-subhead')) {
+  if (
+    id.endsWith('-heading') ||
+    id === 'checkout-subheading' ||
+    id === 'order-number' ||
+    id.endsWith('-subhead')
+  ) {
     return 'HEADING_SECTION';
   }
 
@@ -138,15 +143,11 @@ function classifyElement(id) {
 
   if (id.endsWith('-cta')) {
     if (id.includes('secondary')) return 'CTA_SECONDARY';
-    if (
-      id.includes('product-') ||
-      id.includes('arrival-') ||
-      id.includes('topic-') ||
-      id.startsWith('read-more-') ||
-      id === 'contact-support-link'
-    ) {
-      return 'LINK_PRODUCT';
-    }
+    // Text links only (blue linkColor). Filled pill CTAs stay CTA_PRIMARY.
+    if (/^product-\d+-cta$/.test(id)) return 'LINK_PRODUCT';
+    if (/^topic-\d+-cta$/.test(id)) return 'LINK_PRODUCT';
+    if (id.startsWith('read-more-')) return 'LINK_PRODUCT';
+    if (id === 'contact-support-link') return 'LINK_PRODUCT';
     return 'CTA_PRIMARY';
   }
 
@@ -155,6 +156,7 @@ function classifyElement(id) {
   if (id.includes('feature-') && id.endsWith('-icon')) return 'BADGE_FEATURE';
 
   if (id === 'hero-image') return 'IMAGE_HERO';
+  if (/^image-\d+$/.test(id)) return 'IMAGE_HERO';
   if (id.endsWith('-image')) return 'IMAGE_PRODUCT';
 
   if (
@@ -171,6 +173,13 @@ function classifyElement(id) {
   return 'BODY';
 }
 
+/** Body markup only — skip CSS/JS so attribute selectors do not pollute DOM order. */
+function bodyMarkup(html) {
+  return html
+    .replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, '')
+    .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, '');
+}
+
 const files = fs.readdirSync(bundleDir).filter((f) => f.endsWith('.html')).sort();
 /** @type {Record<string, { id: string, profile: string, templates: string[] }>} */
 const registry = {};
@@ -178,7 +187,7 @@ const registry = {};
 const domOrderByTemplate = {};
 
 for (const file of files) {
-  const html = fs.readFileSync(path.join(bundleDir, file), 'utf8');
+  const html = bodyMarkup(fs.readFileSync(path.join(bundleDir, file), 'utf8'));
   const re = /data-element="([^"]+)"/g;
   let match;
   const seenInFile = new Set();
@@ -275,7 +284,7 @@ fs.writeFileSync(outFile, body);
 const known = new Set(elements.map((entry) => entry.id));
 const missing = [];
 for (const file of files) {
-  const html = fs.readFileSync(path.join(bundleDir, file), 'utf8');
+  const html = bodyMarkup(fs.readFileSync(path.join(bundleDir, file), 'utf8'));
   const re = /data-element="([^"]+)"/g;
   let match;
   while ((match = re.exec(html))) {

@@ -1,5 +1,5 @@
 /**
- * Regenerates industrialB2bElementRegistry.ts from FinalBundles/Industrial B2B Bundle/*.html
+ * Regenerates industrialB2bElementRegistry.ts from FinalBundles/EmailMarketing_B2B/*.html
  * Run: node scripts/sync-industrial-bundle-registry.mjs
  */
 import fs from 'fs';
@@ -8,7 +8,7 @@ import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, '..');
-const bundleDir = path.join(root, 'FinalBundles/Industrial B2B Bundle');
+const bundleDir = path.join(root, 'FinalBundles/EmailMarketing_B2B');
 const outFile = path.join(root, 'src/brand-wizard/apply/industrialB2bElementRegistry.ts');
 
 /** @param {string} id */
@@ -57,7 +57,11 @@ function classifyElement(id) {
   if (id === 'urgency-note' || id === 'promo-expiry') return 'BODY_URGENCY_TEXT';
   if (id === 'guide-download') return 'BODY_INFO_TEXT';
   if (id.startsWith('tier-')) return 'TIER_TEXT';
-  if (id.endsWith('-cta-button')) {
+  if (
+    id.endsWith('-cta-button') ||
+    id === 'cta-primary-button' ||
+    id === 'cta-secondary-button'
+  ) {
     if (id.includes('secondary')) return 'CTA_SECONDARY_TD';
     return 'CTA_PRIMARY_TD';
   }
@@ -73,10 +77,24 @@ function classifyElement(id) {
   if (id.endsWith('-icon') && id.includes('feature-')) return 'BADGE_FEATURE';
   if (id === 'hero-image' || id === 'hero-product-image' || id === 'featured-image') return 'IMAGE_HERO';
   if (id.endsWith('-image')) return 'IMAGE_PRODUCT';
-  if (id === 'pricing-container') return 'SURFACE_LIGHT';
+  if (
+    id === 'pricing-container' ||
+    id === 'order-total-container' ||
+    id === 'order-total-container-td' ||
+    id === 'support-container'
+  ) {
+    return 'SURFACE_LIGHT';
+  }
   if (id === 'featured-insight-container') return 'SURFACE_INFO';
   if (id === 'important-note-container') return 'SURFACE_WARNING';
   return 'BODY';
+}
+
+/** Body markup only — skip CSS/JS so attribute selectors do not pollute DOM order. */
+function bodyMarkup(html) {
+  return html
+    .replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, '')
+    .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, '');
 }
 
 const files = fs.readdirSync(bundleDir).filter((f) => f.endsWith('.html')).sort();
@@ -86,7 +104,7 @@ const registry = {};
 const domOrderByTemplate = {};
 
 for (const file of files) {
-  const html = fs.readFileSync(path.join(bundleDir, file), 'utf8');
+  const html = bodyMarkup(fs.readFileSync(path.join(bundleDir, file), 'utf8'));
   const re = /data-element="([^"]+)"/g;
   let match;
   const seenInFile = new Set();
@@ -113,7 +131,7 @@ const elements = Object.values(registry).sort((a, b) => a.id.localeCompare(b.id)
 
 const header = `/**
  * AUTO-GENERATED — do not edit by hand.
- * Source: FinalBundles/Industrial B2B Bundle/*.html
+ * Source: FinalBundles/EmailMarketing_B2B/*.html
  * Regenerate: node scripts/sync-industrial-bundle-registry.mjs
  */
 `;
@@ -184,7 +202,7 @@ fs.writeFileSync(outFile, body);
 const known = new Set(elements.map((entry) => entry.id));
 const missing = [];
 for (const file of files) {
-  const html = fs.readFileSync(path.join(bundleDir, file), 'utf8');
+  const html = bodyMarkup(fs.readFileSync(path.join(bundleDir, file), 'utf8'));
   const re = /data-element="([^"]+)"/g;
   let match;
   while ((match = re.exec(html))) {

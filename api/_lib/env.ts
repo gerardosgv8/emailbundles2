@@ -13,71 +13,38 @@ export function optional(name: string): string | undefined {
   return value || undefined;
 }
 
-export function getStripeSecretKey() {
-  return required('STRIPE_SECRET_KEY');
+export {
+  getLemonSqueezyApiKey,
+  getLemonSqueezyCheckoutUrl,
+  getLemonSqueezyMode,
+  getLemonSqueezyVariantStarterKit,
+  isLiveLemonSqueezyMode,
+} from './lemonSqueezyConfig.js';
+
+export function getWizardSessionSecret(): string {
+  return required('WIZARD_SESSION_SECRET');
 }
 
-export function getStripeWebhookSecret() {
-  return required('STRIPE_WEBHOOK_SECRET');
+export function getWizardMaxDevicesPerOrder(): number {
+  const raw = optional('WIZARD_MAX_DEVICES_PER_ORDER');
+  const parsed = raw ? Number.parseInt(raw, 10) : 2;
+  if (!Number.isFinite(parsed) || parsed < 1 || parsed > 10) {
+    return 2;
+  }
+  return parsed;
 }
 
-export function getR2Config() {
-  return {
-    accountId: required('R2_ACCOUNT_ID'),
-    accessKeyId: required('R2_ACCESS_KEY_ID'),
-    secretAccessKey: required('R2_SECRET_ACCESS_KEY'),
-    bucketName: required('R2_BUCKET_NAME'),
-  };
+/** Protects GET /api/wizard-unlock-audit (optional). */
+export function getWizardAuditSecret(): string | undefined {
+  return optional('WIZARD_AUDIT_SECRET');
 }
 
 export function getSiteUrl() {
   return optional('SITE_URL') ?? 'http://localhost:5174';
 }
 
-/** Public API origin for download links in emails (defaults to Vercel deployment URL). */
-export function getApiBaseUrl(): string {
-  const explicit = optional('API_BASE_URL');
-  if (explicit) {
-    return explicit.replace(/\/$/, '');
-  }
-
-  const vercelUrl = optional('VERCEL_URL');
-  if (vercelUrl) {
-    return `https://${vercelUrl.replace(/\/$/, '')}`;
-  }
-
-  return 'http://localhost:3000';
-}
-
 export function getSupportEmail(): string {
-  return optional('SUPPORT_EMAIL') ?? 'support@mailcraft.studio';
-}
-
-export function getDownloadLinkTtlSeconds() {
-  const raw = optional('DOWNLOAD_LINK_TTL_SECONDS');
-  const parsed = raw ? Number.parseInt(raw, 10) : 86400;
-  return Number.isFinite(parsed) && parsed > 0 ? parsed : 86400;
-}
-
-/** Short TTL for each R2 presigned redirect (seconds). Default 5 minutes. */
-export function getPresignedUrlTtlSeconds() {
-  const raw = optional('PRESIGNED_URL_TTL_SECONDS');
-  const parsed = raw ? Number.parseInt(raw, 10) : 300;
-  return Number.isFinite(parsed) && parsed > 0 ? parsed : 300;
-}
-
-/** Max successful downloads allowed per Stripe checkout session. Default 5. */
-export function getMaxDownloadsPerPurchase() {
-  const raw = optional('MAX_DOWNLOADS_PER_PURCHASE');
-  const parsed = raw ? Number.parseInt(raw, 10) : 5;
-  return Number.isFinite(parsed) && parsed > 0 ? parsed : 5;
-}
-
-/** Days after purchase that download links remain valid. Default 7. */
-export function getDownloadAccessDays() {
-  const raw = optional('DOWNLOAD_ACCESS_DAYS');
-  const parsed = raw ? Number.parseInt(raw, 10) : 7;
-  return Number.isFinite(parsed) && parsed > 0 ? parsed : 7;
+  return optional('SUPPORT_EMAIL') ?? 'hello@mailcraft.studio';
 }
 
 export function getResendApiKey() {
@@ -98,6 +65,8 @@ export function getAllowedOrigins(): string[] {
   if (!raw) {
     return [
       'http://localhost:5174',
+      'https://www.mailcraft.studio',
+      'https://mailcraft.studio',
       'https://gerardosgv8.github.io',
     ];
   }

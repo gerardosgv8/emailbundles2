@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { DocsGuideAccordion } from '../components/DocsGuideAccordion';
+import { storefrontContentWizardPath } from '../content-wizard/contentWizardRoute';
 import {
   DocCallout,
   DocFaqList,
@@ -18,7 +19,7 @@ export function ContentWizardGuide() {
           Step two: fill headings, body, CTAs, and images for one layout, then download filled HTML
           for your ESP. Brand work stays intact. You don’t redo it in the markup.
         </p>
-        <Link to="/content-wizard" className="btn btn-primary btn-sm">
+        <Link to={storefrontContentWizardPath()} className="btn btn-primary btn-sm">
           Open Content Wizard
         </Link>
       </div>
@@ -77,19 +78,17 @@ export function ContentWizardGuide() {
           },
           {
             id: 'cw-pick',
-            title: 'Pick a bundle and template',
+            title: 'Pick a template',
             children: (
               <>
                 <DocSteps>
                   <DocStep title="Open Content Wizard">
-                    Go to <Link to="/content-wizard">Content Wizard</Link>.
-                  </DocStep>
-                  <DocStep title="Select a bundle">
-                    Click <Ui>Open Content Wizard</Ui> on a supported pack.
+                    Go to <Link to={storefrontContentWizardPath()}>Content Wizard</Link>. You land
+                    on the Email Marketing Starter Kit template list.
                   </DocStep>
                   <DocStep title="Choose a layout">
-                    On the template list, pick the email you are editing. Cards show how many
-                    mapped elements that layout has.
+                    Pick the email you are editing. Cards show how many mapped elements that layout
+                    has.
                   </DocStep>
                 </DocSteps>
                 <DocCallout tone="outcome">
@@ -170,12 +169,13 @@ export function ContentWizardGuide() {
             children: (
               <>
                 <DocSteps>
-                  <DocStep title="Open live preview">
-                    After a successful upload, click <Ui>View live preview</Ui> to open a
-                    full-size modal of the merged HTML.
+                  <DocStep title="Watch the live preview">
+                    After a successful upload, the right pane widens and shows a live preview of
+                    the merged HTML. It updates as you edit fields.
                   </DocStep>
-                  <DocStep title="Scroll the full message">
-                    Check hero, mid sections, and footer. Close the modal when finished.
+                  <DocStep title="Expand if needed">
+                    Use <Ui>Expand</Ui> for a larger modal view, then scroll through the full
+                    message.
                   </DocStep>
                 </DocSteps>
                 <DocCallout tone="tip">

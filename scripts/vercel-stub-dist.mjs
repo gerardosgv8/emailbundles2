@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 const distDir = 'dist';
-const siteUrl = 'https://gerardosgv8.github.io/emailbundles2/';
+const siteUrl = 'https://www.mailcraft.studio/';
 
 fs.mkdirSync(distDir, { recursive: true });
 fs.writeFileSync(
@@ -11,11 +11,18 @@ fs.writeFileSync(
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta http-equiv="refresh" content="0;url=${siteUrl}" />
-  <title>Mailcraft Studio</title>
+  <title>Mailcraft Studio API</title>
 </head>
 <body>
-  <p>Redirecting to <a href="${siteUrl}">Mailcraft Studio</a>…</p>
+  <p>This host is the checkout API. The site lives at <a href="${siteUrl}">Mailcraft Studio</a>.</p>
+  <script>
+    (function () {
+      var host = location.hostname;
+      if (host === 'localhost' || host.endsWith('.vercel.app')) {
+        location.replace(${JSON.stringify(siteUrl)});
+      }
+    })();
+  </script>
 </body>
 </html>
 `,

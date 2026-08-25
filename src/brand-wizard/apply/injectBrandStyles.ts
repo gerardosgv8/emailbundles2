@@ -109,8 +109,13 @@ td[data-brand-btn-variant="secondary"] a[data-element],
 td[data-element*="secondary-cta-button"] a[data-element],
 td[data-element*="cta-secondary-button"] a[data-element] {
   color: ${t.secondaryText} !important;
+  border: none !important;
+  border-width: 0 !important;
+  background-color: transparent !important;
 }
-a[data-element$="-cta"][data-element*="product"],
+/* Text-style product/topic links only — not filled pill CTAs like arrival-* or product-rec-hero */
+a[data-element^="product-"][data-element$="-cta"]:not([data-element*="rec"]),
+a[data-element^="topic-"][data-element$="-cta"],
 a[data-element^="grid-product-"][data-element$="-cta"],
 a[data-element^="update-"][data-element$="-cta"] {
   color: ${t.linkColor} !important;

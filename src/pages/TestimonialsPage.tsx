@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { storefrontBrandWizardPath } from '../brand-wizard/wizardRoute';
 import {
   INDUSTRY_LABELS,
   TESTIMONIALS,
@@ -151,10 +152,10 @@ export function TestimonialsPage() {
           <div className="card cta-card text-center">
             <h2 className="section-title" style={{ fontSize: '1.35rem' }}>Ready to see it yourself?</h2>
             <p style={{ margin: '0 0 1.5rem', color: 'var(--muted)' }}>
-              Define your brand with the wizard, pick a bundle, and ship your next campaign this week.
+              Define your brand with the wizard, fill the Starter Kit, and ship your next campaign this week.
             </p>
             <div className="hero-actions" style={{ justifyContent: 'center' }}>
-              <Link to="/brand-wizard" className="btn btn-primary btn-lg">Open Brand Wizard</Link>
+              <Link to={storefrontBrandWizardPath()} className="btn btn-primary btn-lg">Open Brand Wizard</Link>
               <Link to="/products" className="btn btn-secondary btn-lg">Browse products</Link>
             </div>
           </div>

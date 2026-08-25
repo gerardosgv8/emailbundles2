@@ -85,6 +85,10 @@ const SHARED_TEMPLATE_TOKENS: Omit<
   | 'socialTwitter'
   | 'socialInstagram'
   | 'socialLinkedin'
+  | 'socialFacebookText'
+  | 'socialTwitterText'
+  | 'socialInstagramText'
+  | 'socialLinkedinText'
   | 'linkPrivacy'
   | 'linkTerms'
   | 'linkHelp'
@@ -214,6 +218,10 @@ function createIndustrialDefaults(): Omit<DesignRulesState, 'checklist'> {
     socialTwitter: '',
     socialInstagram: '',
     socialLinkedin: '',
+    socialFacebookText: '',
+    socialTwitterText: '',
+    socialInstagramText: '',
+    socialLinkedinText: '',
     linkPrivacy: '',
     linkTerms: '',
     linkHelp: '',
@@ -283,6 +291,10 @@ function createStarterKitDefaults(): Omit<DesignRulesState, 'checklist'> {
     socialTwitter: '',
     socialInstagram: '',
     socialLinkedin: '',
+    socialFacebookText: '',
+    socialTwitterText: '',
+    socialInstagramText: '',
+    socialLinkedinText: '',
     linkPrivacy: '',
     linkTerms: '',
     linkHelp: '',
@@ -294,7 +306,7 @@ function createStarterKitDefaults(): Omit<DesignRulesState, 'checklist'> {
   };
 }
 
-export function getDefaultDesignRules(bundleId = 'industrial-b2b'): DesignRulesState {
+export function getDefaultDesignRules(bundleId = 'email-marketing-starter-kit'): DesignRulesState {
   const checklistItems = getChecklistItems(bundleId);
   const base =
     bundleId === 'email-marketing-starter-kit'

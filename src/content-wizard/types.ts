@@ -1,4 +1,4 @@
-export type ContentFieldKind = 'text' | 'rich' | 'cta' | 'link' | 'image';
+export type ContentFieldKind = 'text' | 'rich' | 'cta' | 'link' | 'image' | 'labelValue';
 
 export type CtaContentValue = {
   text: string;
@@ -13,9 +13,21 @@ export type LinkContentValue = {
 export type ImageContentValue = {
   src: string;
   alt: string;
+  /** Optional click-through URL (parent &lt;a&gt; / Outlook VML href). */
+  href: string;
 };
 
-export type ContentFieldValue = string | CtaContentValue | LinkContentValue | ImageContentValue;
+export type LabelValueContentValue = {
+  label: string;
+  value: string;
+};
+
+export type ContentFieldValue =
+  | string
+  | CtaContentValue
+  | LinkContentValue
+  | ImageContentValue
+  | LabelValueContentValue;
 
 /** Field copy keyed by data-element id. */
 export type TemplateContentState = Record<string, ContentFieldValue>;
@@ -34,6 +46,9 @@ export type ContentFieldDef = {
   label: string;
   section: string;
   profile: string;
+  /** For `labelValue` fields: hooked label + amount/value element ids. */
+  labelElementId?: string;
+  valueElementId?: string;
 };
 
 export type ContentSection = {

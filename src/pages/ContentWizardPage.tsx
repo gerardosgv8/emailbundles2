@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
 import { getTemplateBundle } from '../data/templateBundles';
 import { groupContentFields } from '../content-wizard/contentFieldSchema';
@@ -6,6 +6,7 @@ import {
   contentWizardPath,
   contentWizardTemplatePath,
   parseContentWizardBundleId,
+  storefrontContentWizardPath,
 } from '../content-wizard/contentWizardRoute';
 import {
   getContentBundleTemplates,
@@ -27,7 +28,12 @@ function isFieldFilled(value: unknown): boolean {
       return Boolean((value as { text: string; href: string }).text.trim() || (value as { text: string; href: string }).href.trim());
     }
     if ('src' in value && 'alt' in value) {
-      return Boolean((value as { src: string; alt: string }).src.trim() || (value as { src: string; alt: string }).alt.trim());
+      const image = value as { src: string; alt: string; href?: string };
+      return Boolean(image.src.trim() || image.alt.trim() || image.href?.trim());
+    }
+    if ('label' in value && 'value' in value) {
+      const pair = value as { label: string; value: string };
+      return Boolean(pair.label.trim() || pair.value.trim());
     }
   }
   return false;
@@ -39,7 +45,7 @@ export function ContentWizardPage() {
   const bundle = bundleId ? getTemplateBundle(bundleId) : undefined;
 
   if (!bundleId || !bundle || !bundle.wizardAvailable || !isContentWizardBundle(bundleId)) {
-    return <Navigate to="/content-wizard" replace />;
+    return <Navigate to={storefrontContentWizardPath()} replace />;
   }
 
   const templates = getContentBundleTemplates(bundleId);
@@ -67,22 +73,30 @@ function ContentWizardTemplatePicker({
     <main className="container section content-wizard-picker">
       <div className="page-hero">
         <p>
-          <Link to="/content-wizard">← All bundles</Link>
+          <Link to="/">← Home</Link>
         </p>
         <h1>{bundle.name}</h1>
         <p>Pick a template to edit its copy. Each layout has its own set of content fields.</p>
       </div>
 
-      <div className="content-template-grid">
+          <div className="content-template-grid">
         {templates.map((template) => (
           <Link
             key={template.slug}
             to={contentWizardTemplatePath(bundle.id, template.slug)}
             className="card content-template-card"
           >
+            <div className="content-template-thumb" aria-hidden="true">
+              <div className="content-template-thumb-frame">
+                <span className="content-template-thumb-bar" />
+                <span className="content-template-thumb-line content-template-thumb-line--short" />
+                <span className="content-template-thumb-line" />
+                <span className="content-template-thumb-block" />
+                <span className="content-template-thumb-line" />
+                <span className="content-template-thumb-line content-template-thumb-line--short" />
+              </div>
+            </div>
             <h3>{template.name}</h3>
-            <p className="content-template-file">{template.file}</p>
-            <p className="content-template-meta">{template.elementCount} mapped elements</p>
           </Link>
         ))}
       </div>
@@ -106,11 +120,35 @@ function ContentWizardEditor({
   const sections = useMemo(() => groupContentFields(fields), [fields]);
   const [resetModalOpen, setResetModalOpen] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
-  const [sourceHtml, setSourceHtml] = useState<string | null>(null);
+  const [uploadsByTemplate, setUploadsByTemplate] = useState<
+    Record<string, { html: string; name: string }>
+  >({});
 
-  useEffect(() => {
-    setSourceHtml(null);
-  }, [templateFile]);
+  const currentUpload = uploadsByTemplate[templateFile] ?? null;
+  const sourceHtml = currentUpload?.html ?? null;
+  const uploadName = currentUpload?.name ?? null;
+
+  const handleSourceHtmlChange = useCallback(
+    (html: string | null, name?: string | null) => {
+      setUploadsByTemplate((prev) => {
+        if (!html) {
+          if (!(templateFile in prev)) return prev;
+          const next = { ...prev };
+          delete next[templateFile];
+          return next;
+        }
+
+        return {
+          ...prev,
+          [templateFile]: {
+            html,
+            name: name?.trim() || prev[templateFile]?.name || templateFile,
+          },
+        };
+      });
+    },
+    [templateFile],
+  );
 
   const filledCount = useMemo(
     () => fields.filter((field) => isFieldFilled(values[field.id])).length,
@@ -143,7 +181,9 @@ function ContentWizardEditor({
 
   return (
     <>
-      <div className="wizard-app content-wizard-app">
+      <div
+        className={`wizard-app content-wizard-app${sourceHtml ? ' content-wizard-app--preview-ready' : ''}`}
+      >
         <aside className="sidebar">
           <Link to={contentWizardPath(bundle.id)} className="wizard-bundle-back">
             ← All templates
@@ -222,6 +262,11 @@ function ContentWizardEditor({
               visibility={visibility}
               onChange={setFieldValue}
               onVisibleChange={setFieldVisible}
+              warning={
+                templateFile === 'Product_Recommendations.html' && section.title === 'Products'
+                  ? 'Each row needs at least 2 products. Show 0, 2, or 4 products. Hiding just 1 or 3 will leave an uneven row.'
+                  : undefined
+              }
             />
           ))}
         </main>
@@ -233,7 +278,8 @@ function ContentWizardEditor({
             values={values}
             visibility={visibility}
             sourceHtml={sourceHtml}
-            onSourceHtmlChange={setSourceHtml}
+            uploadName={uploadName}
+            onSourceHtmlChange={handleSourceHtmlChange}
             onExtracted={handleExtracted}
           />
           <ContentHtmlPreview

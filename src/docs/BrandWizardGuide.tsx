@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { DocsGuideAccordion } from '../components/DocsGuideAccordion';
+import { storefrontBrandWizardPath } from '../brand-wizard/wizardRoute';
 import {
   DocCallout,
   DocFaqList,
@@ -19,7 +20,7 @@ export function BrandWizardGuide() {
           every template, and export shareable Design Rules. One pass replaces
           repeating the same style edits in every file.
         </p>
-        <Link to="/brand-wizard" className="btn btn-primary btn-sm">
+        <Link to={storefrontBrandWizardPath()} className="btn btn-primary btn-sm">
           Open Brand Wizard
         </Link>
       </div>
@@ -81,20 +82,17 @@ export function BrandWizardGuide() {
           },
           {
             id: 'bw-choose',
-            title: 'Choose a template bundle',
+            title: 'Open the Brand Wizard',
             children: (
               <>
                 <DocSteps>
                   <DocStep title="Open the Brand Wizard">
-                    Go to <Link to="/brand-wizard">Brand Wizard</Link> from the site header.
+                    Go to <Link to={storefrontBrandWizardPath()}>Brand Wizard</Link> from the site
+                    header. You land directly in the Email Marketing Starter Kit editor.
                   </DocStep>
-                  <DocStep title="Pick a wizard-ready bundle">
-                    Cards labeled <Ui>Wizard ready</Ui> open the editor. <Ui>Coming soon</Ui>{' '}
-                    bundles are not available yet.
-                  </DocStep>
-                  <DocStep title="Confirm you’re in the right pack">
-                    The sidebar shows the bundle name (for example Industrial B2B or Email
-                    Marketing Starter Kit). Use <Ui>← All bundles</Ui> if you need to switch.
+                  <DocStep title="Confirm you’re in the Starter Kit">
+                    The sidebar shows <Ui>Email Marketing Starter Kit</Ui>. Use <Ui>← Home</Ui> if
+                    you need to leave the wizard.
                   </DocStep>
                 </DocSteps>
                 <DocCallout tone="outcome">

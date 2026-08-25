@@ -91,10 +91,30 @@ const TOKEN_FIELDS: Record<string, ImportableField> = {
 
 const PLATFORM_FIELDS: Record<string, ImportableField> = {
   facebook: 'socialFacebook',
+  'social link 1': 'socialFacebook',
+  'social link 1 url': 'socialFacebook',
+  'link 1 url': 'socialFacebook',
+  'social link 1 text': 'socialFacebookText',
+  'link 1 text': 'socialFacebookText',
   'x (twitter)': 'socialTwitter',
   twitter: 'socialTwitter',
+  'social link 2': 'socialTwitter',
+  'social link 2 url': 'socialTwitter',
+  'link 2 url': 'socialTwitter',
+  'social link 2 text': 'socialTwitterText',
+  'link 2 text': 'socialTwitterText',
   instagram: 'socialInstagram',
+  'social link 3': 'socialInstagram',
+  'social link 3 url': 'socialInstagram',
+  'link 3 url': 'socialInstagram',
+  'social link 3 text': 'socialInstagramText',
+  'link 3 text': 'socialInstagramText',
   linkedin: 'socialLinkedin',
+  'social link 4': 'socialLinkedin',
+  'social link 4 url': 'socialLinkedin',
+  'link 4 url': 'socialLinkedin',
+  'social link 4 text': 'socialLinkedinText',
+  'link 4 text': 'socialLinkedinText',
 };
 
 const LEGAL_FIELDS: Record<string, ImportableField> = {
@@ -248,6 +268,30 @@ export function importDesignRules(markdown: string): ImportDesignRulesResult {
 
     const label = normalizeLabel(cells[0]);
     if (['field', 'token', 'platform', 'link', 'hex', 'value', 'usage', 'url'].includes(label)) {
+      continue;
+    }
+
+    // Social text+URL tables may use 3 columns (Slot | Link text | URL).
+    if (
+      cells.length >= 3 &&
+      (subsection.includes('social') || /^social link \d$/.test(label) || /^link \d$/.test(label))
+    ) {
+      const urlField = PLATFORM_FIELDS[label] ?? PLATFORM_FIELDS[`${label} url`];
+      const textField =
+        PLATFORM_FIELDS[`${label} text`] ??
+        (urlField === 'socialFacebook'
+          ? 'socialFacebookText'
+          : urlField === 'socialTwitter'
+            ? 'socialTwitterText'
+            : urlField === 'socialInstagram'
+              ? 'socialInstagramText'
+              : urlField === 'socialLinkedin'
+                ? 'socialLinkedinText'
+                : null);
+      const textValue = cleanValue(cells[1]);
+      const urlValue = cleanValue(cells[2]);
+      if (textField && textValue && assignField(partial, textField, textValue)) fieldsMatched += 1;
+      if (urlField && urlValue && assignField(partial, urlField, urlValue)) fieldsMatched += 1;
       continue;
     }
 

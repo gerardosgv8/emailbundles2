@@ -40,13 +40,30 @@ export function profileToContentKind(profile: string): import('./types').Content
   return null;
 }
 
-export function humanizeElementId(id: string): string {
-  return id
-    .split('-')
+/** Turn `product-1-name` into "Product 1 Name". Pass `omitProductIndex` when the template has only one product. */
+export function humanizeElementId(id: string, options?: { omitProductIndex?: boolean }): string {
+  const parts = id.split('-').filter((part, index, all) => {
+    if (!options?.omitProductIndex) return true;
+    if (!/^\d+$/.test(part)) return true;
+    // Drop the index in `product-1-*` / `grid-product-1-*` when there's only one product.
+    return all[index - 1] !== 'product';
+  });
+
+  return parts
     .map((part) => (/^\d+$/.test(part) ? part : part.charAt(0).toUpperCase() + part.slice(1)))
     .join(' ')
     .replace(/\s+/g, ' ')
     .trim();
+}
+
+/** Collect numeric product indexes from element ids (`product-1-name`, `grid-product-2-title`, …). */
+export function productIndexesInElements(elementIds: string[]): Set<string> {
+  const indexes = new Set<string>();
+  for (const id of elementIds) {
+    const match = id.match(/(?:^|-)product-(\d+)(?:-|$)/);
+    if (match) indexes.add(match[1]);
+  }
+  return indexes;
 }
 
 export function sectionForElement(id: string): string {
@@ -57,7 +74,10 @@ export function sectionForElement(id: string): string {
     id.startsWith('hero-') ||
     id.startsWith('overview-') ||
     id.startsWith('welcome-') ||
-    id.startsWith('sale-hero-')
+    id.startsWith('sale-hero-') ||
+    id.includes('-hero-cta') ||
+    id.includes('hero-cta') ||
+    /^image-\d+$/.test(id)
   ) {
     return 'Hero';
   }
@@ -71,14 +91,35 @@ export function sectionForElement(id: string): string {
     id.startsWith('topic-') ||
     id.startsWith('quick-') ||
     id.startsWith('trending-') ||
-    id.startsWith('recommendation')
+    id.startsWith('recommendation') ||
+    id.startsWith('read-more-')
   ) {
     return 'Products';
   }
-  if (id.startsWith('event-') || id.startsWith('speaker-')) return 'Event';
+  if (id.startsWith('event-') || id.startsWith('speaker')) return 'Event';
+  if (
+    id.startsWith('featured-') ||
+    id.startsWith('updates-') ||
+    id.startsWith('update-') ||
+    id.startsWith('grid-')
+  ) {
+    return 'Content';
+  }
   if (id.startsWith('pricing-')) return 'Pricing';
   if (id.startsWith('promo-')) return 'Promotion';
-  if (id.startsWith('order-') || id.startsWith('checkout-') || id.startsWith('survey-')) return 'Details';
+  if (
+    id.startsWith('order-') ||
+    id.startsWith('checkout-') ||
+    id.startsWith('survey-') ||
+    id === 'subtotal' ||
+    id === 'shipping' ||
+    id === 'tax' ||
+    id === 'total' ||
+    id.endsWith('-amount') ||
+    id.endsWith('-label')
+  ) {
+    return 'Details';
+  }
   if (id.includes('cta') || id.endsWith('-cta')) return 'Calls to action';
   if (id.startsWith('footer-')) return 'Footer';
   return 'General';

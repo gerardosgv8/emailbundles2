@@ -1,30 +1,44 @@
-import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { DownloadAccessNotice } from '../components/DownloadAccessNotice';
+import { useState } from 'react';
 import { TEMPLATE_BUNDLES } from '../data/templateBundles';
-import { startCheckout } from '../lib/checkout';
-import { describeDownloadPolicy, DEFAULT_PURCHASE_POLICY, fetchPurchasePolicy, type PurchasePolicy } from '../lib/purchasePolicy';
+import { getApiBase } from '../lib/apiBase';
 
-function BuyButton({ productId, label = 'Buy now' }: { productId: string; label?: string }) {
+function BuyButton({
+  productId = 'email-marketing-starter-kit',
+  label = 'Buy now',
+}: {
+  productId?: string;
+  label?: string;
+}) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const handleBuy = async () => {
     setBusy(true);
     setError(null);
+
     try {
-      const url = await startCheckout(productId);
-      window.location.href = url;
+      const response = await fetch(`${getApiBase()}/api/create-checkout`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ productId }),
+      });
+
+      const data = (await response.json()) as { url?: string; error?: string };
+      if (!response.ok || !data.url) {
+        throw new Error(data.error ?? 'Checkout is temporarily unavailable.');
+      }
+
+      window.location.href = data.url;
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Checkout unavailable');
+      setError(err instanceof Error ? err.message : 'Checkout is temporarily unavailable.');
       setBusy(false);
     }
   };
 
   return (
     <div className="product-buy">
-      <button type="button" className="btn btn-primary" disabled={busy} onClick={handleBuy}>
-        {busy ? 'Redirecting…' : label}
+      <button type="button" className="btn btn-primary btn-lg" onClick={handleBuy} disabled={busy}>
+        {busy ? 'Opening checkout…' : label}
       </button>
       {error ? <p className="product-buy-error">{error}</p> : null}
     </div>
@@ -32,76 +46,54 @@ function BuyButton({ productId, label = 'Buy now' }: { productId: string; label?
 }
 
 export function ProductsPage() {
-  const [policy, setPolicy] = useState<PurchasePolicy>(DEFAULT_PURCHASE_POLICY);
+  const product = TEMPLATE_BUNDLES[0];
 
-  useEffect(() => {
-    let cancelled = false;
-
-    fetchPurchasePolicy()
-      .then((result) => {
-        if (!cancelled) setPolicy(result);
-      })
-      .catch(() => {
-        /* Keep DEFAULT_PURCHASE_POLICY */
-      });
-
-    return () => {
-      cancelled = true;
-    };
-  }, []);
+  if (!product) {
+    return (
+      <main className="container section">
+        <div className="page-hero">
+          <h1>Products</h1>
+          <p>No products are available right now. Check back soon.</p>
+        </div>
+      </main>
+    );
+  }
 
   return (
-    <main className="container section">
-      <div className="page-hero">
-        <h1>Products</h1>
+    <main className="container section products-page">
+      <div className="page-hero products-page-hero">
+        <p className="products-eyebrow">Template kit</p>
+        <h1>{product.name}</h1>
         <p>
-          Each pack is production HTML plus Brand and Content Wizards. Brand the zip once. Fill the
-          send. Download HTML you paste into your ESP. $79.99 per bundle.
+          Production HTML plus Brand and Content Wizards. Brand the zip once, fill the send, and
+          download HTML you paste into your ESP.
         </p>
       </div>
 
-      <div className="product-grid">
-        {TEMPLATE_BUNDLES.map((product) => (
-          <article key={product.id} className="card product-card">
-            <div className="product-card-image">
-              <img src={product.imageUrl} alt={product.imageAlt} loading="lazy" />
-            </div>
-            <div className="product-card-body">
-              <h3>{product.name}</h3>
-              <p>{product.description}</p>
-              <p className="product-price">{product.price}</p>
-              <ul className="product-features">
-                {product.features.map((feature) => (
-                  <li key={feature}>{feature}</li>
-                ))}
-              </ul>
-              <div className="product-card-actions">
-                {product.checkoutProductId ? (
-                  <BuyButton productId={product.checkoutProductId} />
-                ) : null}
-                {product.wizardAvailable ? (
-                  <Link to={`/brand-wizard/${product.id}`} className="btn btn-secondary">
-                    Brand Wizard
-                  </Link>
-                ) : (
-                  <Link to="/brand-wizard" className="btn btn-secondary">
-                    Brand Wizard
-                  </Link>
-                )}
-              </div>
-            </div>
-          </article>
-        ))}
-      </div>
+      <article className="product-featured">
+        <div className="product-featured-media">
+          <img src={product.imageUrl} alt={product.imageAlt} loading="lazy" />
+        </div>
+        <div className="product-featured-body">
+          <p className="product-featured-desc">{product.description}</p>
+          <p className="product-price">{product.price}</p>
+          <ul className="product-features">
+            {product.features.map((feature) => (
+              <li key={feature}>{feature}</li>
+            ))}
+          </ul>
+          <div className="product-featured-actions">
+            {product.checkoutProductId ? (
+              <BuyButton productId={product.checkoutProductId} />
+            ) : null}
+          </div>
+        </div>
+      </article>
 
-      <div className="products-policy-section">
-        <DownloadAccessNotice policy={policy} variant="info" showSummary={false} />
-
-        <p className="products-checkout-note">
-          Secure checkout powered by Stripe. After payment, downloads are delivered via personal
-          links. {describeDownloadPolicy(policy)}.
-        </p>
-      </div>
+      <p className="products-checkout-note">
+        Secure checkout powered by Lemon Squeezy. After payment, check the receipt email from
+        Lemon Squeezy for your files.
+      </p>
     </main>
   );
 }

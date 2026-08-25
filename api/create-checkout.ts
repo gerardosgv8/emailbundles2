@@ -1,9 +1,8 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { applyCors } from './_lib/cors.js';
 import { toClientErrorMessage } from './_lib/clientError.js';
-import { getSiteUrl } from './_lib/env.js';
-import { getProduct, getStripePriceId } from './_lib/products.js';
-import { getStripe } from './_lib/stripe.js';
+import { getLemonSqueezyCheckoutUrl } from './_lib/env.js';
+import { getProduct } from './_lib/products.js';
 
 type CheckoutBody = {
   productId?: string;
@@ -30,32 +29,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       return res.status(404).json({ error: 'Product not found' });
     }
 
-    const priceId = getStripePriceId(product);
-    const siteUrl = getSiteUrl().replace(/\/$/, '');
-    if (!siteUrl.includes('emailbundles2') && !siteUrl.includes('localhost')) {
-      console.warn(
-        `[create-checkout] SITE_URL="${siteUrl}" may be missing the /emailbundles2 path — Stripe success redirects can land on a 404.`,
-      );
+    const checkoutUrl = new URL(getLemonSqueezyCheckoutUrl());
+    const email = body.email?.trim();
+    if (email) {
+      checkoutUrl.searchParams.set('checkout[email]', email);
     }
-    const stripe = getStripe();
+    checkoutUrl.searchParams.set('checkout[custom][product_id]', product.id);
 
-    const session = await stripe.checkout.sessions.create({
-      mode: 'payment',
-      customer_email: body.email?.trim() || undefined,
-      line_items: [{ price: priceId, quantity: 1 }],
-      success_url: `${siteUrl}/purchase/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${siteUrl}/products?checkout=cancelled`,
-      metadata: {
-        product_id: product.id,
-        bundle_id: product.id,
-      },
-    });
-
-    if (!session.url) {
-      return res.status(500).json({ error: 'Checkout is temporarily unavailable. Please try again.' });
-    }
-
-    return res.status(200).json({ url: session.url, sessionId: session.id });
+    return res.status(200).json({ url: checkoutUrl.toString() });
   } catch (err) {
     console.error('[create-checkout]', err);
     return res.status(500).json({

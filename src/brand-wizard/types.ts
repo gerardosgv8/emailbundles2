@@ -72,6 +72,10 @@ export interface DesignRulesState {
   socialTwitter: string;
   socialInstagram: string;
   socialLinkedin: string;
+  socialFacebookText: string;
+  socialTwitterText: string;
+  socialInstagramText: string;
+  socialLinkedinText: string;
   linkPrivacy: string;
   linkTerms: string;
   linkHelp: string;

@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { storefrontBrandWizardPath } from '../brand-wizard/wizardRoute';
 
 export function NotFoundPage() {
   return (
@@ -20,8 +21,9 @@ export function NotFoundPage() {
           </div>
           <nav className="not-found-links" aria-label="Helpful links">
             <Link to="/docs">Documentation</Link>
-            <Link to="/brand-wizard">Brand Wizard</Link>
+            <Link to={storefrontBrandWizardPath()}>Brand Wizard</Link>
             <Link to="/faq">FAQ</Link>
+            <Link to="/contact">Contact</Link>
           </nav>
         </div>
       </div>

@@ -1,62 +1,108 @@
 import { Link } from 'react-router-dom';
 import { getFaqHomePreview } from '../data/faq';
+import { storefrontBrandWizardPath } from '../brand-wizard/wizardRoute';
+import { storefrontContentWizardPath } from '../content-wizard/contentWizardRoute';
+import { assetUrl } from '../lib/assetUrl';
+import { resolveWizardHref } from '../lib/wizardNav';
+import { useWizardAccess } from '../wizard-access/WizardAccessProvider';
 
 const PREVIEW_FAQS = getFaqHomePreview();
 
 const AUDIENCE = [
-  [
-    'Agencies',
-    'Onboard a client brand once, apply it across the pack, then fill each send without rebuilding markup from scratch.',
-  ],
-  [
-    'Freelancers & designers',
-    'Deliver branded HTML faster. Export Design Rules so the client (or your future self) has one brand reference.',
-  ],
-  [
-    'In-house marketers',
-    'Keep logo, colors, and footer consistent while campaign copy changes every week. Brand and content stay separate on purpose.',
-  ],
+  {
+    title: 'Agencies',
+    desc: 'Onboard a client brand once, apply it across the pack, then fill each send without rebuilding markup from scratch.',
+    icon: 'agencies' as const,
+  },
+  {
+    title: 'Freelancers & designers',
+    desc: 'Deliver branded HTML faster. Export Design Rules so the client (or your future self) has one brand reference.',
+    icon: 'freelancers' as const,
+  },
+  {
+    title: 'In-house marketers',
+    desc: 'Keep logo, colors, and footer consistent while campaign copy changes every week. Brand and content stay separate on purpose.',
+    icon: 'marketers' as const,
+  },
 ];
 
-const WORKFLOW = [
+function AudienceIcon({ name }: { name: (typeof AUDIENCE)[number]['icon'] }) {
+  const common = {
+    width: 28,
+    height: 28,
+    viewBox: '0 0 28 28',
+    fill: 'none',
+    xmlns: 'http://www.w3.org/2000/svg',
+    'aria-hidden': true as const,
+  };
+
+  if (name === 'agencies') {
+    return (
+      <svg {...common}>
+        <path
+          d="M5 23V9.5L14 5l9 4.5V23"
+          stroke="currentColor"
+          strokeWidth="1.75"
+          strokeLinejoin="round"
+        />
+        <path d="M10 23V14h8v9" stroke="currentColor" strokeWidth="1.75" strokeLinejoin="round" />
+        <path d="M12.5 17h3M12.5 20h3" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" />
+      </svg>
+    );
+  }
+
+  if (name === 'freelancers') {
+    return (
+      <svg {...common}>
+        <path
+          d="M7 21l1.2-4.2L18.8 6.2a2.1 2.1 0 0 1 3 3L11.2 19.8 7 21z"
+          stroke="currentColor"
+          strokeWidth="1.75"
+          strokeLinejoin="round"
+        />
+        <path d="M16.5 8.5l3 3" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" />
+        <path d="M6 24h10" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" />
+      </svg>
+    );
+  }
+
+  return (
+    <svg {...common}>
+      <rect x="4.5" y="7" width="19" height="14" rx="2.5" stroke="currentColor" strokeWidth="1.75" />
+      <path d="M4.5 11.5h19" stroke="currentColor" strokeWidth="1.75" />
+      <circle cx="8.5" cy="9.2" r="0.9" fill="currentColor" />
+      <circle cx="11.5" cy="9.2" r="0.9" fill="currentColor" />
+      <path
+        d="M10 16.5l2.2 2.2 5.3-5.3"
+        stroke="currentColor"
+        strokeWidth="1.75"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+const SYSTEM = [
   [
     '1',
-    'Pick a bundle',
-    'Choose Industrial B2B (9 templates) or the Email Marketing Starter Kit (11 templates) for the campaigns you actually send.',
+    'Pick the kit',
+    'Get the Email Marketing Starter Kit (11 templates). You’re working in production HTML: table layouts, inline styles, Outlook-friendly CTAs, not a mock that dies at send time.',
   ],
   [
     '2',
     'Brand the pack',
-    'Enter logo, colors, buttons, and footer in the Brand Wizard. Apply those tokens to a template zip in one pass.',
+    'Set logo, colors, buttons, and footer once in Brand Wizard. Apply those tokens across the zip in one pass, then export Design Rules so the brand handoff isn’t tribal knowledge.',
   ],
   [
     '3',
     'Fill the send',
-    'Open the Content Wizard. Drop in headlines, body, CTAs, and images for one layout. Brand tokens stay untouched.',
+    'Open Content Wizard and drop in headlines, body, CTAs, and images through forms. Hide optional blocks for this campaign. Brand tokens stay untouched on purpose.',
   ],
   [
     '4',
-    'Export & Send',
-    'Grab your production-ready HTML, paste it into your ESP, and launch with total confidence across Gmail, Outlook, and Apple Mail.',
-  ],
-];
-
-const MECHANISM = [
-  [
-    'Production HTML, not a mock',
-    'Table-based layouts with inline styles and Outlook-friendly button fallbacks. What you customize is what you send.',
-  ],
-  [
-    'Brand Wizard',
-    'Define design tokens once. Apply them across the zip. Export Design Rules as your team’s brand handoff.',
-  ],
-  [
-    'Content Wizard',
-    'Fill campaign fields through forms. Hide optional blocks for this send. Download filled .html without hunting through markup.',
-  ],
-  [
-    'ESP-ready output',
-    'Paste the full file into Klaviyo, Mailchimp, HubSpot, Salesforce, or any platform that accepts custom HTML.',
+    'Export & send',
+    'Download the filled HTML and paste it into Klaviyo, Mailchimp, HubSpot, Salesforce, or any ESP that accepts custom HTML. Same path every week.',
   ],
 ];
 
@@ -82,23 +128,28 @@ const DOCS = [
 ];
 
 export function HomePage() {
+  const { status } = useWizardAccess();
+  const isAuthenticated = status === 'authenticated';
+  const brandWizardTo = resolveWizardHref(storefrontBrandWizardPath(), isAuthenticated);
+  const contentWizardTo = resolveWizardHref(storefrontContentWizardPath(), isAuthenticated);
+
   return (
     <main>
       <section className="hero-split">
         <div className="hero-copy">
           <div className="hero-copy-inner">
             <p className="hero-eyebrow">Mailcraft Studio</p>
-            <h1>Ship high-quality emails in minutes</h1>
+            <h1>Design high-quality emails in minutes</h1>
             <p>
               Production HTML templates plus Brand and Content Wizards. Brand the pack once, fill
               your campaign copy through forms, and download ESP-ready HTML. What used to take an
               afternoon of markup edits becomes a short, repeatable path.
             </p>
             <div className="hero-actions">
-              <Link to="/products" className="btn btn-primary btn-lg">
-                Browse bundles
+              <Link to="/products" className="btn btn-primary btn-lg btn-glow">
+                View the kit
               </Link>
-              <Link to="/brand-wizard" className="btn btn-secondary btn-lg">
+              <Link to={brandWizardTo} className="btn btn-secondary btn-lg">
                 Try Brand Wizard
               </Link>
             </div>
@@ -146,30 +197,30 @@ export function HomePage() {
               </li>
             </ul>
           </div>
-          <div className="card card-muted">
-            <h4>What’s in a bundle</h4>
-            <ul className="feature-list">
-              <li>9 or 11 production HTML templates (by pack)</li>
-              <li>Brand Design Wizard with zip apply and Design Rules export</li>
-              <li>Content Wizard with filled .html download</li>
-              <li>Docs for ESP upload, merge tags, and common fixes</li>
-            </ul>
-            <Link to="/products" className="btn btn-primary" style={{ marginTop: '1.25rem' }}>
-              See pricing and packs
-            </Link>
+          <div>
+            <div className="video-frame video-frame-natural">
+              <video
+                src={assetUrl('images/Walkthrough.mp4')}
+                autoPlay
+                loop
+                muted
+                playsInline
+                aria-label="Walkthrough of branding and filling email templates in Mailcraft Studio"
+              />
+            </div>
           </div>
         </div>
       </section>
 
-      <section className="section section-muted">
+      <section className="section section-muted" id="templates">
         <div className="container">
           <h2 className="section-title">How the system works</h2>
           <p className="section-lead">
-            Four steps. Design and content stay separate on purpose, so branding stays consistent
-            while each campaign stays quick to assemble.
+            Four steps from bundle to ESP. Brand and content stay separate so design stays consistent
+            while each campaign stays quick to assemble, and what you customize is what you send.
           </p>
           <div className="grid-4 mc-stagger" style={{ marginTop: '1.5rem' }}>
-            {WORKFLOW.map(([num, title, desc]) => (
+            {SYSTEM.map(([num, title, desc]) => (
               <div key={title} className="card card-quiet">
                 <span className="workflow-step-num" aria-hidden="true">{num}</span>
                 <h4>{title}</h4>
@@ -178,44 +229,12 @@ export function HomePage() {
             ))}
           </div>
           <div className="hero-actions mt-8" style={{ justifyContent: 'center' }}>
-            <Link to="/brand-wizard" className="btn btn-primary">
+            <Link to={brandWizardTo} className="btn btn-primary">
               Start with Brand Wizard
             </Link>
-            <Link to="/content-wizard" className="btn btn-secondary">
+            <Link to={contentWizardTo} className="btn btn-secondary">
               Or open Content Wizard
             </Link>
-          </div>
-        </div>
-      </section>
-
-      <section className="section">
-        <div className="container">
-          <h2 className="section-title">Built for people who ship email for a living</h2>
-          <div className="grid-3 mc-stagger" style={{ marginTop: '1.5rem' }}>
-            {AUDIENCE.map(([title, desc]) => (
-              <div key={title} className="card card-quiet">
-                <h4>{title}</h4>
-                <p>{desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="section section-white" id="templates">
-        <div className="container">
-          <h2 className="section-title">The pieces that make the mechanism work</h2>
-          <p className="section-lead">
-            Every feature maps to a concrete outcome: fewer markup edits, consistent brand, faster
-            path from brief to ESP.
-          </p>
-          <div className="grid-4 mc-stagger" style={{ marginTop: '1.5rem' }}>
-            {MECHANISM.map(([title, desc]) => (
-              <div key={title} className="card card-quiet">
-                <h4>{title}</h4>
-                <p>{desc}</p>
-              </div>
-            ))}
           </div>
         </div>
       </section>
@@ -242,8 +261,25 @@ export function HomePage() {
               </li>
             </ul>
           </div>
-          <div className="video-frame" aria-hidden="true">
-            Brand once. Fill copy. ESP.
+          <div className="image-placeholder" aria-hidden="true">
+            Image placeholder
+          </div>
+        </div>
+      </section>
+
+      <section className="section">
+        <div className="container">
+          <h2 className="section-title text-center">Built for people who ship email for a living</h2>
+          <div className="grid-3 mc-stagger" style={{ marginTop: '1.5rem' }}>
+            {AUDIENCE.map(({ title, desc, icon }) => (
+              <div key={title} className="card card-quiet audience-card">
+                <div className="audience-icon" aria-hidden="true">
+                  <AudienceIcon name={icon} />
+                </div>
+                <h4>{title}</h4>
+                <p>{desc}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -322,14 +358,14 @@ export function HomePage() {
               Ready to ship your next email in minutes?
             </h3>
             <p style={{ margin: '0 0 1.5rem', color: 'var(--muted)', fontSize: '0.9rem' }}>
-              Pick a pack, brand it once, fill the send, and download ESP-ready HTML. Industrial B2B
-              or Email Marketing Starter Kit. $79.99 per bundle.
+              Pick the Email Marketing Starter Kit, brand it once, fill the send, and download
+              ESP-ready HTML. $79.99.
             </p>
             <div className="hero-actions" style={{ justifyContent: 'center' }}>
               <Link to="/products" className="btn btn-primary btn-lg">
-                Browse bundles
+                View the kit
               </Link>
-              <Link to="/brand-wizard" className="btn btn-secondary btn-lg">
+              <Link to={brandWizardTo} className="btn btn-secondary btn-lg">
                 Try Brand Wizard
               </Link>
             </div>

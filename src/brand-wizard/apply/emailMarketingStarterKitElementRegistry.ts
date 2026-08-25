@@ -8,11 +8,11 @@ export const EMAIL_MARKETING_STARTER_KIT_TEMPLATE_FILES = [
   "Back_in_Stock_Notification.html",
   "Checkout_Abandonment_Email.html",
   "Feature_Announcement.html",
+  "Image_Powered.html",
   "Newsletter_Editorial.html",
   "Order_Confirmation_Email.html",
-  "Product_Launch.html",
   "Product_Recommendations.html",
-  "Product_Recommendations_(Horizontal).html",
+  "Product_Recommendations_(Vertical).html",
   "Promotional_Campaign.html",
   "Survey_&_Feedback.html",
   "Welcome_&_Onboarding.html"
@@ -63,11 +63,18 @@ export type StarterKitElementEntry = {
   templates: EmailMarketingStarterKitTemplateFile[];
 };
 
-/** Every data-element hook in the Email Marketing Starter Kit (176 total). */
+/** Every data-element hook in the Email Marketing Starter Kit (184 total). */
 export const EMAIL_MARKETING_STARTER_KIT_ELEMENT_REGISTRY: StarterKitElementEntry[] = [
   {
     "id": "arrival-1-cta",
-    "profile": "LINK_PRODUCT",
+    "profile": "CTA_PRIMARY",
+    "templates": [
+      "Product_Recommendations.html"
+    ]
+  },
+  {
+    "id": "arrival-1-cta-button",
+    "profile": "CTA_PRIMARY_TD",
     "templates": [
       "Product_Recommendations.html"
     ]
@@ -95,7 +102,14 @@ export const EMAIL_MARKETING_STARTER_KIT_ELEMENT_REGISTRY: StarterKitElementEntr
   },
   {
     "id": "arrival-2-cta",
-    "profile": "LINK_PRODUCT",
+    "profile": "CTA_PRIMARY",
+    "templates": [
+      "Product_Recommendations.html"
+    ]
+  },
+  {
+    "id": "arrival-2-cta-button",
+    "profile": "CTA_PRIMARY_TD",
     "templates": [
       "Product_Recommendations.html"
     ]
@@ -123,7 +137,14 @@ export const EMAIL_MARKETING_STARTER_KIT_ELEMENT_REGISTRY: StarterKitElementEntr
   },
   {
     "id": "arrival-3-cta",
-    "profile": "LINK_PRODUCT",
+    "profile": "CTA_PRIMARY",
+    "templates": [
+      "Product_Recommendations.html"
+    ]
+  },
+  {
+    "id": "arrival-3-cta-button",
+    "profile": "CTA_PRIMARY_TD",
     "templates": [
       "Product_Recommendations.html"
     ]
@@ -151,7 +172,14 @@ export const EMAIL_MARKETING_STARTER_KIT_ELEMENT_REGISTRY: StarterKitElementEntr
   },
   {
     "id": "arrival-4-cta",
-    "profile": "LINK_PRODUCT",
+    "profile": "CTA_PRIMARY",
+    "templates": [
+      "Product_Recommendations.html"
+    ]
+  },
+  {
+    "id": "arrival-4-cta-button",
+    "profile": "CTA_PRIMARY_TD",
     "templates": [
       "Product_Recommendations.html"
     ]
@@ -178,7 +206,28 @@ export const EMAIL_MARKETING_STARTER_KIT_ELEMENT_REGISTRY: StarterKitElementEntr
     ]
   },
   {
+    "id": "back-in-stock-cta",
+    "profile": "CTA_PRIMARY",
+    "templates": [
+      "Back_in_Stock_Notification.html"
+    ]
+  },
+  {
+    "id": "back-in-stock-cta-button",
+    "profile": "CTA_PRIMARY_TD",
+    "templates": [
+      "Back_in_Stock_Notification.html"
+    ]
+  },
+  {
     "id": "checkout-button",
+    "profile": "CTA_PRIMARY_TD",
+    "templates": [
+      "Checkout_Abandonment_Email.html"
+    ]
+  },
+  {
+    "id": "checkout-cta-button",
     "profile": "CTA_PRIMARY_TD",
     "templates": [
       "Checkout_Abandonment_Email.html"
@@ -206,6 +255,20 @@ export const EMAIL_MARKETING_STARTER_KIT_ELEMENT_REGISTRY: StarterKitElementEntr
     ]
   },
   {
+    "id": "cta-description",
+    "profile": "BODY",
+    "templates": [
+      "Image_Powered.html"
+    ]
+  },
+  {
+    "id": "cta-heading",
+    "profile": "HEADING_SECTION",
+    "templates": [
+      "Image_Powered.html"
+    ]
+  },
+  {
     "id": "cta-primary",
     "profile": "CTA_PRIMARY",
     "templates": [
@@ -216,17 +279,7 @@ export const EMAIL_MARKETING_STARTER_KIT_ELEMENT_REGISTRY: StarterKitElementEntr
     "id": "cta-secondary",
     "profile": "CTA_SECONDARY",
     "templates": [
-      "Back_in_Stock_Notification.html",
-      "Checkout_Abandonment_Email.html",
-      "Feature_Announcement.html",
-      "Newsletter_Editorial.html",
-      "Order_Confirmation_Email.html",
-      "Product_Launch.html",
-      "Product_Recommendations.html",
-      "Product_Recommendations_(Horizontal).html",
-      "Promotional_Campaign.html",
-      "Survey_&_Feedback.html",
-      "Welcome_&_Onboarding.html"
+      "Feature_Announcement.html"
     ]
   },
   {
@@ -240,17 +293,7 @@ export const EMAIL_MARKETING_STARTER_KIT_ELEMENT_REGISTRY: StarterKitElementEntr
     "id": "cta-view-details",
     "profile": "CTA_SECONDARY",
     "templates": [
-      "Back_in_Stock_Notification.html",
-      "Checkout_Abandonment_Email.html",
-      "Feature_Announcement.html",
-      "Newsletter_Editorial.html",
-      "Order_Confirmation_Email.html",
-      "Product_Launch.html",
-      "Product_Recommendations.html",
-      "Product_Recommendations_(Horizontal).html",
-      "Promotional_Campaign.html",
-      "Survey_&_Feedback.html",
-      "Welcome_&_Onboarding.html"
+      "Order_Confirmation_Email.html"
     ]
   },
   {
@@ -313,48 +356,42 @@ export const EMAIL_MARKETING_STARTER_KIT_ELEMENT_REGISTRY: StarterKitElementEntr
     "id": "feature-1-description",
     "profile": "BODY",
     "templates": [
-      "Feature_Announcement.html",
-      "Product_Launch.html"
+      "Feature_Announcement.html"
     ]
   },
   {
     "id": "feature-1-title",
     "profile": "HEADING_FEATURE",
     "templates": [
-      "Feature_Announcement.html",
-      "Product_Launch.html"
+      "Feature_Announcement.html"
     ]
   },
   {
     "id": "feature-2-description",
     "profile": "BODY",
     "templates": [
-      "Feature_Announcement.html",
-      "Product_Launch.html"
+      "Feature_Announcement.html"
     ]
   },
   {
     "id": "feature-2-title",
     "profile": "HEADING_FEATURE",
     "templates": [
-      "Feature_Announcement.html",
-      "Product_Launch.html"
+      "Feature_Announcement.html"
     ]
   },
   {
     "id": "feature-3-description",
     "profile": "BODY",
     "templates": [
-      "Feature_Announcement.html",
-      "Product_Launch.html"
+      "Feature_Announcement.html"
     ]
   },
   {
     "id": "feature-3-title",
     "profile": "HEADING_FEATURE",
     "templates": [
-      "Feature_Announcement.html",
-      "Product_Launch.html"
+      "Feature_Announcement.html"
     ]
   },
   {
@@ -367,6 +404,13 @@ export const EMAIL_MARKETING_STARTER_KIT_ELEMENT_REGISTRY: StarterKitElementEntr
   {
     "id": "featured-cta",
     "profile": "CTA_PRIMARY",
+    "templates": [
+      "Newsletter_Editorial.html"
+    ]
+  },
+  {
+    "id": "featured-cta-button",
+    "profile": "CTA_PRIMARY_TD",
     "templates": [
       "Newsletter_Editorial.html"
     ]
@@ -399,11 +443,11 @@ export const EMAIL_MARKETING_STARTER_KIT_ELEMENT_REGISTRY: StarterKitElementEntr
       "Back_in_Stock_Notification.html",
       "Checkout_Abandonment_Email.html",
       "Feature_Announcement.html",
+      "Image_Powered.html",
       "Newsletter_Editorial.html",
       "Order_Confirmation_Email.html",
-      "Product_Launch.html",
       "Product_Recommendations.html",
-      "Product_Recommendations_(Horizontal).html",
+      "Product_Recommendations_(Vertical).html",
       "Promotional_Campaign.html",
       "Survey_&_Feedback.html",
       "Welcome_&_Onboarding.html"
@@ -416,11 +460,11 @@ export const EMAIL_MARKETING_STARTER_KIT_ELEMENT_REGISTRY: StarterKitElementEntr
       "Back_in_Stock_Notification.html",
       "Checkout_Abandonment_Email.html",
       "Feature_Announcement.html",
+      "Image_Powered.html",
       "Newsletter_Editorial.html",
       "Order_Confirmation_Email.html",
-      "Product_Launch.html",
       "Product_Recommendations.html",
-      "Product_Recommendations_(Horizontal).html",
+      "Product_Recommendations_(Vertical).html",
       "Promotional_Campaign.html",
       "Survey_&_Feedback.html",
       "Welcome_&_Onboarding.html"
@@ -433,11 +477,11 @@ export const EMAIL_MARKETING_STARTER_KIT_ELEMENT_REGISTRY: StarterKitElementEntr
       "Back_in_Stock_Notification.html",
       "Checkout_Abandonment_Email.html",
       "Feature_Announcement.html",
+      "Image_Powered.html",
       "Newsletter_Editorial.html",
       "Order_Confirmation_Email.html",
-      "Product_Launch.html",
       "Product_Recommendations.html",
-      "Product_Recommendations_(Horizontal).html",
+      "Product_Recommendations_(Vertical).html",
       "Promotional_Campaign.html",
       "Survey_&_Feedback.html",
       "Welcome_&_Onboarding.html"
@@ -450,11 +494,11 @@ export const EMAIL_MARKETING_STARTER_KIT_ELEMENT_REGISTRY: StarterKitElementEntr
       "Back_in_Stock_Notification.html",
       "Checkout_Abandonment_Email.html",
       "Feature_Announcement.html",
+      "Image_Powered.html",
       "Newsletter_Editorial.html",
       "Order_Confirmation_Email.html",
-      "Product_Launch.html",
       "Product_Recommendations.html",
-      "Product_Recommendations_(Horizontal).html",
+      "Product_Recommendations_(Vertical).html",
       "Promotional_Campaign.html",
       "Survey_&_Feedback.html",
       "Welcome_&_Onboarding.html"
@@ -467,11 +511,11 @@ export const EMAIL_MARKETING_STARTER_KIT_ELEMENT_REGISTRY: StarterKitElementEntr
       "Back_in_Stock_Notification.html",
       "Checkout_Abandonment_Email.html",
       "Feature_Announcement.html",
+      "Image_Powered.html",
       "Newsletter_Editorial.html",
       "Order_Confirmation_Email.html",
-      "Product_Launch.html",
       "Product_Recommendations.html",
-      "Product_Recommendations_(Horizontal).html",
+      "Product_Recommendations_(Vertical).html",
       "Promotional_Campaign.html",
       "Survey_&_Feedback.html",
       "Welcome_&_Onboarding.html"
@@ -484,11 +528,11 @@ export const EMAIL_MARKETING_STARTER_KIT_ELEMENT_REGISTRY: StarterKitElementEntr
       "Back_in_Stock_Notification.html",
       "Checkout_Abandonment_Email.html",
       "Feature_Announcement.html",
+      "Image_Powered.html",
       "Newsletter_Editorial.html",
       "Order_Confirmation_Email.html",
-      "Product_Launch.html",
       "Product_Recommendations.html",
-      "Product_Recommendations_(Horizontal).html",
+      "Product_Recommendations_(Vertical).html",
       "Promotional_Campaign.html",
       "Survey_&_Feedback.html",
       "Welcome_&_Onboarding.html"
@@ -501,11 +545,11 @@ export const EMAIL_MARKETING_STARTER_KIT_ELEMENT_REGISTRY: StarterKitElementEntr
       "Back_in_Stock_Notification.html",
       "Checkout_Abandonment_Email.html",
       "Feature_Announcement.html",
+      "Image_Powered.html",
       "Newsletter_Editorial.html",
       "Order_Confirmation_Email.html",
-      "Product_Launch.html",
       "Product_Recommendations.html",
-      "Product_Recommendations_(Horizontal).html",
+      "Product_Recommendations_(Vertical).html",
       "Promotional_Campaign.html",
       "Survey_&_Feedback.html",
       "Welcome_&_Onboarding.html"
@@ -518,11 +562,11 @@ export const EMAIL_MARKETING_STARTER_KIT_ELEMENT_REGISTRY: StarterKitElementEntr
       "Back_in_Stock_Notification.html",
       "Checkout_Abandonment_Email.html",
       "Feature_Announcement.html",
+      "Image_Powered.html",
       "Newsletter_Editorial.html",
       "Order_Confirmation_Email.html",
-      "Product_Launch.html",
       "Product_Recommendations.html",
-      "Product_Recommendations_(Horizontal).html",
+      "Product_Recommendations_(Vertical).html",
       "Promotional_Campaign.html",
       "Survey_&_Feedback.html",
       "Welcome_&_Onboarding.html"
@@ -535,11 +579,11 @@ export const EMAIL_MARKETING_STARTER_KIT_ELEMENT_REGISTRY: StarterKitElementEntr
       "Back_in_Stock_Notification.html",
       "Checkout_Abandonment_Email.html",
       "Feature_Announcement.html",
+      "Image_Powered.html",
       "Newsletter_Editorial.html",
       "Order_Confirmation_Email.html",
-      "Product_Launch.html",
       "Product_Recommendations.html",
-      "Product_Recommendations_(Horizontal).html",
+      "Product_Recommendations_(Vertical).html",
       "Promotional_Campaign.html",
       "Survey_&_Feedback.html",
       "Welcome_&_Onboarding.html"
@@ -552,11 +596,11 @@ export const EMAIL_MARKETING_STARTER_KIT_ELEMENT_REGISTRY: StarterKitElementEntr
       "Back_in_Stock_Notification.html",
       "Checkout_Abandonment_Email.html",
       "Feature_Announcement.html",
+      "Image_Powered.html",
       "Newsletter_Editorial.html",
       "Order_Confirmation_Email.html",
-      "Product_Launch.html",
       "Product_Recommendations.html",
-      "Product_Recommendations_(Horizontal).html",
+      "Product_Recommendations_(Vertical).html",
       "Promotional_Campaign.html",
       "Survey_&_Feedback.html",
       "Welcome_&_Onboarding.html"
@@ -569,11 +613,11 @@ export const EMAIL_MARKETING_STARTER_KIT_ELEMENT_REGISTRY: StarterKitElementEntr
       "Back_in_Stock_Notification.html",
       "Checkout_Abandonment_Email.html",
       "Feature_Announcement.html",
+      "Image_Powered.html",
       "Newsletter_Editorial.html",
       "Order_Confirmation_Email.html",
-      "Product_Launch.html",
       "Product_Recommendations.html",
-      "Product_Recommendations_(Horizontal).html",
+      "Product_Recommendations_(Vertical).html",
       "Promotional_Campaign.html",
       "Survey_&_Feedback.html",
       "Welcome_&_Onboarding.html"
@@ -586,11 +630,11 @@ export const EMAIL_MARKETING_STARTER_KIT_ELEMENT_REGISTRY: StarterKitElementEntr
       "Back_in_Stock_Notification.html",
       "Checkout_Abandonment_Email.html",
       "Feature_Announcement.html",
+      "Image_Powered.html",
       "Newsletter_Editorial.html",
       "Order_Confirmation_Email.html",
-      "Product_Launch.html",
       "Product_Recommendations.html",
-      "Product_Recommendations_(Horizontal).html",
+      "Product_Recommendations_(Vertical).html",
       "Promotional_Campaign.html",
       "Survey_&_Feedback.html",
       "Welcome_&_Onboarding.html"
@@ -603,11 +647,11 @@ export const EMAIL_MARKETING_STARTER_KIT_ELEMENT_REGISTRY: StarterKitElementEntr
       "Back_in_Stock_Notification.html",
       "Checkout_Abandonment_Email.html",
       "Feature_Announcement.html",
+      "Image_Powered.html",
       "Newsletter_Editorial.html",
       "Order_Confirmation_Email.html",
-      "Product_Launch.html",
       "Product_Recommendations.html",
-      "Product_Recommendations_(Horizontal).html",
+      "Product_Recommendations_(Vertical).html",
       "Promotional_Campaign.html",
       "Survey_&_Feedback.html",
       "Welcome_&_Onboarding.html"
@@ -620,11 +664,11 @@ export const EMAIL_MARKETING_STARTER_KIT_ELEMENT_REGISTRY: StarterKitElementEntr
       "Back_in_Stock_Notification.html",
       "Checkout_Abandonment_Email.html",
       "Feature_Announcement.html",
+      "Image_Powered.html",
       "Newsletter_Editorial.html",
       "Order_Confirmation_Email.html",
-      "Product_Launch.html",
       "Product_Recommendations.html",
-      "Product_Recommendations_(Horizontal).html",
+      "Product_Recommendations_(Vertical).html",
       "Promotional_Campaign.html",
       "Survey_&_Feedback.html",
       "Welcome_&_Onboarding.html"
@@ -637,11 +681,11 @@ export const EMAIL_MARKETING_STARTER_KIT_ELEMENT_REGISTRY: StarterKitElementEntr
       "Back_in_Stock_Notification.html",
       "Checkout_Abandonment_Email.html",
       "Feature_Announcement.html",
+      "Image_Powered.html",
       "Newsletter_Editorial.html",
       "Order_Confirmation_Email.html",
-      "Product_Launch.html",
       "Product_Recommendations.html",
-      "Product_Recommendations_(Horizontal).html",
+      "Product_Recommendations_(Vertical).html",
       "Promotional_Campaign.html",
       "Survey_&_Feedback.html",
       "Welcome_&_Onboarding.html"
@@ -654,11 +698,11 @@ export const EMAIL_MARKETING_STARTER_KIT_ELEMENT_REGISTRY: StarterKitElementEntr
       "Back_in_Stock_Notification.html",
       "Checkout_Abandonment_Email.html",
       "Feature_Announcement.html",
+      "Image_Powered.html",
       "Newsletter_Editorial.html",
       "Order_Confirmation_Email.html",
-      "Product_Launch.html",
       "Product_Recommendations.html",
-      "Product_Recommendations_(Horizontal).html",
+      "Product_Recommendations_(Vertical).html",
       "Promotional_Campaign.html",
       "Survey_&_Feedback.html",
       "Welcome_&_Onboarding.html"
@@ -671,11 +715,11 @@ export const EMAIL_MARKETING_STARTER_KIT_ELEMENT_REGISTRY: StarterKitElementEntr
       "Back_in_Stock_Notification.html",
       "Checkout_Abandonment_Email.html",
       "Feature_Announcement.html",
+      "Image_Powered.html",
       "Newsletter_Editorial.html",
       "Order_Confirmation_Email.html",
-      "Product_Launch.html",
       "Product_Recommendations.html",
-      "Product_Recommendations_(Horizontal).html",
+      "Product_Recommendations_(Vertical).html",
       "Promotional_Campaign.html",
       "Survey_&_Feedback.html",
       "Welcome_&_Onboarding.html"
@@ -703,13 +747,6 @@ export const EMAIL_MARKETING_STARTER_KIT_ELEMENT_REGISTRY: StarterKitElementEntr
     ]
   },
   {
-    "id": "header-kicker",
-    "profile": "HEADING_KICKER",
-    "templates": [
-      "Product_Launch.html"
-    ]
-  },
-  {
     "id": "header-main-title",
     "profile": "HEADING_KICKER",
     "templates": [
@@ -721,8 +758,9 @@ export const EMAIL_MARKETING_STARTER_KIT_ELEMENT_REGISTRY: StarterKitElementEntr
     "profile": "HEADING_KICKER",
     "templates": [
       "Back_in_Stock_Notification.html",
+      "Image_Powered.html",
       "Product_Recommendations.html",
-      "Product_Recommendations_(Horizontal).html",
+      "Product_Recommendations_(Vertical).html",
       "Welcome_&_Onboarding.html"
     ]
   },
@@ -745,8 +783,12 @@ export const EMAIL_MARKETING_STARTER_KIT_ELEMENT_REGISTRY: StarterKitElementEntr
     "profile": "HEADING_KICKER",
     "templates": [
       "Feature_Announcement.html",
-      "Product_Recommendations_(Horizontal).html",
-      "Survey_&_Feedback.html"
+      "Image_Powered.html",
+      "Order_Confirmation_Email.html",
+      "Product_Recommendations.html",
+      "Product_Recommendations_(Vertical).html",
+      "Survey_&_Feedback.html",
+      "Welcome_&_Onboarding.html"
     ]
   },
   {
@@ -774,7 +816,11 @@ export const EMAIL_MARKETING_STARTER_KIT_ELEMENT_REGISTRY: StarterKitElementEntr
     "id": "hero-image",
     "profile": "IMAGE_HERO",
     "templates": [
-      "Feature_Announcement.html"
+      "Feature_Announcement.html",
+      "Newsletter_Editorial.html",
+      "Product_Recommendations.html",
+      "Promotional_Campaign.html",
+      "Welcome_&_Onboarding.html"
     ]
   },
   {
@@ -792,17 +838,38 @@ export const EMAIL_MARKETING_STARTER_KIT_ELEMENT_REGISTRY: StarterKitElementEntr
     ]
   },
   {
-    "id": "launch-subtitle",
-    "profile": "BODY_SUBTITLE",
+    "id": "image-1",
+    "profile": "IMAGE_HERO",
     "templates": [
-      "Product_Launch.html"
+      "Image_Powered.html"
     ]
   },
   {
-    "id": "launch-title",
-    "profile": "HEADING_HERO",
+    "id": "image-2",
+    "profile": "IMAGE_HERO",
     "templates": [
-      "Product_Launch.html"
+      "Image_Powered.html"
+    ]
+  },
+  {
+    "id": "image-3",
+    "profile": "IMAGE_HERO",
+    "templates": [
+      "Image_Powered.html"
+    ]
+  },
+  {
+    "id": "image-4",
+    "profile": "IMAGE_HERO",
+    "templates": [
+      "Image_Powered.html"
+    ]
+  },
+  {
+    "id": "image-5",
+    "profile": "IMAGE_HERO",
+    "templates": [
+      "Image_Powered.html"
     ]
   },
   {
@@ -823,12 +890,14 @@ export const EMAIL_MARKETING_STARTER_KIT_ELEMENT_REGISTRY: StarterKitElementEntr
     "id": "logo",
     "profile": "LOGO",
     "templates": [
+      "Back_in_Stock_Notification.html",
       "Checkout_Abandonment_Email.html",
       "Feature_Announcement.html",
+      "Image_Powered.html",
       "Newsletter_Editorial.html",
       "Order_Confirmation_Email.html",
       "Product_Recommendations.html",
-      "Product_Recommendations_(Horizontal).html",
+      "Product_Recommendations_(Vertical).html",
       "Promotional_Campaign.html",
       "Survey_&_Feedback.html",
       "Welcome_&_Onboarding.html"
@@ -839,6 +908,20 @@ export const EMAIL_MARKETING_STARTER_KIT_ELEMENT_REGISTRY: StarterKitElementEntr
     "profile": "BODY_MUTED",
     "templates": [
       "Order_Confirmation_Email.html"
+    ]
+  },
+  {
+    "id": "order-number",
+    "profile": "HEADING_SECTION",
+    "templates": [
+      "Order_Confirmation_Email.html"
+    ]
+  },
+  {
+    "id": "order-summary-heading",
+    "profile": "HEADING_SECTION",
+    "templates": [
+      "Checkout_Abandonment_Email.html"
     ]
   },
   {
@@ -870,58 +953,10 @@ export const EMAIL_MARKETING_STARTER_KIT_ELEMENT_REGISTRY: StarterKitElementEntr
     ]
   },
   {
-    "id": "pricing-compare",
-    "profile": "BODY_MUTED",
-    "templates": [
-      "Product_Launch.html"
-    ]
-  },
-  {
-    "id": "pricing-container",
-    "profile": "SURFACE_LIGHT",
-    "templates": [
-      "Product_Launch.html"
-    ]
-  },
-  {
-    "id": "pricing-cta",
-    "profile": "CTA_PRIMARY",
-    "templates": [
-      "Product_Launch.html"
-    ]
-  },
-  {
-    "id": "pricing-cta-button",
-    "profile": "CTA_PRIMARY_TD",
-    "templates": [
-      "Product_Launch.html"
-    ]
-  },
-  {
-    "id": "pricing-main",
-    "profile": "HEADING_HERO",
-    "templates": [
-      "Product_Launch.html"
-    ]
-  },
-  {
-    "id": "pricing-note",
-    "profile": "BODY_MUTED",
-    "templates": [
-      "Product_Launch.html"
-    ]
-  },
-  {
-    "id": "pricing-title",
-    "profile": "HEADING_HERO",
-    "templates": [
-      "Product_Launch.html"
-    ]
-  },
-  {
     "id": "primary-cta",
     "profile": "CTA_PRIMARY",
     "templates": [
+      "Image_Powered.html",
       "Welcome_&_Onboarding.html"
     ]
   },
@@ -929,6 +964,7 @@ export const EMAIL_MARKETING_STARTER_KIT_ELEMENT_REGISTRY: StarterKitElementEntr
     "id": "primary-cta-button",
     "profile": "CTA_PRIMARY_TD",
     "templates": [
+      "Image_Powered.html",
       "Welcome_&_Onboarding.html"
     ]
   },
@@ -936,7 +972,7 @@ export const EMAIL_MARKETING_STARTER_KIT_ELEMENT_REGISTRY: StarterKitElementEntr
     "id": "product-1-cta",
     "profile": "LINK_PRODUCT",
     "templates": [
-      "Product_Recommendations_(Horizontal).html"
+      "Product_Recommendations_(Vertical).html"
     ]
   },
   {
@@ -945,14 +981,16 @@ export const EMAIL_MARKETING_STARTER_KIT_ELEMENT_REGISTRY: StarterKitElementEntr
     "templates": [
       "Checkout_Abandonment_Email.html",
       "Order_Confirmation_Email.html",
-      "Product_Recommendations_(Horizontal).html"
+      "Product_Recommendations_(Vertical).html"
     ]
   },
   {
     "id": "product-1-image",
     "profile": "IMAGE_PRODUCT",
     "templates": [
-      "Product_Recommendations_(Horizontal).html"
+      "Checkout_Abandonment_Email.html",
+      "Order_Confirmation_Email.html",
+      "Product_Recommendations_(Vertical).html"
     ]
   },
   {
@@ -969,119 +1007,119 @@ export const EMAIL_MARKETING_STARTER_KIT_ELEMENT_REGISTRY: StarterKitElementEntr
     "templates": [
       "Checkout_Abandonment_Email.html",
       "Order_Confirmation_Email.html",
-      "Product_Recommendations_(Horizontal).html"
+      "Product_Recommendations_(Vertical).html"
     ]
   },
   {
     "id": "product-1-title",
     "profile": "HEADING_FEATURE",
     "templates": [
-      "Product_Recommendations_(Horizontal).html"
+      "Product_Recommendations_(Vertical).html"
     ]
   },
   {
     "id": "product-2-cta",
     "profile": "LINK_PRODUCT",
     "templates": [
-      "Product_Recommendations_(Horizontal).html"
+      "Product_Recommendations_(Vertical).html"
     ]
   },
   {
     "id": "product-2-description",
     "profile": "BODY",
     "templates": [
-      "Product_Recommendations_(Horizontal).html"
+      "Product_Recommendations_(Vertical).html"
     ]
   },
   {
     "id": "product-2-image",
     "profile": "IMAGE_PRODUCT",
     "templates": [
-      "Product_Recommendations_(Horizontal).html"
+      "Product_Recommendations_(Vertical).html"
     ]
   },
   {
     "id": "product-2-price",
     "profile": "BODY_MUTED",
     "templates": [
-      "Product_Recommendations_(Horizontal).html"
+      "Product_Recommendations_(Vertical).html"
     ]
   },
   {
     "id": "product-2-title",
     "profile": "HEADING_FEATURE",
     "templates": [
-      "Product_Recommendations_(Horizontal).html"
+      "Product_Recommendations_(Vertical).html"
     ]
   },
   {
     "id": "product-3-cta",
     "profile": "LINK_PRODUCT",
     "templates": [
-      "Product_Recommendations_(Horizontal).html"
+      "Product_Recommendations_(Vertical).html"
     ]
   },
   {
     "id": "product-3-description",
     "profile": "BODY",
     "templates": [
-      "Product_Recommendations_(Horizontal).html"
+      "Product_Recommendations_(Vertical).html"
     ]
   },
   {
     "id": "product-3-image",
     "profile": "IMAGE_PRODUCT",
     "templates": [
-      "Product_Recommendations_(Horizontal).html"
+      "Product_Recommendations_(Vertical).html"
     ]
   },
   {
     "id": "product-3-price",
     "profile": "BODY_MUTED",
     "templates": [
-      "Product_Recommendations_(Horizontal).html"
+      "Product_Recommendations_(Vertical).html"
     ]
   },
   {
     "id": "product-3-title",
     "profile": "HEADING_FEATURE",
     "templates": [
-      "Product_Recommendations_(Horizontal).html"
+      "Product_Recommendations_(Vertical).html"
     ]
   },
   {
     "id": "product-4-cta",
     "profile": "LINK_PRODUCT",
     "templates": [
-      "Product_Recommendations_(Horizontal).html"
+      "Product_Recommendations_(Vertical).html"
     ]
   },
   {
     "id": "product-4-description",
     "profile": "BODY",
     "templates": [
-      "Product_Recommendations_(Horizontal).html"
+      "Product_Recommendations_(Vertical).html"
     ]
   },
   {
     "id": "product-4-image",
     "profile": "IMAGE_PRODUCT",
     "templates": [
-      "Product_Recommendations_(Horizontal).html"
+      "Product_Recommendations_(Vertical).html"
     ]
   },
   {
     "id": "product-4-price",
     "profile": "BODY_MUTED",
     "templates": [
-      "Product_Recommendations_(Horizontal).html"
+      "Product_Recommendations_(Vertical).html"
     ]
   },
   {
     "id": "product-4-title",
     "profile": "HEADING_FEATURE",
     "templates": [
-      "Product_Recommendations_(Horizontal).html"
+      "Product_Recommendations_(Vertical).html"
     ]
   },
   {
@@ -1092,6 +1130,13 @@ export const EMAIL_MARKETING_STARTER_KIT_ELEMENT_REGISTRY: StarterKitElementEntr
     ]
   },
   {
+    "id": "product-image",
+    "profile": "IMAGE_PRODUCT",
+    "templates": [
+      "Promotional_Campaign.html"
+    ]
+  },
+  {
     "id": "product-price",
     "profile": "BODY_MUTED",
     "templates": [
@@ -1099,10 +1144,38 @@ export const EMAIL_MARKETING_STARTER_KIT_ELEMENT_REGISTRY: StarterKitElementEntr
     ]
   },
   {
+    "id": "product-rec-hero-cta",
+    "profile": "CTA_PRIMARY",
+    "templates": [
+      "Product_Recommendations.html"
+    ]
+  },
+  {
+    "id": "product-rec-hero-cta-button",
+    "profile": "CTA_PRIMARY_TD",
+    "templates": [
+      "Product_Recommendations.html"
+    ]
+  },
+  {
     "id": "product-title",
     "profile": "HEADING_HERO",
     "templates": [
       "Back_in_Stock_Notification.html"
+    ]
+  },
+  {
+    "id": "promo-main-cta",
+    "profile": "CTA_PRIMARY",
+    "templates": [
+      "Promotional_Campaign.html"
+    ]
+  },
+  {
+    "id": "promo-main-cta-button",
+    "profile": "CTA_PRIMARY_TD",
+    "templates": [
+      "Promotional_Campaign.html"
     ]
   },
   {
@@ -1186,14 +1259,15 @@ export const EMAIL_MARKETING_STARTER_KIT_ELEMENT_REGISTRY: StarterKitElementEntr
     "id": "recommendations-description",
     "profile": "BODY",
     "templates": [
-      "Product_Recommendations_(Horizontal).html"
+      "Product_Recommendations_(Vertical).html"
     ]
   },
   {
     "id": "recommendations-heading",
     "profile": "HEADING_HERO",
     "templates": [
-      "Product_Recommendations_(Horizontal).html"
+      "Product_Recommendations.html",
+      "Product_Recommendations_(Vertical).html"
     ]
   },
   {
@@ -1208,23 +1282,6 @@ export const EMAIL_MARKETING_STARTER_KIT_ELEMENT_REGISTRY: StarterKitElementEntr
     "profile": "HEADING_HERO",
     "templates": [
       "Promotional_Campaign.html"
-    ]
-  },
-  {
-    "id": "secondary-cta",
-    "profile": "CTA_SECONDARY",
-    "templates": [
-      "Back_in_Stock_Notification.html",
-      "Checkout_Abandonment_Email.html",
-      "Feature_Announcement.html",
-      "Newsletter_Editorial.html",
-      "Order_Confirmation_Email.html",
-      "Product_Launch.html",
-      "Product_Recommendations.html",
-      "Product_Recommendations_(Horizontal).html",
-      "Promotional_Campaign.html",
-      "Survey_&_Feedback.html",
-      "Welcome_&_Onboarding.html"
     ]
   },
   {
@@ -1349,6 +1406,13 @@ export const EMAIL_MARKETING_STARTER_KIT_ELEMENT_REGISTRY: StarterKitElementEntr
     ]
   },
   {
+    "id": "survey-cta-button",
+    "profile": "CTA_PRIMARY_TD",
+    "templates": [
+      "Survey_&_Feedback.html"
+    ]
+  },
+  {
     "id": "survey-description",
     "profile": "BODY",
     "templates": [
@@ -1360,6 +1424,13 @@ export const EMAIL_MARKETING_STARTER_KIT_ELEMENT_REGISTRY: StarterKitElementEntr
     "profile": "BODY_MUTED",
     "templates": [
       "Checkout_Abandonment_Email.html",
+      "Order_Confirmation_Email.html"
+    ]
+  },
+  {
+    "id": "tax-label",
+    "profile": "BODY_MUTED",
+    "templates": [
       "Order_Confirmation_Email.html"
     ]
   },
@@ -1477,22 +1548,15 @@ export const EMAIL_MARKETING_STARTER_KIT_ELEMENT_REGISTRY: StarterKitElementEntr
     ]
   },
   {
-    "id": "urgency-note",
-    "profile": "BODY_URGENCY_TEXT",
-    "templates": [
-      "Product_Launch.html"
-    ]
-  },
-  {
-    "id": "view-all-cta",
-    "profile": "CTA_PRIMARY",
-    "templates": [
-      "Product_Recommendations_(Horizontal).html"
-    ]
-  },
-  {
     "id": "welcome-description",
     "profile": "BODY",
+    "templates": [
+      "Welcome_&_Onboarding.html"
+    ]
+  },
+  {
+    "id": "welcome-heading",
+    "profile": "HEADING_SECTION",
     "templates": [
       "Welcome_&_Onboarding.html"
     ]
@@ -1507,9 +1571,7 @@ export const EMAIL_MARKETING_STARTER_KIT_PROFILE_BY_ELEMENT: Record<string, Elem
 
 export const EMAIL_MARKETING_STARTER_KIT_ELEMENTS_BY_TEMPLATE = {
   "Back_in_Stock_Notification.html": [
-    "cta-secondary",
-    "secondary-cta",
-    "cta-view-details",
+    "logo",
     "header-main-title",
     "header-subhead",
     "product-title",
@@ -1517,6 +1579,8 @@ export const EMAIL_MARKETING_STARTER_KIT_ELEMENTS_BY_TEMPLATE = {
     "product-price",
     "limited-stock-container",
     "limited-stock-message",
+    "back-in-stock-cta-button",
+    "back-in-stock-cta",
     "footer-company-name",
     "footer-address",
     "footer-tagline",
@@ -1536,10 +1600,9 @@ export const EMAIL_MARKETING_STARTER_KIT_ELEMENTS_BY_TEMPLATE = {
     "footer-copyright"
   ],
   "Checkout_Abandonment_Email.html": [
-    "cta-secondary",
-    "secondary-cta",
-    "cta-view-details",
     "logo",
+    "order-summary-heading",
+    "product-1-image",
     "product-1-name",
     "product-1-description",
     "product-1-price",
@@ -1549,6 +1612,7 @@ export const EMAIL_MARKETING_STARTER_KIT_ELEMENTS_BY_TEMPLATE = {
     "total-amount",
     "checkout-cta-heading",
     "checkout-subheading",
+    "checkout-cta-button",
     "checkout-button",
     "footer-company-name",
     "footer-address",
@@ -1569,9 +1633,6 @@ export const EMAIL_MARKETING_STARTER_KIT_ELEMENTS_BY_TEMPLATE = {
     "footer-copyright"
   ],
   "Feature_Announcement.html": [
-    "cta-secondary",
-    "secondary-cta",
-    "cta-view-details",
     "logo",
     "header-title",
     "header-subtitle",
@@ -1587,6 +1648,7 @@ export const EMAIL_MARKETING_STARTER_KIT_ELEMENTS_BY_TEMPLATE = {
     "getting-started-heading",
     "getting-started-highlight",
     "getting-started-instructions",
+    "cta-secondary",
     "cta-primary",
     "footer-company-name",
     "footer-address",
@@ -1606,16 +1668,46 @@ export const EMAIL_MARKETING_STARTER_KIT_ELEMENTS_BY_TEMPLATE = {
     "footer-contact",
     "footer-copyright"
   ],
-  "Newsletter_Editorial.html": [
-    "cta-secondary",
-    "secondary-cta",
-    "cta-view-details",
-    "header-tagline",
+  "Image_Powered.html": [
     "logo",
+    "header-title",
+    "header-subhead",
+    "image-1",
+    "image-2",
+    "image-3",
+    "image-4",
+    "image-5",
+    "cta-heading",
+    "cta-description",
+    "primary-cta-button",
+    "primary-cta",
+    "footer-company-name",
+    "footer-address",
+    "footer-tagline",
+    "footer-social-facebook",
+    "footer-social-twitter",
+    "footer-social-instagram",
+    "footer-social-linkedin",
+    "footer-link-privacy",
+    "footer-link-terms",
+    "footer-link-help",
+    "footer-link-unsubscribe",
+    "footer-icon-1",
+    "footer-icon-2",
+    "footer-icon-3",
+    "footer-icon-4",
+    "footer-contact",
+    "footer-copyright"
+  ],
+  "Newsletter_Editorial.html": [
+    "logo",
+    "header-tagline",
+    "hero-image",
     "featured-title",
     "featured-body",
     "featured-insight",
     "featured-insight-container",
+    "featured-cta-button",
     "featured-cta",
     "trending-heading",
     "trending-subhead",
@@ -1661,11 +1753,11 @@ export const EMAIL_MARKETING_STARTER_KIT_ELEMENTS_BY_TEMPLATE = {
     "footer-copyright"
   ],
   "Order_Confirmation_Email.html": [
-    "cta-secondary",
-    "secondary-cta",
-    "cta-view-details",
-    "order-date",
     "logo",
+    "header-title",
+    "order-number",
+    "order-date",
+    "product-1-image",
     "product-1-name",
     "product-1-description",
     "product-1-price",
@@ -1675,49 +1767,12 @@ export const EMAIL_MARKETING_STARTER_KIT_ELEMENTS_BY_TEMPLATE = {
     "subtotal-amount",
     "shipping-label",
     "shipping-amount",
+    "tax-label",
     "tax-amount",
     "total-label",
     "total-amount",
     "cta-track-order",
-    "footer-company-name",
-    "footer-address",
-    "footer-tagline",
-    "footer-social-facebook",
-    "footer-social-twitter",
-    "footer-social-instagram",
-    "footer-social-linkedin",
-    "footer-link-privacy",
-    "footer-link-terms",
-    "footer-link-help",
-    "footer-link-unsubscribe",
-    "footer-icon-1",
-    "footer-icon-2",
-    "footer-icon-3",
-    "footer-icon-4",
-    "footer-contact",
-    "footer-copyright"
-  ],
-  "Product_Launch.html": [
-    "cta-secondary",
-    "secondary-cta",
     "cta-view-details",
-    "header-kicker",
-    "launch-title",
-    "launch-subtitle",
-    "feature-1-title",
-    "feature-1-description",
-    "feature-2-title",
-    "feature-2-description",
-    "feature-3-title",
-    "feature-3-description",
-    "pricing-container",
-    "pricing-title",
-    "pricing-main",
-    "pricing-compare",
-    "pricing-note",
-    "pricing-cta-button",
-    "pricing-cta",
-    "urgency-note",
     "footer-company-name",
     "footer-address",
     "footer-tagline",
@@ -1737,30 +1792,36 @@ export const EMAIL_MARKETING_STARTER_KIT_ELEMENTS_BY_TEMPLATE = {
     "footer-copyright"
   ],
   "Product_Recommendations.html": [
-    "cta-secondary",
-    "secondary-cta",
-    "cta-view-details",
+    "logo",
+    "header-title",
     "header-subhead",
     "hero-title",
     "hero-description",
-    "logo",
+    "hero-image",
     "hero-price",
     "hero-compare-price",
+    "product-rec-hero-cta-button",
+    "product-rec-hero-cta",
+    "recommendations-heading",
     "arrival-1-title",
     "arrival-1-description",
     "arrival-1-price",
+    "arrival-1-cta-button",
     "arrival-1-cta",
     "arrival-2-title",
     "arrival-2-description",
     "arrival-2-price",
+    "arrival-2-cta-button",
     "arrival-2-cta",
     "arrival-3-title",
     "arrival-3-description",
     "arrival-3-price",
+    "arrival-3-cta-button",
     "arrival-3-cta",
     "arrival-4-title",
     "arrival-4-description",
     "arrival-4-price",
+    "arrival-4-cta-button",
     "arrival-4-cta",
     "footer-company-name",
     "footer-address",
@@ -1780,10 +1841,7 @@ export const EMAIL_MARKETING_STARTER_KIT_ELEMENTS_BY_TEMPLATE = {
     "footer-contact",
     "footer-copyright"
   ],
-  "Product_Recommendations_(Horizontal).html": [
-    "cta-secondary",
-    "secondary-cta",
-    "cta-view-details",
+  "Product_Recommendations_(Vertical).html": [
     "logo",
     "header-title",
     "header-subhead",
@@ -1809,7 +1867,6 @@ export const EMAIL_MARKETING_STARTER_KIT_ELEMENTS_BY_TEMPLATE = {
     "product-4-description",
     "product-4-price",
     "product-4-cta",
-    "view-all-cta",
     "footer-company-name",
     "footer-address",
     "footer-tagline",
@@ -1829,13 +1886,12 @@ export const EMAIL_MARKETING_STARTER_KIT_ELEMENTS_BY_TEMPLATE = {
     "footer-copyright"
   ],
   "Promotional_Campaign.html": [
-    "cta-secondary",
-    "secondary-cta",
-    "cta-view-details",
+    "logo",
     "hero-heading",
+    "hero-image",
     "sale-hero-heading",
     "sale-hero-description",
-    "logo",
+    "product-image",
     "deal-1-title",
     "deal-1-price",
     "deal-1-compare",
@@ -1844,6 +1900,8 @@ export const EMAIL_MARKETING_STARTER_KIT_ELEMENTS_BY_TEMPLATE = {
     "deal-2-price",
     "deal-2-compare",
     "deal-2-discount",
+    "promo-main-cta-button",
+    "promo-main-cta",
     "footer-company-name",
     "footer-address",
     "footer-tagline",
@@ -1863,12 +1921,10 @@ export const EMAIL_MARKETING_STARTER_KIT_ELEMENTS_BY_TEMPLATE = {
     "footer-copyright"
   ],
   "Survey_&_Feedback.html": [
-    "cta-secondary",
-    "secondary-cta",
-    "cta-view-details",
     "logo",
     "header-title",
     "survey-description",
+    "survey-cta-button",
     "survey-cta",
     "footer-company-name",
     "footer-address",
@@ -1889,11 +1945,11 @@ export const EMAIL_MARKETING_STARTER_KIT_ELEMENTS_BY_TEMPLATE = {
     "footer-copyright"
   ],
   "Welcome_&_Onboarding.html": [
-    "cta-secondary",
-    "secondary-cta",
-    "cta-view-details",
-    "header-subhead",
     "logo",
+    "header-title",
+    "header-subhead",
+    "hero-image",
+    "welcome-heading",
     "welcome-description",
     "step-1-number",
     "step-1-title",

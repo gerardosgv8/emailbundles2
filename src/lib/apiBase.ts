@@ -1,11 +1,5 @@
 /**
- * Resolves the Vercel API origin for checkout, verify-session, and downloads.
- *
- * Priority:
- * 1. VITE_API_URL at build time (.env.production, .env.development, or deploy command)
- * 2. GitHub Pages runtime fallback (when env was missing from an older build)
- * 3. Local Vite dev → deployed Vercel API (no `vercel dev` required for frontend work)
- * 4. Empty string only when none of the above apply
+ * Resolves the Vercel API origin for storefront API calls.
  */
 const PRODUCTION_API_URL = 'https://emailbundles2.vercel.app';
 
@@ -18,7 +12,12 @@ export function getApiBase(): string {
   if (typeof window !== 'undefined') {
     const { hostname } = window.location;
 
-    if (hostname.endsWith('.github.io') || hostname.endsWith('.github.dev')) {
+    if (
+      hostname === 'mailcraft.studio' ||
+      hostname === 'www.mailcraft.studio' ||
+      hostname.endsWith('.github.io') ||
+      hostname.endsWith('.github.dev')
+    ) {
       return PRODUCTION_API_URL;
     }
 

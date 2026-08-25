@@ -36,10 +36,14 @@ export const FIELD_PLACEHOLDERS: Partial<Record<DesignRulesField, string>> = {
   footerPhone: '+1 (555) 000-0000',
   footerTagline: 'Short footer line or trust message',
 
-  socialFacebook: 'https://facebook.com/your-page',
-  socialTwitter: 'https://x.com/your-handle',
-  socialInstagram: 'https://instagram.com/your-handle',
-  socialLinkedin: 'https://linkedin.com/company/your-company',
+  socialFacebook: 'https://…',
+  socialTwitter: 'https://…',
+  socialInstagram: 'https://…',
+  socialLinkedin: 'https://…',
+  socialFacebookText: 'LinkedIn',
+  socialTwitterText: 'Instagram',
+  socialInstagramText: 'YouTube',
+  socialLinkedinText: 'Blog',
 
   linkPrivacy: 'https://www.yourcompany.com/privacy',
   linkTerms: 'https://www.yourcompany.com/terms',

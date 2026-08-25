@@ -152,6 +152,9 @@ export function DocsPage() {
                 <Link to="/faq" className="btn btn-primary btn-sm">
                   Browse FAQ
                 </Link>
+                <Link to="/contact" className="btn btn-secondary btn-sm">
+                  Contact
+                </Link>
               </div>
             </div>
           </section>

@@ -393,11 +393,11 @@ function patchDualButtonVariants(html) {
 
   const secondaryReplacements = [
     [
-      /(<td align="center" class="mc-inline-btn" style="border-radius: 8px; background-color: #ffffff; border: 2px solid #2563eb; padding: 0;">\s*<a[^>]*data-element="cta-view-details")/g,
+      /(<td align="center" class="mc-inline-btn" style="border-radius: 8px; background-color: #ffffff;(?: border: 2px solid #2563eb;)? padding: 0;">\s*<a[^>]*data-element="cta-view-details")/g,
       '<td align="center" class="mc-inline-btn" data-brand-btn-variant="secondary" style="border-radius: 8px; background-color: #ffffff; border: 2px solid #2563eb; padding: 0;">\n                    <a data-element="cta-view-details"',
     ],
     [
-      /(<td align="center" class="mc-inline-btn" style="border-radius: 8px; background-color: #ffffff; border: 2px solid #2563eb; padding: 0;">\s*<a[^>]*data-element="cta-secondary")/g,
+      /(<td align="center" class="mc-inline-btn" style="border-radius: 8px; background-color: #ffffff;(?: border: 2px solid #2563eb;)? padding: 0;">\s*<a[^>]*data-element="cta-secondary")/g,
       '<td align="center" class="mc-inline-btn" data-brand-btn-variant="secondary" style="border-radius: 8px; background-color: #ffffff; border: 2px solid #2563eb; padding: 0;">\n                    <a data-element="cta-secondary"',
     ],
   ];

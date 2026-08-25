@@ -1,26 +1,44 @@
 /**
- * Vercel dashboard overrides sometimes run raw `vite build` (not npm scripts).
- * Copying node_modules/.bin/vite to /usr/local/bin breaks relative imports — install globally instead.
+ * Vercel dashboard / git deploys sometimes run raw `vite build` (not npm scripts),
+ * so `vite` is not on PATH. Prefer a shim that points at the local package.
  */
-import { execSync } from 'node:child_process';
-import { readFileSync } from 'node:fs';
+import { chmodSync, existsSync, mkdirSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { execSync } from 'node:child_process';
 
 if (process.env.VERCEL !== '1') {
   process.exit(0);
 }
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
-const pkg = JSON.parse(readFileSync(join(root, 'package.json'), 'utf8'));
-const viteRange = pkg.dependencies?.vite ?? pkg.devDependencies?.vite ?? '7.1.7';
-const version = viteRange.replace(/^[^\d]*/, '') || '7.1.7';
+const viteJs = join(root, 'node_modules/vite/bin/vite.js');
+
+if (!existsSync(viteJs)) {
+  console.warn('ensure-vercel-vite: local vite not installed, skip shim');
+  process.exit(0);
+}
+
+const shim = `#!/bin/sh
+exec node ${JSON.stringify(viteJs)} "$@"
+`;
+
+const destDirs = ['/usr/local/bin', '/usr/bin', join(root, 'node_modules/.bin')];
+
+for (const dir of destDirs) {
+  try {
+    mkdirSync(dir, { recursive: true });
+    const dest = join(dir, 'vite');
+    writeFileSync(dest, shim, { encoding: 'utf8' });
+    chmodSync(dest, 0o755);
+    console.log(`ensure-vercel-vite: wrote shim ${dest}`);
+  } catch (err) {
+    console.warn(`ensure-vercel-vite: could not write ${dir}:`, err?.message ?? err);
+  }
+}
 
 try {
-  execSync(`npm install -g vite@${version}`, { stdio: 'inherit' });
   execSync('vite --version', { stdio: 'inherit' });
-  console.log(`ensure-vercel-vite: vite@${version} available globally`);
-} catch (err) {
-  console.warn('ensure-vercel-vite: global vite install failed:', err?.message ?? err);
-  process.exit(0);
+} catch {
+  console.warn('ensure-vercel-vite: vite still not on PATH (harmless if buildCommand is npm run vercel-build)');
 }

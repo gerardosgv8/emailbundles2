@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Mailcraft Studio API</title>
+</head>
+<body>
+  <p>This host is the checkout API. The site lives at <a href="https://www.mailcraft.studio/">Mailcraft Studio</a>.</p>
+  <script>
+    (function () {
+      var host = location.hostname;
+      if (host === 'localhost' || host.endsWith('.vercel.app')) {
+        location.replace('https://www.mailcraft.studio/');
+      }
+    })();
+  </script>
+</body>
+</html>

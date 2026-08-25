@@ -34,8 +34,8 @@ export const FAQ_CATEGORIES: FaqCategory[] = [
         answer:
           'You can brand and fill the whole pack at once, or edit a single HTML file by hand. For the pack path: open Brand Wizard to apply logo, colors, and footer across the zip, then use Content Wizard to drop in campaign copy and download filled HTML. Prefer manual edits? Extract the zip, open the file that matches your campaign, swap copy and images, and paste the full HTML into your ESP. Host images on HTTPS and send a test before your full list.',
         related: [
-          { label: 'Brand Design Wizard', to: '/brand-wizard' },
-          { label: 'Content Wizard', to: '/content-wizard' },
+          { label: 'Brand Design Wizard', to: '/brand-wizard/email-marketing-starter-kit' },
+          { label: 'Content Wizard', to: '/content-wizard/email-marketing-starter-kit' },
           { label: 'Getting started guide', to: '/docs#getting-started' },
         ],
       },
@@ -45,8 +45,8 @@ export const FAQ_CATEGORIES: FaqCategory[] = [
         answer:
           'A little HTML familiarity helps, but you can update most text and images without writing code. Styles are inlined and commented. For brand colors and logos across a whole pack, use the Brand Design Wizard. For campaign copy, use the Content Wizard.',
         related: [
-          { label: 'Brand Design Wizard', to: '/brand-wizard' },
-          { label: 'Content Wizard', to: '/content-wizard' },
+          { label: 'Brand Design Wizard', to: '/brand-wizard/email-marketing-starter-kit' },
+          { label: 'Content Wizard', to: '/content-wizard/email-marketing-starter-kit' },
         ],
       },
       {
@@ -79,7 +79,7 @@ export const FAQ_CATEGORIES: FaqCategory[] = [
         answer:
           'Yes. Search for hex values in the HTML, or define tokens in the Brand Design Wizard and apply them to your zip. Export Design Rules so your team shares one brand reference.',
         related: [
-          { label: 'Open Brand Wizard', to: '/brand-wizard' },
+          { label: 'Open Brand Wizard', to: '/brand-wizard/email-marketing-starter-kit' },
           { label: 'Customization overview', to: '/docs#customization' },
         ],
       },
@@ -117,7 +117,17 @@ export const FAQ_CATEGORIES: FaqCategory[] = [
           'Open Brand Wizard, choose your bundle, fill the token steps, then on Review & export upload the zip and click Apply brand. Download the branded package. It includes your Design Rules file.',
         related: [
           { label: 'Apply brand guide', to: '/docs#bw-apply' },
-          { label: 'Open Brand Wizard', to: '/brand-wizard' },
+          { label: 'Open Brand Wizard', to: '/brand-wizard/email-marketing-starter-kit' },
+        ],
+      },
+      {
+        id: 'wizard-access',
+        question: 'How do I unlock the Brand and Content Wizards after purchase?',
+        answer:
+          'Wizards are for buyers only. Go to Unlock wizards (or follow the link on your purchase success page), enter the email and order number from your Lemon Squeezy receipt, and access lasts 30 days in this browser tab. Files still arrive by email from Lemon Squeezy; unlocking only gates the online wizards.',
+        related: [
+          { label: 'Unlock wizards', to: '/wizard-access' },
+          { label: 'Contact', to: '/contact' },
         ],
       },
       {
@@ -134,7 +144,7 @@ export const FAQ_CATEGORIES: FaqCategory[] = [
           'Use Content Wizard: pick the layout, edit fields, upload the matching HTML, then download the filled file. Toggle Shown / Hidden in email to drop optional blocks for this send.',
         related: [
           { label: 'Content Wizard guide', to: '/docs#content-wizard' },
-          { label: 'Open Content Wizard', to: '/content-wizard' },
+          { label: 'Open Content Wizard', to: '/content-wizard/email-marketing-starter-kit' },
         ],
       },
       {
@@ -188,7 +198,8 @@ export const FAQ_CATEGORIES: FaqCategory[] = [
         id: 'downloads',
         question: 'How do downloads work after I purchase?',
         answer:
-          'You get a personal download link by email and on the success page. Each order includes a limited number of attempts within a set window. Save the zip locally and don’t share the link. If access expires, contact support with your receipt.',
+          'After checkout, Lemon Squeezy emails your receipt. Save the zip locally. If the files are missing, contact us with the email you used at checkout and your receipt.',
+        related: [{ label: 'Contact', to: '/contact' }],
       },
       {
         id: 'client-work',
@@ -200,14 +211,16 @@ export const FAQ_CATEGORIES: FaqCategory[] = [
         id: 'refunds',
         question: 'What if I need a refund?',
         answer:
-          'If templates don’t meet the documented compatibility standards and we can’t resolve it, contact support within 14 days of purchase for a review. Digital product terms are covered in our Refund Policy.',
+          'If templates don’t meet the documented compatibility standards and we can’t resolve it, contact us within 14 days of purchase for a review. Digital product terms are covered in our Refund Policy.',
+        related: [{ label: 'Contact', to: '/contact' }],
       },
       {
         id: 'still-stuck',
         question: 'Where do I go if I’m still stuck?',
         answer:
-          'Start with Documentation for step-by-step wizard and ESP guides, then this FAQ for quick answers. If you still need help, use the contact path below with your order number and what you already tried.',
+          'Start with Documentation for step-by-step wizard and ESP guides, then this FAQ for quick answers. If you still need help, use the Contact page with your order number and what you already tried.',
         related: [
+          { label: 'Contact', to: '/contact' },
           { label: 'Documentation', to: '/docs' },
           { label: 'Brand Wizard troubleshooting', to: '/docs#bw-faq' },
           { label: 'Content Wizard troubleshooting', to: '/docs#cw-faq' },

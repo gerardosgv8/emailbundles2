@@ -1,64 +1,7 @@
-import { Link } from 'react-router-dom';
-import { TEMPLATE_BUNDLES } from '../data/templateBundles';
-import { wizardPath } from '../brand-wizard/wizardRoute';
+import { Navigate } from 'react-router-dom';
+import { storefrontBrandWizardPath } from '../brand-wizard/wizardRoute';
 
+/** Bundle picker retired while only one kit is offered — jump straight into the wizard. */
 export function BrandWizardSelectPage() {
-  return (
-    <main className="container section">
-      <div className="page-hero">
-        <h1>Brand Design Wizard</h1>
-        <p>
-          Step one of the Mailcraft path. Define logo, colors, buttons, and footer tokens, apply
-          them across your templates or bundle zip, and export your Design Rules. One brand pass. Whole
-          pack updated.
-        </p>
-      </div>
-
-      <div className="bundle-select-grid">
-        {TEMPLATE_BUNDLES.map((bundle) => (
-          <article
-            key={bundle.id}
-            className={`card bundle-select-card${bundle.wizardAvailable ? '' : ' bundle-select-card--soon'}`}
-          >
-            <div className="bundle-select-card-head">
-              <h3>{bundle.name}</h3>
-              {bundle.wizardAvailable ? (
-                <span className="bundle-select-badge bundle-select-badge--ready">Wizard ready</span>
-              ) : (
-                <span className="bundle-select-badge">Coming soon</span>
-              )}
-            </div>
-            <p>{bundle.description}</p>
-            {bundle.templateCount ? (
-              <p className="bundle-select-meta">{bundle.templateCount} templates</p>
-            ) : null}
-            <ul className="product-features">
-              {bundle.features.map((feature) => (
-                <li key={feature}>{feature}</li>
-              ))}
-            </ul>
-            {bundle.wizardAvailable ? (
-              <div className="bundle-select-actions">
-                <Link to={wizardPath(bundle.id)} className="btn btn-primary">
-                  Open Brand Wizard
-                </Link>
-              </div>
-            ) : (
-              <button type="button" className="btn btn-secondary" disabled>
-                Wizard coming soon
-              </button>
-            )}
-          </article>
-        ))}
-      </div>
-
-      <p className="text-center mt-8" style={{ color: 'var(--muted)', fontSize: '0.9rem' }}>
-        Need copy instead of colors?{' '}
-        <Link to="/content-wizard">Open Content Wizard</Link>
-        {' · '}
-        Don&apos;t have a bundle yet?{' '}
-        <Link to="/products">Browse products</Link>
-      </p>
-    </main>
-  );
+  return <Navigate to={storefrontBrandWizardPath()} replace />;
 }

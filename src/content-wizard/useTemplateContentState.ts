@@ -5,6 +5,7 @@ import {
   buildEmptyContentStore,
   getContentFieldsForTemplate,
 } from './contentFieldSchema';
+import { linkedVisibilityIds } from './contentVisibility';
 import type {
   ContentFieldValue,
   TemplateContentState,
@@ -71,10 +72,18 @@ export function useTemplateContentState(bundleId: string, templateFile: string) 
   }, []);
 
   const setFieldVisible = useCallback((fieldId: string, visible: boolean) => {
-    setStore((prev) => ({
-      ...prev,
-      visibility: { ...prev.visibility, [fieldId]: visible },
-    }));
+    setStore((prev) => {
+      const nextVisibility = { ...prev.visibility, [fieldId]: visible };
+      for (const linkedId of linkedVisibilityIds(fieldId)) {
+        if (linkedId in prev.visibility) {
+          nextVisibility[linkedId] = visible;
+        }
+      }
+      return {
+        ...prev,
+        visibility: nextVisibility,
+      };
+    });
   }, []);
 
   const mergeExtracted = useCallback(

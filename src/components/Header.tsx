@@ -1,19 +1,28 @@
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-
-const NAV_LINKS = [
-  { to: '/', label: 'Home', end: true },
-  { to: '/products', label: 'Products' },
-  { to: '/brand-wizard', label: 'Brand Wizard' },
-  { to: '/content-wizard', label: 'Content Wizard' },
-  // { to: '/testimonials', label: 'Testimonials' }, // saved for later
-  { to: '/faq', label: 'FAQ' },
-  { to: '/docs', label: 'Docs' },
-];
+import { storefrontBrandWizardPath } from '../brand-wizard/wizardRoute';
+import { storefrontContentWizardPath } from '../content-wizard/contentWizardRoute';
+import { resolveWizardHref } from '../lib/wizardNav';
+import { useWizardAccess } from '../wizard-access/WizardAccessProvider';
 
 export function Header() {
   const [open, setOpen] = useState(false);
   const location = useLocation();
+  const { status } = useWizardAccess();
+  const isAuthenticated = status === 'authenticated';
+
+  const brandWizardTo = resolveWizardHref(storefrontBrandWizardPath(), isAuthenticated);
+  const contentWizardTo = resolveWizardHref(storefrontContentWizardPath(), isAuthenticated);
+
+  const navLinks = [
+    { to: '/', label: 'Home', end: true },
+    { to: '/products', label: 'Products' },
+    { to: brandWizardTo, label: 'Brand Wizard' },
+    { to: contentWizardTo, label: 'Content Wizard' },
+    { to: '/faq', label: 'FAQ' },
+    { to: '/contact', label: 'Contact' },
+    { to: '/docs', label: 'Docs' },
+  ];
 
   useEffect(() => {
     setOpen(false);
@@ -28,9 +37,9 @@ export function Header() {
             Mailcraft Studio
           </Link>
           <nav className="nav-desktop" aria-label="Main">
-            {NAV_LINKS.map(({ to, label, end }) => (
+            {navLinks.map(({ to, label, end }) => (
               <NavLink
-                key={to}
+                key={label}
                 to={to}
                 end={end}
                 className={({ isActive }) => (isActive ? 'active' : undefined)}
@@ -39,7 +48,7 @@ export function Header() {
               </NavLink>
             ))}
             <Link to="/products" className="btn btn-primary btn-sm">
-              Browse bundles
+              View the kit
             </Link>
           </nav>
           <button
@@ -67,11 +76,11 @@ export function Header() {
           <button type="button" aria-label="Close menu" onClick={() => setOpen(false)}>&times;</button>
         </div>
         <nav className="nav-drawer-links">
-          {NAV_LINKS.map(({ to, label }) => (
-            <Link key={to} to={to}>{label}</Link>
+          {navLinks.map(({ to, label }) => (
+            <Link key={label} to={to}>{label}</Link>
           ))}
           <Link to="/products" className="btn btn-primary">
-            Browse bundles
+            View the kit
           </Link>
         </nav>
       </aside>

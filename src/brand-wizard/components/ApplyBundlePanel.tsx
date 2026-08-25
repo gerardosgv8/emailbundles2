@@ -15,6 +15,12 @@ function isAcceptedFile(file: File): boolean {
   return ACCEPTED_EXTENSIONS.some((ext) => name.endsWith(ext));
 }
 
+/** `EmailMarketing_StarterKit/Survey_&_Feedback.html` → `Survey_&_Feedback` */
+function templateDisplayName(path: string): string {
+  const base = path.split(/[/\\]/).pop() ?? path;
+  return base.replace(/\.html?$/i, '');
+}
+
 export function ApplyBundlePanel({ state, bundleId }: Props) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -99,9 +105,9 @@ export function ApplyBundlePanel({ state, bundleId }: Props) {
       <p className="card-note">
         Drop or upload a single .html template or a full bundle .zip. Mailcraft maps your wizard
         tokens to elements marked with <code>data-element</code> and returns a branded download
-        with your Design Rules file included. Filled CTAs use <strong>Primary bg</strong> and <strong>Primary text</strong> (one button per
-        template). Templates with two buttons also use <strong>Secondary</strong> tokens for the
-        outline button.
+        with your Design Rules file included. Prefer the original bundle zip (not a previously
+        branded export). Logo URL updates the header mark only — hero and product images stay as
+        placeholders until you set them in Content Wizard.
       </p>
 
       <div
@@ -133,7 +139,7 @@ export function ApplyBundlePanel({ state, bundleId }: Props) {
         <span className="apply-bundle-dropzone-icon" aria-hidden="true">↓</span>
         {selectedFile ? (
           <>
-            <strong>{selectedFile.name}</strong>
+            <strong title={selectedFile.name}>{selectedFile.name}</strong>
             <span>Drop a new file to replace, or click to browse</span>
           </>
         ) : (
@@ -155,18 +161,17 @@ export function ApplyBundlePanel({ state, bundleId }: Props) {
       {result ? (
         <div className="apply-bundle-report">
           <p className="apply-bundle-summary">
-            Applied <strong>{result.report.totalUpdates}</strong> update
-            {result.report.totalUpdates === 1 ? '' : 's'} across{' '}
-            <strong>{result.report.files.length}</strong> file
-            {result.report.files.length === 1 ? '' : 's'}.
+            Branded <strong>{result.report.files.length}</strong> template
+            {result.report.files.length === 1 ? '' : 's'}:
           </p>
           <ul className="apply-bundle-file-list">
             {result.report.files.map((file) => (
               <li key={file.path}>
-                <strong>{file.path}</strong>
-                <span>{file.updateCount} updates</span>
-                {file.touchedElements.length > 0 ? (
-                  <span className="apply-bundle-hooks">{file.touchedElements.join(', ')}</span>
+                <strong>{templateDisplayName(file.path)}</strong>
+                {file.touchedElements.some((id) => id === 'logo' || id === 'header-logo' || id === 'logo-raw') ? (
+                  <span className="apply-bundle-logo-ok"> · logo updated</span>
+                ) : state.logoUrl.trim() ? (
+                  <span className="apply-bundle-logo-miss"> · logo not found</span>
                 ) : null}
               </li>
             ))}

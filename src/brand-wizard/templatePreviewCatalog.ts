@@ -40,9 +40,9 @@ const B2C_ENTRIES: TemplatePreviewEntry[] = [
     label: 'Product Recommendations (Grid)',
   },
   {
-    key: 'Product_Recommendations (Horizontal)',
+    key: 'Product_Recommendations (Vertical)',
     screenshot: 'Product_Recommendations_(Horizontal).png',
-    label: 'Product Recommendations (Horizontal)',
+    label: 'Product Recommendations (Vertical)',
   },
   {
     key: 'Product_Recommendations',

@@ -165,14 +165,18 @@ Define your baseline brand settings here before customizing templates. Generated
 | **Footer heading color** | \`${d.footerHeadingColor}\` |
 | **Footer link color** | \`${d.footerLinkColor}\` |
 
-### Social links
+### Social & profile links
 
-| Platform | URL |
-|----------|-----|
-| Facebook | ${escMd(val(d.socialFacebook))} |
-| X (Twitter) | ${escMd(val(d.socialTwitter))} |
-| Instagram | ${escMd(val(d.socialInstagram))} |
-| LinkedIn | ${escMd(val(d.socialLinkedin))} |
+| Field | Value |
+|-------|-------|
+| Social link 1 text | ${escMd(val(d.socialFacebookText))} |
+| Social link 1 | ${escMd(val(d.socialFacebook))} |
+| Social link 2 text | ${escMd(val(d.socialTwitterText))} |
+| Social link 2 | ${escMd(val(d.socialTwitter))} |
+| Social link 3 text | ${escMd(val(d.socialInstagramText))} |
+| Social link 3 | ${escMd(val(d.socialInstagram))} |
+| Social link 4 text | ${escMd(val(d.socialLinkedinText))} |
+| Social link 4 | ${escMd(val(d.socialLinkedin))} |
 
 ### Legal & compliance links
 

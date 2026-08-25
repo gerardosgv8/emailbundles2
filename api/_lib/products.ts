@@ -1,42 +1,30 @@
-import { optional } from './env.js';
-
 /**
- * Maps storefront product ids → Stripe Price ID + R2 object key.
- * Set STRIPE_PRICE_* in Vercel env to match your Stripe Dashboard prices.
+ * Maps storefront product ids → Lemon Squeezy checkout.
  */
+
+import {
+  getLemonSqueezyCheckoutUrl,
+  LEMON_SQUEEZY_STARTER_KIT_CHECKOUT_URL_TEST,
+} from './lemonSqueezyConfig.js';
+
+export const STOREFRONT_PRODUCT_ID = 'email-marketing-starter-kit';
+
+export const LEMON_SQUEEZY_STARTER_KIT_CHECKOUT_URL = LEMON_SQUEEZY_STARTER_KIT_CHECKOUT_URL_TEST;
 
 export type ProductDefinition = {
   id: string;
   name: string;
-  r2Key: string;
-  stripePriceEnvVar: string;
+  lemonSqueezyCheckoutUrl: string;
 };
 
 export const PRODUCTS: ProductDefinition[] = [
   {
-    id: 'industrial-b2b',
-    name: 'Industrial B2B Bundle',
-    r2Key: 'industrial-b2b.zip',
-    stripePriceEnvVar: 'STRIPE_PRICE_INDUSTRIAL_B2B',
-  },
-  {
-    id: 'email-marketing-starter-kit',
+    id: STOREFRONT_PRODUCT_ID,
     name: 'Email Marketing Starter Kit',
-    r2Key: 'EmailMarketing_StarterKit.zip',
-    stripePriceEnvVar: 'STRIPE_PRICE_EMAIL_MARKETING_STARTER_KIT',
+    lemonSqueezyCheckoutUrl: getLemonSqueezyCheckoutUrl(),
   },
 ];
 
 export function getProduct(productId: string): ProductDefinition | undefined {
   return PRODUCTS.find((p) => p.id === productId);
-}
-
-export function getStripePriceId(product: ProductDefinition): string {
-  const priceId = optional(product.stripePriceEnvVar);
-  if (!priceId) {
-    throw new Error(
-      `Missing ${product.stripePriceEnvVar} for product "${product.id}". Create a Stripe Price and add the env var in Vercel.`,
-    );
-  }
-  return priceId;
 }

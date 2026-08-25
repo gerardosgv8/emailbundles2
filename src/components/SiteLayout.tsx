@@ -4,7 +4,8 @@ import { Header } from './Header';
 
 export function SiteLayout() {
   const { pathname } = useLocation();
-  const isWizard = /^\/brand-wizard\/[^/]+$/.test(pathname);
+  const isWizard =
+    /^\/brand-wizard\/[^/]+$/.test(pathname) || /^\/content-wizard\/[^/]+/.test(pathname);
 
   return (
     <>

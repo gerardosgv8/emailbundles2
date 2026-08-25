@@ -32,5 +32,5 @@ function run(nodeScript, args = []) {
 }
 
 await run(ghPagesCleanBin);
-await run(ghPagesBin, ['-d', 'dist']);
-console.log('Published to GitHub Pages');
+await run(ghPagesBin, ['-d', 'dist', '--cname', 'www.mailcraft.studio']);
+console.log('Published to GitHub Pages (https://www.mailcraft.studio)');

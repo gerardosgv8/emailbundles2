@@ -1,6 +1,6 @@
 /**
  * AUTO-GENERATED — do not edit by hand.
- * Source: FinalBundles/Industrial B2B Bundle/*.html
+ * Source: FinalBundles/EmailMarketing_B2B/*.html
  * Regenerate: node scripts/sync-industrial-bundle-registry.mjs
  */
 
@@ -73,7 +73,7 @@ export const INDUSTRIAL_B2B_ELEMENT_REGISTRY: BundleElementEntry[] = [
   },
   {
     "id": "cta-primary-button",
-    "profile": "BODY",
+    "profile": "CTA_PRIMARY_TD",
     "templates": [
       "02_Product_Update.html",
       "07_Product_Enablement_Guide.html"
@@ -88,7 +88,7 @@ export const INDUSTRIAL_B2B_ELEMENT_REGISTRY: BundleElementEntry[] = [
   },
   {
     "id": "cta-secondary-button",
-    "profile": "BODY",
+    "profile": "CTA_SECONDARY_TD",
     "templates": [
       "02_Product_Update.html"
     ]
@@ -824,8 +824,15 @@ export const INDUSTRIAL_B2B_ELEMENT_REGISTRY: BundleElementEntry[] = [
     "id": "logo",
     "profile": "LOGO",
     "templates": [
+      "01_Product_Launch.html",
       "02_Product_Update.html",
-      "07_Product_Enablement_Guide.html"
+      "03_Products_Horizontal.html",
+      "04_Products_Catalog_Grid.html",
+      "05_Event_Invitation.html",
+      "06_Service_Launch.html",
+      "07_Product_Enablement_Guide.html",
+      "08_Promotion.html",
+      "09_Company_Update.html"
     ]
   },
   {
@@ -1306,6 +1313,7 @@ export const INDUSTRIAL_B2B_PROFILE_BY_ELEMENT: Record<string, ElementApplyProfi
 
 export const INDUSTRIAL_B2B_ELEMENTS_BY_TEMPLATE = {
   "01_Product_Launch.html": [
+    "logo",
     "header-kicker",
     "hero-image",
     "launch-title",
@@ -1382,6 +1390,7 @@ export const INDUSTRIAL_B2B_ELEMENTS_BY_TEMPLATE = {
     "footer-copyright"
   ],
   "03_Products_Horizontal.html": [
+    "logo",
     "header-kicker",
     "header-subtitle",
     "recommendations-heading",
@@ -1420,6 +1429,7 @@ export const INDUSTRIAL_B2B_ELEMENTS_BY_TEMPLATE = {
     "footer-copyright"
   ],
   "04_Products_Catalog_Grid.html": [
+    "logo",
     "header-kicker",
     "header-subtitle",
     "hero-title",
@@ -1465,6 +1475,7 @@ export const INDUSTRIAL_B2B_ELEMENTS_BY_TEMPLATE = {
     "footer-copyright"
   ],
   "05_Event_Invitation.html": [
+    "logo",
     "header-kicker",
     "hero-image",
     "event-title",
@@ -1508,6 +1519,7 @@ export const INDUSTRIAL_B2B_ELEMENTS_BY_TEMPLATE = {
     "footer-copyright"
   ],
   "06_Service_Launch.html": [
+    "logo",
     "header-kicker",
     "hero-image",
     "launch-title",
@@ -1581,6 +1593,7 @@ export const INDUSTRIAL_B2B_ELEMENTS_BY_TEMPLATE = {
     "footer-copyright"
   ],
   "08_Promotion.html": [
+    "logo",
     "header-kicker",
     "header-subtitle",
     "hero-image",
@@ -1612,6 +1625,7 @@ export const INDUSTRIAL_B2B_ELEMENTS_BY_TEMPLATE = {
     "footer-copyright"
   ],
   "09_Company_Update.html": [
+    "logo",
     "header-kicker",
     "header-subtitle",
     "featured-image",

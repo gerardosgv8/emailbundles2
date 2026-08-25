@@ -21,12 +21,11 @@ const TEMPLATE_CATALOG: Omit<StarterKitTemplateInfo, 'elementCount'>[] = [
   { file: 'Order_Confirmation_Email.html', id: 'order-confirmation', name: 'Order Confirmation' },
   { file: 'Checkout_Abandonment_Email.html', id: 'checkout-abandonment', name: 'Checkout Abandonment' },
   { file: 'Back_in_Stock_Notification.html', id: 'back-in-stock', name: 'Back in Stock' },
-  { file: 'Product_Launch.html', id: 'product-launch', name: 'Product Launch' },
   { file: 'Promotional_Campaign.html', id: 'promotional-campaign', name: 'Promotional Campaign' },
   {
-    file: 'Product_Recommendations_(Horizontal).html',
-    id: 'product-recommendations-horizontal',
-    name: 'Product Recommendations (Horizontal)',
+    file: 'Product_Recommendations_(Vertical).html',
+    id: 'product-recommendations-vertical',
+    name: 'Product Recommendations (Vertical)',
   },
   {
     file: 'Product_Recommendations.html',
@@ -36,6 +35,7 @@ const TEMPLATE_CATALOG: Omit<StarterKitTemplateInfo, 'elementCount'>[] = [
   { file: 'Feature_Announcement.html', id: 'feature-announcement', name: 'Feature Announcement' },
   { file: 'Newsletter_Editorial.html', id: 'newsletter-editorial', name: 'Newsletter Editorial' },
   { file: 'Survey_&_Feedback.html', id: 'survey-feedback', name: 'Survey & Feedback' },
+  { file: 'Image_Powered.html', id: 'image-powered', name: 'Image Powered' },
 ];
 
 export const EMAIL_MARKETING_STARTER_KIT_TEMPLATES: StarterKitTemplateInfo[] = TEMPLATE_CATALOG.map((template) => ({
@@ -175,6 +175,10 @@ export const EMAIL_MARKETING_STARTER_KIT_TOKEN_ELEMENTS: Partial<Record<string, 
   socialTwitter: ['footer-social-twitter'],
   socialInstagram: ['footer-social-instagram'],
   socialLinkedin: ['footer-social-linkedin'],
+  socialFacebookText: ['footer-social-facebook'],
+  socialTwitterText: ['footer-social-twitter'],
+  socialInstagramText: ['footer-social-instagram'],
+  socialLinkedinText: ['footer-social-linkedin'],
   linkPrivacy: ['footer-link-privacy'],
   linkTerms: ['footer-link-terms'],
   linkHelp: ['footer-link-help'],

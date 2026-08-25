@@ -18,7 +18,7 @@ import {
 } from './industrialB2bApplyEngine';
 import { applyVmlBranding } from './applyVmlBranding';
 import { injectBrandStyleOverrides } from './injectBrandStyles';
-import { applyLinkDecorationPass } from './styleUtils';
+import { applyLinkDecorationPass, applyLogoInRawHtml, healLogoHooks } from './styleUtils';
 
 export type FileApplyResult = {
   path: string;
@@ -108,6 +108,11 @@ export function applyBrandToHtml(
     }
   }
 
+  // Heal mis-tagged logo hooks before dedicated logo pass (corrupted re-brand zips).
+  if (healLogoHooks(doc) > 0) {
+    touched.add('logo-hooks-healed');
+  }
+
   if (applyHeaderLogo(doc, state)) {
     updateCount += 1;
     touched.add('header-logo');
@@ -138,6 +143,22 @@ export function applyBrandToHtml(
   let serialized = hasHtmlShell
     ? `<!DOCTYPE html>\n${doc.documentElement.outerHTML}`
     : doc.body.innerHTML;
+
+  // Outlook conditional-comment logos never enter the DOM — patch them in the serialized HTML.
+  if (state.logoUrl.trim()) {
+    const { html: withLogos, updated } = applyLogoInRawHtml(
+      serialized,
+      state.logoUrl,
+      state.logoAlt,
+      state.logoWidth,
+      state.logoHeight,
+    );
+    serialized = withLogos;
+    if (updated > 0) {
+      updateCount += updated;
+      touched.add('logo-raw');
+    }
+  }
 
   if (bundleId === 'email-marketing-starter-kit') {
     const { html: withVml, updateCount: vmlUpdates } = applyVmlBranding(

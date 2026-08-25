@@ -4,6 +4,9 @@ node_modules
 # Build output (Vite + gh-pages deploy artifact)
 dist
 
+# Large source assets kept locally (deploy uses optimized public/ copies)
+assets-source/
+
 # Commercial template source — ship via R2 after purchase, not in public repo
 FinalBundles
 

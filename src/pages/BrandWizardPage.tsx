@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useState } from 'react';
 import { Link, Navigate, useParams } from 'react-router-dom';
 import { getTemplateBundle } from '../data/templateBundles';
-import { parseWizardBundleId, isLegacyEnhancedRoute, wizardPath } from '../brand-wizard/wizardRoute';
+import { parseWizardBundleId, isLegacyEnhancedRoute, wizardPath, storefrontBrandWizardPath } from '../brand-wizard/wizardRoute';
 import { getWizardSteps, getChecklistItems } from '../brand-wizard/defaults';
 import { downloadDesignRules } from '../brand-wizard/exportDesignRules';
 import { useDesignRulesState } from '../brand-wizard/useDesignRulesState';
@@ -54,7 +54,18 @@ function WizardPreview({
       <h3>Live preview</h3>
       <div className="preview-email">
         <div className="p-header" style={{ background: d.colorBgEmail }}>
-          <img src={d.logoUrl} alt="" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
+          {d.logoUrl.trim() ? (
+            <img
+              src={d.logoUrl}
+              alt={d.logoAlt || d.brandName || 'Logo'}
+              onError={(e) => {
+                const img = e.target as HTMLImageElement;
+                img.style.display = 'none';
+              }}
+            />
+          ) : (
+            <div className="p-logo-placeholder">Logo URL</div>
+          )}
           <div style={{ fontWeight: 700, fontSize: 18, color: d.colorHeaderKicker }}>
             {d.brandName || 'Your company name'}
           </div>
@@ -145,7 +156,7 @@ function StepContent({
         <>
           <WizardCard title="Logo assets">
             <div className="field-grid">
-              <TextField bundleId={bundleId} fieldKey="logoUrl" label="Logo URL" type="url" full {...m('logoUrl')} value={state.logoUrl} onChange={set} />
+              <TextField bundleId={bundleId} fieldKey="logoUrl" label="Logo URL" full {...m('logoUrl')} value={state.logoUrl} onChange={set} />
               <TextField bundleId={bundleId} fieldKey="logoAlt" label="Logo alt text" {...m('logoAlt')} value={state.logoAlt} onChange={set} />
               <TextField bundleId={bundleId} fieldKey="logoWidth" label="Display width" {...m('logoWidth')} value={state.logoWidth} onChange={set} />
               <TextField bundleId={bundleId} fieldKey="logoHeight" label="Display height" {...m('logoHeight')} value={state.logoHeight} onChange={set} />
@@ -272,12 +283,20 @@ function StepContent({
               <ColorField bundleId={bundleId} fieldKey="footerLinkColor" label="Footer links" {...m('footerLinkColor')} value={state.footerLinkColor} onChange={set} />
             </div>
           </WizardCard>
-          <WizardCard title="Social links">
+          <WizardCard title="Social & profile links">
+            <p className="card-note">
+              Four open slots for any profile or community links. Set the visible link text and URL for each;
+              leave unused slots blank.
+            </p>
             <div className="field-grid">
-              <TextField bundleId={bundleId} fieldKey="socialFacebook" label="Facebook" type="url" {...m('socialFacebook')} value={state.socialFacebook} onChange={set} />
-              <TextField bundleId={bundleId} fieldKey="socialTwitter" label="X (Twitter)" type="url" {...m('socialTwitter')} value={state.socialTwitter} onChange={set} />
-              <TextField bundleId={bundleId} fieldKey="socialInstagram" label="Instagram" type="url" {...m('socialInstagram')} value={state.socialInstagram} onChange={set} />
-              <TextField bundleId={bundleId} fieldKey="socialLinkedin" label="LinkedIn" type="url" {...m('socialLinkedin')} value={state.socialLinkedin} onChange={set} />
+              <TextField bundleId={bundleId} fieldKey="socialFacebookText" label="Link 1 text" {...m('socialFacebookText')} value={state.socialFacebookText} onChange={set} />
+              <TextField bundleId={bundleId} fieldKey="socialFacebook" label="Link 1 URL" type="url" {...m('socialFacebook')} value={state.socialFacebook} onChange={set} />
+              <TextField bundleId={bundleId} fieldKey="socialTwitterText" label="Link 2 text" {...m('socialTwitterText')} value={state.socialTwitterText} onChange={set} />
+              <TextField bundleId={bundleId} fieldKey="socialTwitter" label="Link 2 URL" type="url" {...m('socialTwitter')} value={state.socialTwitter} onChange={set} />
+              <TextField bundleId={bundleId} fieldKey="socialInstagramText" label="Link 3 text" {...m('socialInstagramText')} value={state.socialInstagramText} onChange={set} />
+              <TextField bundleId={bundleId} fieldKey="socialInstagram" label="Link 3 URL" type="url" {...m('socialInstagram')} value={state.socialInstagram} onChange={set} />
+              <TextField bundleId={bundleId} fieldKey="socialLinkedinText" label="Link 4 text" {...m('socialLinkedinText')} value={state.socialLinkedinText} onChange={set} />
+              <TextField bundleId={bundleId} fieldKey="socialLinkedin" label="Link 4 URL" type="url" {...m('socialLinkedin')} value={state.socialLinkedin} onChange={set} />
             </div>
           </WizardCard>
           <WizardCard title="Legal links">
@@ -365,7 +384,7 @@ export function BrandWizardPage() {
   }
 
   if (!bundleId || !bundle || !bundle.wizardAvailable) {
-    return <Navigate to="/brand-wizard" replace />;
+    return <Navigate to={storefrontBrandWizardPath()} replace />;
   }
 
   return <BrandWizardEditor bundle={bundle} />;
@@ -437,7 +456,7 @@ function BrandWizardEditor({
     <>
       <div className="wizard-app">
         <aside className="sidebar">
-          <Link to="/brand-wizard" className="wizard-bundle-back">← All bundles</Link>
+          <Link to="/" className="wizard-bundle-back">← Home</Link>
 
           <div className="wizard-sidebar-desktop">
             <h1>{bundle.name}</h1>

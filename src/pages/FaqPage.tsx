@@ -2,9 +2,17 @@ import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { AccordionGroup } from '../components/Accordion';
 import { FAQ_CATEGORIES, FAQ_QUICK_LINKS } from '../data/faq';
+import { storefrontBrandWizardPath } from '../brand-wizard/wizardRoute';
+import { storefrontContentWizardPath } from '../content-wizard/contentWizardRoute';
+import { resolveWizardHref } from '../lib/wizardNav';
+import { useWizardAccess } from '../wizard-access/WizardAccessProvider';
 
 export function FaqPage() {
   const [query, setQuery] = useState('');
+  const { status } = useWizardAccess();
+  const isAuthenticated = status === 'authenticated';
+  const brandWizardTo = resolveWizardHref(storefrontBrandWizardPath(), isAuthenticated);
+  const contentWizardTo = resolveWizardHref(storefrontContentWizardPath(), isAuthenticated);
 
   const matchCount = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -74,12 +82,9 @@ export function FaqPage() {
               <Link to="/docs" className="btn btn-primary btn-sm">
                 View documentation
               </Link>
-              <a
-                className="btn btn-secondary btn-sm faq-sidebar-secondary"
-                href="mailto:support@mailcraftstudio.com?subject=Mailcraft%20support"
-              >
-                Email support
-              </a>
+              <Link to="/contact" className="btn btn-secondary btn-sm faq-sidebar-secondary">
+                Contact
+              </Link>
             </div>
           </aside>
 
@@ -108,19 +113,16 @@ export function FaqPage() {
               <h2>Still need help?</h2>
               <p>
                 If your question isn’t listed, check the docs for step-by-step wizard guides, or
-                contact support with what you tried and your order number (if you have one).
+                contact us with what you tried and your order number (if you have one).
               </p>
             </div>
             <div className="faq-escalation-actions">
               <Link to="/docs" className="btn btn-primary">
                 Read documentation
               </Link>
-              <a
-                className="btn btn-secondary"
-                href="mailto:support@mailcraftstudio.com?subject=Mailcraft%20support"
-              >
-                Contact support
-              </a>
+              <Link to="/contact" className="btn btn-secondary">
+                Contact
+              </Link>
             </div>
           </div>
 
@@ -128,22 +130,22 @@ export function FaqPage() {
             <div className="card card-muted">
               <h3>Brand Design Wizard</h3>
               <p>Apply logo, colors, and footer tokens across a template bundle.</p>
-              <Link to="/brand-wizard" className="btn btn-secondary btn-sm" style={{ marginTop: '1rem' }}>
+              <Link to={brandWizardTo} className="btn btn-secondary btn-sm" style={{ marginTop: '1rem' }}>
                 Open Brand Wizard
               </Link>
             </div>
             <div className="card card-muted">
               <h3>Content Wizard</h3>
               <p>Fill headlines, body, and CTAs, then download filled HTML.</p>
-              <Link to="/content-wizard" className="btn btn-secondary btn-sm" style={{ marginTop: '1rem' }}>
+              <Link to={contentWizardTo} className="btn btn-secondary btn-sm" style={{ marginTop: '1rem' }}>
                 Open Content Wizard
               </Link>
             </div>
             <div className="card card-muted">
-              <h3>Template bundles</h3>
-              <p>B2B, ecommerce, and starter packs built for real campaigns.</p>
+              <h3>Email Marketing Starter Kit</h3>
+              <p>Eleven production templates for welcome, cart recovery, launches, and more.</p>
               <Link to="/products" className="btn btn-secondary btn-sm" style={{ marginTop: '1rem' }}>
-                View products
+                View product
               </Link>
             </div>
           </div>

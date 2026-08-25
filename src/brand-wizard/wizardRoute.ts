@@ -1,3 +1,5 @@
+import { STOREFRONT_BUNDLE_ID } from '../data/templateBundles';
+
 const ENHANCED_SUFFIX = '-enhanced';
 
 /** Strip legacy `-enhanced` suffix from route param. */
@@ -16,4 +18,9 @@ export function isLegacyEnhancedRoute(routeBundleId: string | undefined): boolea
 
 export function wizardPath(bundleId: string): string {
   return `/brand-wizard/${bundleId}`;
+}
+
+/** Brand Wizard entry for the storefront kit (skips bundle picker). */
+export function storefrontBrandWizardPath(): string {
+  return wizardPath(STOREFRONT_BUNDLE_ID);
 }

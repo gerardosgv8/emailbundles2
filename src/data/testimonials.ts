@@ -13,7 +13,7 @@ export interface Testimonial {
 export const TESTIMONIAL_STATS = [
   { value: '500+', label: 'Marketing teams' },
   { value: '18%', label: 'Avg. CTR lift reported' },
-  { value: '9', label: 'Templates per bundle' },
+  { value: '11', label: 'Templates in the kit' },
   { value: '4.9/5', label: 'Customer satisfaction' },
 ];
 
@@ -48,7 +48,7 @@ export const TESTIMONIALS: Testimonial[] = [
   },
   {
     id: 'elena',
-    quote: 'The Industrial B2B bundle matched our brand tone out of the box. The Brand Design Wizard gave us Design Rules our whole team could follow without guessing hex codes.',
+    quote: 'The Email Marketing Starter Kit matched our brand tone out of the box. The Brand Design Wizard gave us Design Rules our whole team could follow without guessing hex codes.',
     name: 'Elena Whitfield',
     role: 'Director of Communications',
     company: 'ForgeLine Industrial',

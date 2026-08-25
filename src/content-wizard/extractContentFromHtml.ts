@@ -1,12 +1,21 @@
-import { getContentFieldsForTemplate } from './contentFieldSchema';
+import { contentFieldHookIds, getContentFieldsForTemplate } from './contentFieldSchema';
 import { profileToContentKind } from './contentProfiles';
 import { getContentBundleConfig } from './bundleContentConfig';
 import { extractVisibilityFromHtml } from './contentVisibility';
-import type { ContentFieldValue, TemplateContentState, TemplateVisibilityState } from './types';
+import type {
+  ContentFieldDef,
+  ContentFieldValue,
+  TemplateContentState,
+  TemplateVisibilityState,
+} from './types';
 
 function readText(el: Element): string {
   if (el.tagName === 'IMG') return '';
   return (el.innerHTML ?? '').trim();
+}
+
+function readPlainText(el: Element | null): string {
+  return (el?.textContent ?? '').replace(/\s+/g, ' ').trim();
 }
 
 function readCtaOrLink(el: Element): { text: string; href: string } {
@@ -20,12 +29,20 @@ function readCtaOrLink(el: Element): { text: string; href: string } {
   };
 }
 
-function readImage(el: Element): { src: string; alt: string } {
+function readImage(el: Element): { src: string; alt: string; href: string } {
   const img = el.tagName === 'IMG' ? el : el.querySelector('img');
-  if (!img) return { src: '', alt: '' };
+  if (!img) return { src: '', alt: '', href: '' };
+
+  const parentAnchor = img.closest('a');
+  const href =
+    parentAnchor?.getAttribute('href') ??
+    img.getAttribute('data-href') ??
+    '';
+
   return {
     src: img.getAttribute('src') ?? '',
     alt: img.getAttribute('alt') ?? '',
+    href,
   };
 }
 
@@ -46,6 +63,30 @@ function extractElementValue(el: Element, kind: ReturnType<typeof profileToConte
   }
 }
 
+function extractFieldValue(
+  doc: Document,
+  field: ContentFieldDef,
+  profileByElement: Record<string, string>,
+): ContentFieldValue | null {
+  if (field.kind === 'labelValue' && field.labelElementId && field.valueElementId) {
+    const labelEl = doc.querySelector(`[data-element="${field.labelElementId}"]`);
+    const valueEl = doc.querySelector(`[data-element="${field.valueElementId}"]`);
+    if (!labelEl && !valueEl) return null;
+    return {
+      label: readPlainText(labelEl),
+      value: readPlainText(valueEl),
+    };
+  }
+
+  const el = doc.querySelector(`[data-element="${field.id}"]`);
+  if (!el) return null;
+
+  const profile = profileByElement[field.id] ?? field.profile;
+  const kind = profileToContentKind(profile) ?? field.kind;
+  if (kind === 'labelValue') return null;
+  return extractElementValue(el, kind);
+}
+
 export function extractContentFromHtml(
   html: string,
   bundleId: string,
@@ -55,24 +96,23 @@ export function extractContentFromHtml(
   const fields = getContentFieldsForTemplate(bundleId, templateFile);
   const doc = new DOMParser().parseFromString(html, 'text/html');
   const values: TemplateContentState = {};
-  const fieldIds = fields.map((field) => field.id);
 
   for (const field of fields) {
-    const el = doc.querySelector(`[data-element="${field.id}"]`);
-    if (!el) continue;
-
-    const profile = profileByElement[field.id] ?? field.profile;
-    const kind = profileToContentKind(profile) ?? field.kind;
-    const value = extractElementValue(el, kind);
+    const value = extractFieldValue(doc, field, profileByElement);
     if (value !== null) {
       values[field.id] = value;
     }
   }
 
-  return {
-    values,
-    visibility: extractVisibilityFromHtml(doc, fieldIds),
-  };
+  const visibilitySeedIds = fields.flatMap((field) => contentFieldHookIds(field));
+  const rawVisibility = extractVisibilityFromHtml(doc, visibilitySeedIds);
+  const visibility: TemplateVisibilityState = {};
+  for (const field of fields) {
+    const hooks = contentFieldHookIds(field);
+    visibility[field.id] = hooks.every((hookId) => rawVisibility[hookId] !== false);
+  }
+
+  return { values, visibility };
 }
 
 export function detectTemplateFileFromHtml(html: string, bundleId: string): string | undefined {

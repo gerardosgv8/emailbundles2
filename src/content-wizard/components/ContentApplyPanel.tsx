@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { applyContentToHtml } from '../applyContentToHtml';
 import { matchTemplateFileFromUploadName } from '../bundleContentConfig';
 import { detectTemplateFileFromHtml, extractContentFromHtml } from '../extractContentFromHtml';
@@ -11,7 +11,8 @@ type Props = {
   values: TemplateContentState;
   visibility: TemplateVisibilityState;
   sourceHtml: string | null;
-  onSourceHtmlChange: (html: string | null) => void;
+  uploadName: string | null;
+  onSourceHtmlChange: (html: string | null, uploadName?: string | null) => void;
   onExtracted: (values: TemplateContentState, visibility: TemplateVisibilityState) => void;
 };
 
@@ -21,6 +22,7 @@ export function ContentApplyPanel({
   values,
   visibility,
   sourceHtml,
+  uploadName,
   onSourceHtmlChange,
   onExtracted,
 }: Props) {
@@ -29,7 +31,13 @@ export function ContentApplyPanel({
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [report, setReport] = useState<ContentApplyReport | null>(null);
-  const [uploadName, setUploadName] = useState<string | null>(null);
+
+  useEffect(() => {
+    setError(null);
+    setReport(null);
+    setDragging(false);
+    if (inputRef.current) inputRef.current.value = '';
+  }, [templateFile]);
 
   const hiddenCount = Object.values(visibility).filter((visible) => !visible).length;
 
@@ -64,8 +72,7 @@ export function ContentApplyPanel({
       }
 
       const extracted = extractContentFromHtml(html, bundleId, templateFile);
-      onSourceHtmlChange(html);
-      setUploadName(file.name);
+      onSourceHtmlChange(html, file.name);
       onExtracted(extracted.values, extracted.visibility);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Could not read the template file.');
@@ -99,16 +106,24 @@ export function ContentApplyPanel({
     }
   };
 
+  const compact = Boolean(sourceHtml);
+
   return (
-    <div className="w-card apply-bundle-panel content-apply-panel">
-      <h3>Apply &amp; download</h3>
-      <p className="card-note">
-        Upload the matching <code>{templateFile}</code> from your bundle. Hidden elements export with{' '}
-        <code>display: none</code> on their layout row or cell so spacing collapses.
-      </p>
+    <div
+      className={`w-card apply-bundle-panel content-apply-panel${compact ? ' content-apply-panel--compact' : ''}`}
+    >
+      {!compact ? (
+        <>
+          <h3>Apply &amp; download</h3>
+          <p className="card-note">
+            Upload the matching <code>{templateFile}</code> from your bundle. Hidden elements export with{' '}
+            <code>display: none</code> on their layout row or cell so spacing collapses.
+          </p>
+        </>
+      ) : null}
 
       <div
-        className={`apply-bundle-dropzone${dragging ? ' apply-bundle-dropzone--active' : ''}`}
+        className={`apply-bundle-dropzone${dragging ? ' apply-bundle-dropzone--active' : ''}${uploadName ? ' apply-bundle-dropzone--filled' : ''}${compact ? ' apply-bundle-dropzone--compact' : ''}`}
         onDragOver={(e) => {
           e.preventDefault();
           setDragging(true);
@@ -120,10 +135,29 @@ export function ContentApplyPanel({
           void readFile(e.dataTransfer.files?.[0]);
         }}
       >
-        <p>{uploadName ? `Loaded: ${uploadName}` : 'Drop template .html here'}</p>
-        <button type="button" className="btn btn-secondary btn-sm" onClick={() => inputRef.current?.click()} disabled={busy}>
-          Browse file
-        </button>
+        {compact ? (
+          <button
+            type="button"
+            className="content-apply-replace-btn"
+            onClick={() => inputRef.current?.click()}
+            disabled={busy}
+            title={uploadName ?? templateFile}
+          >
+            Replace file
+          </button>
+        ) : uploadName ? (
+          <>
+            <span>Loaded</span>
+            <strong title={uploadName}>{uploadName}</strong>
+          </>
+        ) : (
+          <p>Drop template .html here</p>
+        )}
+        {!compact ? (
+          <button type="button" className="btn btn-secondary btn-sm" onClick={() => inputRef.current?.click()} disabled={busy}>
+            Browse file
+          </button>
+        ) : null}
         <input
           ref={inputRef}
           type="file"
@@ -133,7 +167,7 @@ export function ContentApplyPanel({
         />
       </div>
 
-      {hiddenCount > 0 ? (
+      {!compact && hiddenCount > 0 ? (
         <p className="card-note content-hidden-note">
           {hiddenCount} element{hiddenCount === 1 ? '' : 's'} will be hidden in the exported email.
         </p>
@@ -146,7 +180,7 @@ export function ContentApplyPanel({
       </div>
 
       {error ? <p className="apply-bundle-error">{error}</p> : null}
-      {report ? (
+      {!compact && report ? (
         <p className="apply-bundle-success">
           Updated {report.updateCount} element{report.updateCount === 1 ? '' : 's'} across{' '}
           {report.touchedElements.length} hook{report.touchedElements.length === 1 ? '' : 's'}.

@@ -1,7 +1,16 @@
 import { Link } from 'react-router-dom';
+import { storefrontBrandWizardPath } from '../brand-wizard/wizardRoute';
+import { storefrontContentWizardPath } from '../content-wizard/contentWizardRoute';
+import { resolveWizardHref } from '../lib/wizardNav';
+import { useWizardAccess } from '../wizard-access/WizardAccessProvider';
 
 export function Footer() {
   const year = new Date().getFullYear();
+  const { status } = useWizardAccess();
+  const isAuthenticated = status === 'authenticated';
+
+  const brandWizardTo = resolveWizardHref(storefrontBrandWizardPath(), isAuthenticated);
+  const contentWizardTo = resolveWizardHref(storefrontContentWizardPath(), isAuthenticated);
 
   return (
     <footer className="site-footer">
@@ -20,9 +29,10 @@ export function Footer() {
           <h6>Resources</h6>
           <ul>
             <li><Link to="/docs">Documentation</Link></li>
-            <li><Link to="/brand-wizard">Brand Design Wizard</Link></li>
-            <li><Link to="/content-wizard">Content Wizard</Link></li>
+            <li><Link to={brandWizardTo}>Brand Design Wizard</Link></li>
+            <li><Link to={contentWizardTo}>Content Wizard</Link></li>
             <li><Link to="/faq">FAQ</Link></li>
+            <li><Link to="/wizard-access">Unlock wizards</Link></li>
           </ul>
         </div>
         <div>

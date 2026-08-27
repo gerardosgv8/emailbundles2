@@ -152,19 +152,23 @@ function setTargetVisibility(target: HTMLElement, visible: boolean): void {
       target.removeAttribute(CONTENT_PREV_STYLE_ATTR);
       return;
     }
-    removeStylePropertiesFromElement(target, [
-      'display',
-      'max-height',
-      'overflow',
-      'height',
-      'font-size',
-      'line-height',
-      'mso-hide',
-      'padding',
-      'margin',
-      'border',
-      'border-width',
-    ]);
+    removeStylePropertiesFromElement(
+      target,
+      [
+        'display',
+        'max-height',
+        'overflow',
+        'height',
+        'font-size',
+        'line-height',
+        'mso-hide',
+        'padding',
+        'margin',
+        'border',
+        'border-width',
+      ],
+      { allowStructural: true },
+    );
     return;
   }
 
@@ -486,7 +490,7 @@ export function applyContentVisibility(el: Element, visible: boolean): void {
       if (el.hasAttribute(CONTENT_PREV_STYLE_ATTR)) {
         setTargetVisibility(el as HTMLElement, true);
       } else {
-        removeStylePropertiesFromElement(el, ['display']);
+        removeStylePropertiesFromElement(el, ['display'], { allowStructural: true });
       }
     }
     return;

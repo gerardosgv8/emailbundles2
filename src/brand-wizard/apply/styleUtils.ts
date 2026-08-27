@@ -9,11 +9,67 @@ export function markUserStyled(el: Element, opts: { bg?: boolean; text?: boolean
   if (opts.text) el.setAttribute('data-user-text-color', '');
 }
 
+/**
+ * Layout / spacing / type metrics. Color and fill toggles must never clear these
+ * unless a caller opts in *and* has already written replacements onto the pill surface.
+ */
+export const STRUCTURAL_STYLE_PROPERTIES = [
+  'padding',
+  'padding-top',
+  'padding-right',
+  'padding-bottom',
+  'padding-left',
+  'margin',
+  'margin-top',
+  'margin-right',
+  'margin-bottom',
+  'margin-left',
+  'border-radius',
+  'width',
+  'height',
+  'min-width',
+  'max-width',
+  'line-height',
+  'font-size',
+  'font-weight',
+  'font-family',
+  'display',
+  'vertical-align',
+  'letter-spacing',
+  'white-space',
+] as const;
+
+const STRUCTURAL_STYLE_SET = new Set<string>(STRUCTURAL_STYLE_PROPERTIES);
+
+/** Paint tokens that brand apply may rewrite freely. */
+export const VISUAL_FILL_STYLE_PROPERTIES = [
+  'background-color',
+  'border',
+  'border-color',
+  'border-width',
+  'border-style',
+] as const;
+
+export function isStructuralStyleProperty(property: string): boolean {
+  return STRUCTURAL_STYLE_SET.has(property.toLowerCase());
+}
+
 /** Remove inline declarations from a style attribute (email-safe string edit). */
-export function removeStylePropertiesFromElement(el: Element, properties: string[]) {
+export function removeStylePropertiesFromElement(
+  el: Element,
+  properties: string[],
+  opts: { allowStructural?: boolean } = {},
+) {
+  const filtered = opts.allowStructural
+    ? properties
+    : properties.filter((property) => !isStructuralStyleProperty(property));
+
+  if (filtered.length === 0) return;
+
   let style = el.getAttribute('style') ?? '';
-  for (const property of properties) {
+  for (const property of filtered) {
     const escaped = property.replace(/-/g, '\\-');
+    // Exact property name only — `border` must not match `border-radius`.
     const re = new RegExp(`(?:^|;)\\s*${escaped}\\s*:\\s*[^;]*`, 'gi');
     style = style.replace(re, '');
   }
@@ -21,19 +77,69 @@ export function removeStylePropertiesFromElement(el: Element, properties: string
   el.setAttribute('style', style);
 }
 
-/** Pill lives on the TD — strip legacy inline-block button chrome from the anchor. */
+/**
+ * Clear duplicate fill/outline on the link when the wrapper TD owns the pill.
+ * Never touches padding, radius, display, fonts, etc.
+ */
+export function stripAnchorDuplicateFillStyles(anchor: HTMLElement) {
+  removeStylePropertiesFromElement(anchor, [...VISUAL_FILL_STYLE_PROPERTIES]);
+  upsertStylePropertyOnElement(anchor, 'border', 'none', true);
+  upsertStylePropertyOnElement(anchor, 'background-color', 'transparent', true);
+}
+
+/** @deprecated Use stripAnchorDuplicateFillStyles — structural props must not be stripped by paint. */
 export function stripLegacyAnchorPillStyles(anchor: HTMLElement) {
-  removeStylePropertiesFromElement(anchor, [
-    'background-color',
-    'padding',
-    'border-radius',
-    'display',
-    'margin',
-    'border',
-    'border-color',
-    'border-width',
-    'border-style',
-  ]);
+  stripAnchorDuplicateFillStyles(anchor);
+}
+
+export function readInlineStyleProperty(el: Element, property: string): string {
+  const style = el.getAttribute('style') ?? '';
+  const escaped = property.replace(/-/g, '\\-');
+  const match = style.match(new RegExp(`(?:^|;)\\s*${escaped}\\s*:\\s*([^;]+)`, 'i'));
+  return match?.[1]?.replace(/\s*!important\s*$/i, '').trim() ?? '';
+}
+
+function isEmptyBoxValue(value: string): boolean {
+  if (!value) return true;
+  return /^0+(?:px|em|rem|%)?(?:\s+0+(?:px|em|rem|%)?){0,3}$/i.test(value.trim());
+}
+
+/**
+ * Guarantee button padding/radius survive paint updates:
+ * 1) Prefer Design Rules geometry
+ * 2) Else keep wrapper values
+ * 3) Else migrate from the anchor
+ * Only then may structural props be cleared from the anchor.
+ */
+function ensureButtonGeometryOnWrapper(
+  wrapper: HTMLTableCellElement,
+  anchor: HTMLElement,
+  geometry: { padding?: string; radius?: string },
+) {
+  const wrapperPadding = readInlineStyleProperty(wrapper, 'padding');
+  const anchorPadding = readInlineStyleProperty(anchor, 'padding');
+  const padding =
+    geometry.padding?.trim() ||
+    (!isEmptyBoxValue(wrapperPadding) ? wrapperPadding : '') ||
+    anchorPadding;
+
+  const wrapperRadius = readInlineStyleProperty(wrapper, 'border-radius');
+  const anchorRadius = readInlineStyleProperty(anchor, 'border-radius');
+  const radius = geometry.radius?.trim() || wrapperRadius || anchorRadius;
+
+  if (padding) {
+    upsertStylePropertyOnElement(wrapper, 'padding', padding, true);
+    removeStylePropertiesFromElement(
+      anchor,
+      ['padding', 'padding-top', 'padding-right', 'padding-bottom', 'padding-left'],
+      { allowStructural: true },
+    );
+  }
+
+  if (radius) {
+    upsertStylePropertyOnElement(wrapper, 'border-radius', radius, true);
+    removeStylePropertiesFromElement(anchor, ['border-radius'], { allowStructural: true });
+  }
 }
 
 /** Rewrite the style attribute string so values persist in serialized HTML (email-safe). */
@@ -188,13 +294,18 @@ function applyStyleToNode(
     color?: string;
     borderColor?: string;
     variant?: 'primary' | 'secondary';
+    padding?: string;
+    radius?: string;
   },
 ) {
   const isTd = node.tagName === 'TD';
+  const wrapperTd = isTd ? (node as HTMLTableCellElement) : findAncestorTd(node);
   const anchorInButtonTd = !isTd && isAnchorInButtonWrapperTd(node);
+  const geometry = { padding: opts.padding, radius: opts.radius };
 
   if (opts.variant) node.setAttribute('data-brand-btn-variant', opts.variant);
 
+  // --- Visual tokens only (safe to toggle repeatedly) ---
   if (opts.bg && (isTd || !anchorInButtonTd)) {
     markUserStyled(node, { bg: true });
     upsertStylePropertyOnElement(node, 'background-color', opts.bg, true);
@@ -215,12 +326,18 @@ function applyStyleToNode(
     upsertStylePropertyOnElement(node, 'border-color', opts.borderColor, true);
   }
 
-  if (anchorInButtonTd && !isTd) {
-    stripLegacyAnchorPillStyles(node);
-    // Keep the outline on the wrapper TD only — a second border on the link looks too thick.
-    removeStylePropertiesFromElement(node, ['border', 'border-color', 'border-width', 'border-style']);
-    upsertStylePropertyOnElement(node, 'border', 'none', true);
-    upsertStylePropertyOnElement(node, 'background-color', 'transparent', true);
+  // --- Structural tokens: write/migrate, never delete blindly ---
+  if (anchorInButtonTd && wrapperTd && wrapperTd !== node) {
+    ensureButtonGeometryOnWrapper(wrapperTd, node, geometry);
+    stripAnchorDuplicateFillStyles(node);
+    return;
+  }
+
+  if (opts.padding && (isTd || !anchorInButtonTd)) {
+    upsertStylePropertyOnElement(node, 'padding', opts.padding, true);
+  }
+  if (opts.radius && (isTd || !anchorInButtonTd)) {
+    upsertStylePropertyOnElement(node, 'border-radius', opts.radius, true);
   }
 }
 
@@ -229,11 +346,18 @@ export function applyPrimaryCta(
   bg: string,
   text: string,
   variant: 'primary' | 'secondary' = 'primary',
+  geometry: { padding?: string; radius?: string } = {},
 ) {
   if (!bg && !text) return;
 
   collectCtaTargets(el).forEach((node) => {
-    applyStyleToNode(node, { bg, color: text, variant });
+    applyStyleToNode(node, {
+      bg,
+      color: text,
+      variant,
+      padding: geometry.padding,
+      radius: geometry.radius,
+    });
   });
 }
 
@@ -242,6 +366,7 @@ export function applySecondaryCta(
   bg: string,
   text: string,
   border: string,
+  geometry: { padding?: string; radius?: string } = {},
 ) {
   if (!bg && !text && !border) return;
 
@@ -251,14 +376,9 @@ export function applySecondaryCta(
       color: text,
       borderColor: border,
       variant: 'secondary',
+      padding: geometry.padding,
+      radius: geometry.radius,
     });
-
-    // Secondary outline lives on the wrapper cell only — never stack it on the link.
-    if (node.tagName === 'A' && isAnchorInButtonWrapperTd(node)) {
-      removeStylePropertiesFromElement(node, ['border', 'border-color', 'border-width', 'border-style']);
-      upsertStylePropertyOnElement(node, 'border', 'none', true);
-      upsertStylePropertyOnElement(node, 'background-color', 'transparent', true);
-    }
   });
 }
 

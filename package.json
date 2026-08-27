@@ -16,6 +16,7 @@
     "deploy": "node scripts/deploy-gh-pages.mjs",
     "dev:api": "vercel dev",
     "verify:templates": "node scripts/verify-bundle-templates.mjs",
+    "verify:cta-styles": "node scripts/verify-cta-style-safety.mjs",
     "verify:starter-kit": "node scripts/verify-email-marketing-starter-kit-templates.mjs",
     "sync:registry": "node scripts/sync-industrial-bundle-registry.mjs",
     "sync:starter-kit": "node scripts/sync-email-marketing-starter-kit-registry.mjs",

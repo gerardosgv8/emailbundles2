@@ -100,14 +100,14 @@ function socialLinkLabel(href: string): string {
 
 function setSocialSlotVisible(el: Element, visible: boolean) {
   if (visible) {
-    removeStylePropertiesFromElement(el, ['display']);
+    removeStylePropertiesFromElement(el, ['display'], { allowStructural: true });
   } else {
     upsertStylePropertyOnElement(el, 'display', 'none', true);
   }
   const td = el.parentElement;
   if (td && td.tagName === 'TD') {
     if (visible) {
-      removeStylePropertiesFromElement(td, ['display']);
+      removeStylePropertiesFromElement(td, ['display'], { allowStructural: true });
     } else {
       upsertStylePropertyOnElement(td, 'display', 'none', true);
     }
@@ -118,7 +118,7 @@ function setSocialSlotVisible(el: Element, visible: boolean) {
       (anchor) => !/display\s*:\s*none/i.test(anchor.getAttribute('style') ?? ''),
     );
     if (anyVisible) {
-      removeStylePropertiesFromElement(tr, ['display']);
+      removeStylePropertiesFromElement(tr, ['display'], { allowStructural: true });
     } else {
       upsertStylePropertyOnElement(tr, 'display', 'none', true);
     }
@@ -277,12 +277,16 @@ export function applyElementProfile(
     case 'CTA_PRIMARY': {
       let bg = primaryButtonBg(state);
       const text = primaryButtonText(state);
+      const geometry = {
+        padding: state.btnPrimaryPadding.trim() || undefined,
+        radius: state.btnPrimaryRadius.trim() || undefined,
+      };
       if (ctx.elementId === 'pricing-cta' || ctx.elementId === 'pricing-cta-button') {
         bg = state.btnPricingBg.trim() || bg;
       } else if (ctx.elementId === 'featured-cta') {
         bg = state.btnPromoBg.trim() || bg;
       }
-      applyPrimaryCta(el, bg, text);
+      applyPrimaryCta(el, bg, text, 'primary', geometry);
       if (state.urlBase.trim()) setHref(el, state.urlBase.trim());
       return true;
     }
@@ -290,10 +294,14 @@ export function applyElementProfile(
     case 'CTA_PRIMARY_TD': {
       let bg = primaryButtonBg(state);
       const text = primaryButtonText(state);
+      const geometry = {
+        padding: state.btnPrimaryPadding.trim() || undefined,
+        radius: state.btnPrimaryRadius.trim() || undefined,
+      };
       if (ctx.elementId === 'pricing-cta-button') {
         bg = state.btnPricingBg.trim() || bg;
       }
-      applyPrimaryCta(el, bg, text, 'primary');
+      applyPrimaryCta(el, bg, text, 'primary', geometry);
       return true;
     }
 
@@ -303,6 +311,10 @@ export function applyElementProfile(
         state.btnSecondaryBg,
         state.btnSecondaryText,
         state.btnSecondaryBorder,
+        {
+          padding: state.btnPrimaryPadding.trim() || undefined,
+          radius: state.btnPrimaryRadius.trim() || undefined,
+        },
       );
       return true;
 
@@ -312,6 +324,10 @@ export function applyElementProfile(
         state.btnSecondaryBg,
         state.btnSecondaryText,
         state.btnSecondaryBorder,
+        {
+          padding: state.btnPrimaryPadding.trim() || undefined,
+          radius: state.btnPrimaryRadius.trim() || undefined,
+        },
       );
       return true;
 

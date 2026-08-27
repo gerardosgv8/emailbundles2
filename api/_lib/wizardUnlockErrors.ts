@@ -82,7 +82,7 @@ export const WIZARD_UNLOCK_ISSUES = {
     buildWizardUnlockIssue('DEVICE_LIMIT', {
       title: 'Device limit reached',
       error: `This purchase is already active on the maximum number of devices (${maxDevices}).`,
-      hint: 'Sign out on another browser you used before, or contact us if you did not share your receipt. Each license is for one buyer.',
+      hint: 'Try again from a browser you used before, or contact us with the support reference if you are the buyer and keep seeing this.',
     }),
   rateLimitIp: () =>
     buildWizardUnlockIssue('RATE_LIMIT_IP', {

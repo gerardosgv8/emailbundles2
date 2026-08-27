@@ -11,7 +11,7 @@ import {
   getWizardMaxDevicesPerOrder,
   getWizardSessionSecret,
 } from './_lib/env.js';
-import { hashClientFingerprint, hashIpForRateLimit } from './_lib/requestFingerprint.js';
+import { hashIpForRateLimit, resolveWizardDeviceKey } from './_lib/requestFingerprint.js';
 import { consumeRateLimit } from './_lib/rateLimit.js';
 import { createWizardSessionToken } from './_lib/wizardSession.js';
 import {
@@ -27,6 +27,7 @@ type VerifyPurchaseBody = {
   email?: string;
   orderId?: string;
   productId?: string;
+  deviceId?: string;
 };
 
 function delay(ms: number): Promise<void> {
@@ -100,13 +101,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
 
     if (isUnlockRegistryAvailable()) {
-      const deviceKey = hashClientFingerprint(req, secret);
+      const deviceKey = resolveWizardDeviceKey(req, secret, body.deviceId);
       const unlock = await requestWizardUnlock(
         order.id,
         deviceKey,
         getWizardMaxDevicesPerOrder(),
       );
 
+      // Soft cap: requestWizardUnlock replaces the oldest slot when full.
+      // Hard DEVICE_LIMIT is retained only as a defensive fallback.
       if (!unlock.allowed) {
         await delay(400);
         return sendWizardUnlockIssue(

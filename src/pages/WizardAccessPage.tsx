@@ -92,7 +92,8 @@ export function WizardAccessPage() {
           <h1>Unlock the wizards</h1>
           <p className="page-banner-lead">
             Enter the email and order number from your Lemon Squeezy receipt. Access lasts 7 days
-            per browser, up to 2 devices per purchase. Do not share your receipt.
+            per browser (up to 2 browsers stay registered; unlocking on a new one replaces the
+            oldest). Do not share your receipt.
           </p>
         </div>
       </section>

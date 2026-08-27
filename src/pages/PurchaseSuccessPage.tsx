@@ -22,7 +22,8 @@ export function PurchaseSuccessPage() {
           </Link>
         </div>
         <p className="purchase-success-footnote">
-          Wizard access lasts 7 days per browser (up to 2 devices per purchase). Keep your receipt
+          Wizard access lasts 7 days per browser (up to 2 browsers stay registered; a new one
+          replaces the oldest). Keep your receipt
           private and{' '}
           <Link to="/contact">contact us</Link> if you need help.
         </p>

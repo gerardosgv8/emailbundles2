@@ -4,6 +4,7 @@ import { getWizardAuditSecret } from './_lib/env.js';
 import { readBearerToken } from './_lib/wizardSession.js';
 import {
   analyzeSharingSignals,
+  clearOrderUnlockRecord,
   getOrderUnlockAudit,
   isUnlockRegistryAvailable,
 } from './_lib/wizardUnlockRegistry.js';
@@ -11,7 +12,7 @@ import {
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (applyCors(req, res)) return;
 
-  if (req.method !== 'GET') {
+  if (req.method !== 'GET' && req.method !== 'DELETE') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
@@ -30,6 +31,18 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(400).json({ error: 'orderId query parameter is required.' });
   }
 
+  if (req.method === 'DELETE') {
+    const cleared = await clearOrderUnlockRecord(orderId);
+    if (!cleared) {
+      return res.status(404).json({ error: 'No unlock history for this order.' });
+    }
+    return res.status(200).json({
+      orderId,
+      cleared: true,
+      message: 'Device slots cleared. Buyer can unlock again from up to 2 devices.',
+    });
+  }
+
   const record = await getOrderUnlockAudit(orderId);
   if (!record) {
     return res.status(404).json({ error: 'No unlock history for this order.' });
@@ -45,6 +58,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       lastUnlockAt: slot.lastUnlockAt,
     })),
     deniedAttempts: record.denied.length,
+    replacements: record.replacements?.length ?? 0,
     sharingSignals: signals,
   });
 }

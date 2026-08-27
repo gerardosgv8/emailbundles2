@@ -117,22 +117,33 @@ Each purchase can unlock wizards on **up to 2 devices** (configurable). Sessions
 | Rate limits | 20 attempts / hour / IP; 10 / hour / order |
 | Audit trail | Redis stores device hashes + blocked attempts per order |
 
+**Device limit (how it works for buyers)**
+
+1. Each browser stores a stable device id in `localStorage` (survives sign-out).
+2. Unlocking on the same browser reuses that slot — network/VPN changes do not burn a new one.
+3. Soft cap of **2 browsers**: unlocking on a 3rd replaces the least-recently-used slot (buyer is not permanently locked out).
+4. Support can still clear slots: `DELETE /api/wizard-unlock-audit?orderId=…` with `WIZARD_AUDIT_SECRET`.
+
 **How to tell if credentials are being shared**
 
 You cannot prove intent, but these **signals** are stored automatically:
 
-1. **`deniedAttempts` > 0** — a third (or more) device tried to unlock after the cap.
-2. **Multiple distinct blocked device hashes** — several different people attempted with the same receipt.
-3. **Vercel function logs** — `[wizard-unlock] device cap hit — possible credential sharing` with `orderId`.
+1. **`replacements` ≥ 3** — many different browsers keep kicking each other off the same receipt.
+2. **Legacy `deniedAttempts` > 0** — blocked under the old hard cap.
+3. **Vercel function logs** — `[wizard-unlock] replaced oldest device slot` with `orderId`.
 
 **Investigate an order** (after setting `WIZARD_AUDIT_SECRET` on Vercel):
 
 ```bash
 curl "https://emailbundles2.vercel.app/api/wizard-unlock-audit?orderId=ORDER_ID" \
   -H "Authorization: Bearer YOUR_WIZARD_AUDIT_SECRET"
+
+# Clear device slots for a stuck buyer:
+curl -X DELETE "https://emailbundles2.vercel.app/api/wizard-unlock-audit?orderId=ORDER_ID" \
+  -H "Authorization: Bearer YOUR_WIZARD_AUDIT_SECRET"
 ```
 
-Response includes `sharingSignals.likelySharing` and human-readable `notes`. Device keys are one-way hashes (IP + browser), not raw PII.
+Response includes `sharingSignals.likelySharing` and human-readable `notes`. Device keys are one-way hashes, not raw PII.
 
 **User-facing issue codes** (shown on `/wizard-access` with a support reference):
 
@@ -143,7 +154,7 @@ Response includes `sharingSignals.likelySharing` and human-readable `notes`. Dev
 | `ORDER_NOT_PAID` | Payment not completed yet |
 | `TEST_ORDER_LIVE_MODE` | Test purchase while store is in live mode |
 | `WRONG_PRODUCT` | Order is not the Starter Kit |
-| `DEVICE_LIMIT` | More than 2 devices tried to unlock |
+| `DEVICE_LIMIT` | Defensive fallback (soft replace is default; rare) |
 | `RATE_LIMIT_IP` | Too many attempts from this network |
 | `RATE_LIMIT_ORDER` | Too many attempts for this order |
 | `SERVER_ERROR` | Temporary server problem |
@@ -167,7 +178,7 @@ Device caps and rate limits need Redis. Until it is connected, unlock still work
    - `KV_REST_API_URL` + `KV_REST_API_TOKEN` (what some Marketplace Redis stores still inject)
    - `UPSTASH_REDIS_REST_URL` + `UPSTASH_REDIS_REST_TOKEN`
 6. **Redeploy** Production so functions pick up the new env vars.
-7. **Verify:** unlock from two different browsers with a test order; a third should show **Device limit reached** (`DEVICE_LIMIT`).
+7. **Verify:** unlock from two browsers with a test order; a third unlock should succeed and replace the oldest slot (check Vercel logs for `replaced oldest device slot`).
 
 From the project instead: **emailbundles2 → Storage / Marketplace** → browse storage → **Redis** → **Upstash**.
 

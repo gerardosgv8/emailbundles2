@@ -6,6 +6,7 @@ import {
 } from './wizardUnlockIssue';
 
 export const WIZARD_SESSION_STORAGE_KEY = 'mailcraft-wizard-session-v1';
+export const WIZARD_DEVICE_STORAGE_KEY = 'mailcraft-wizard-device-v1';
 
 export type WizardSession = {
   token: string;
@@ -15,6 +16,30 @@ export type WizardSession = {
   productId: string;
   productName?: string;
 };
+
+/** Stable per-browser id (survives sign-out). Same browser always counts as one device. */
+export function getOrCreateWizardDeviceId(): string {
+  if (typeof window === 'undefined') {
+    return '';
+  }
+
+  try {
+    const existing = window.localStorage.getItem(WIZARD_DEVICE_STORAGE_KEY)?.trim() ?? '';
+    if (/^[a-zA-Z0-9_-]{16,128}$/.test(existing)) {
+      return existing;
+    }
+
+    const created =
+      typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function'
+        ? crypto.randomUUID().replace(/-/g, '')
+        : `d${Date.now().toString(36)}${Math.random().toString(36).slice(2, 14)}`;
+
+    window.localStorage.setItem(WIZARD_DEVICE_STORAGE_KEY, created);
+    return created;
+  } catch {
+    return `fallback${Date.now().toString(36)}`;
+  }
+}
 
 export function readStoredWizardSession(): WizardSession | null {
   if (typeof window === 'undefined') {
@@ -58,7 +83,11 @@ export async function verifyPurchaseCredentials(
   const response = await fetch(`${getApiBase()}/api/verify-purchase`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email, orderId }),
+    body: JSON.stringify({
+      email,
+      orderId,
+      deviceId: getOrCreateWizardDeviceId(),
+    }),
   });
 
   const data = (await response.json()) as WizardSession & Partial<WizardUnlockIssue>;

@@ -81,6 +81,34 @@ function syncVmlImageHref(html: string, elementId: string, href: string): string
   return html.slice(0, msoStart) + updated + html.slice(msoEnd);
 }
 
+/** MSO conditionals are HTML comments — sync v:imagedata src near an image hook in raw markup. */
+function syncVmlImageSrc(html: string, elementId: string, src: string): string {
+  const marker = `data-element="${elementId}"`;
+  const idx = html.indexOf(marker);
+  if (idx < 0) return html;
+
+  const windowStart = Math.max(0, idx - 1800);
+  const before = html.slice(windowStart, idx);
+  const msoRel = before.lastIndexOf('<!--[if mso]>');
+  if (msoRel < 0) return html;
+
+  const msoStart = windowStart + msoRel;
+  const msoEnd = html.indexOf('<![endif]-->', msoStart);
+  if (msoEnd < 0 || msoEnd > idx) return html;
+
+  const block = html.slice(msoStart, msoEnd);
+  if (!/v:imagedata/i.test(block)) return html;
+
+  const updated = block.replace(/<v:imagedata\b([^>]*)\/?>/i, (_full, attrs: string) => {
+    if (/\bsrc\s*=/i.test(attrs)) {
+      return `<v:imagedata${attrs.replace(/\bsrc\s*=\s*("[^"]*"|'[^']*')/i, ` src="${src}"`)} />`;
+    }
+    return `<v:imagedata src="${src}"${attrs} />`;
+  });
+
+  return html.slice(0, msoStart) + updated + html.slice(msoEnd);
+}
+
 function applyFieldValue(el: Element, kind: string, value: ContentFieldValue): boolean {
   if (typeof value === 'string') {
     if (!value.trim()) return false;
@@ -201,10 +229,15 @@ export function applyContentToHtml(
 
   for (const [elementId, value] of Object.entries(values)) {
     if (kindById[elementId] !== 'image') continue;
-    if (typeof value !== 'object' || value === null || !('href' in value)) continue;
-    const href = value.href.trim();
-    if (!href) continue;
-    serialized = syncVmlImageHref(serialized, elementId, href);
+    if (typeof value !== 'object' || value === null) continue;
+    if ('href' in value) {
+      const href = value.href.trim();
+      if (href) serialized = syncVmlImageHref(serialized, elementId, href);
+    }
+    if ('src' in value) {
+      const src = value.src.trim();
+      if (src) serialized = syncVmlImageSrc(serialized, elementId, src);
+    }
   }
 
   return {

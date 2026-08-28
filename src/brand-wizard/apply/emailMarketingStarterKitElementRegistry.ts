@@ -63,7 +63,7 @@ export type StarterKitElementEntry = {
   templates: EmailMarketingStarterKitTemplateFile[];
 };
 
-/** Every data-element hook in the Email Marketing Starter Kit (184 total). */
+/** Every data-element hook in the Email Marketing Starter Kit (193 total). */
 export const EMAIL_MARKETING_STARTER_KIT_ELEMENT_REGISTRY: StarterKitElementEntry[] = [
   {
     "id": "arrival-1-cta",
@@ -82,6 +82,13 @@ export const EMAIL_MARKETING_STARTER_KIT_ELEMENT_REGISTRY: StarterKitElementEntr
   {
     "id": "arrival-1-description",
     "profile": "BODY",
+    "templates": [
+      "Product_Recommendations.html"
+    ]
+  },
+  {
+    "id": "arrival-1-image",
+    "profile": "IMAGE_PRODUCT",
     "templates": [
       "Product_Recommendations.html"
     ]
@@ -122,6 +129,13 @@ export const EMAIL_MARKETING_STARTER_KIT_ELEMENT_REGISTRY: StarterKitElementEntr
     ]
   },
   {
+    "id": "arrival-2-image",
+    "profile": "IMAGE_PRODUCT",
+    "templates": [
+      "Product_Recommendations.html"
+    ]
+  },
+  {
     "id": "arrival-2-price",
     "profile": "BODY_MUTED",
     "templates": [
@@ -157,6 +171,13 @@ export const EMAIL_MARKETING_STARTER_KIT_ELEMENT_REGISTRY: StarterKitElementEntr
     ]
   },
   {
+    "id": "arrival-3-image",
+    "profile": "IMAGE_PRODUCT",
+    "templates": [
+      "Product_Recommendations.html"
+    ]
+  },
+  {
     "id": "arrival-3-price",
     "profile": "BODY_MUTED",
     "templates": [
@@ -187,6 +208,13 @@ export const EMAIL_MARKETING_STARTER_KIT_ELEMENT_REGISTRY: StarterKitElementEntr
   {
     "id": "arrival-4-description",
     "profile": "BODY",
+    "templates": [
+      "Product_Recommendations.html"
+    ]
+  },
+  {
+    "id": "arrival-4-image",
+    "profile": "IMAGE_PRODUCT",
     "templates": [
       "Product_Recommendations.html"
     ]
@@ -334,6 +362,13 @@ export const EMAIL_MARKETING_STARTER_KIT_ELEMENT_REGISTRY: StarterKitElementEntr
   {
     "id": "deal-2-discount",
     "profile": "BODY_MUTED",
+    "templates": [
+      "Promotional_Campaign.html"
+    ]
+  },
+  {
+    "id": "deal-2-image",
+    "profile": "IMAGE_PRODUCT",
     "templates": [
       "Promotional_Campaign.html"
     ]
@@ -1133,6 +1168,7 @@ export const EMAIL_MARKETING_STARTER_KIT_ELEMENT_REGISTRY: StarterKitElementEntr
     "id": "product-image",
     "profile": "IMAGE_PRODUCT",
     "templates": [
+      "Back_in_Stock_Notification.html",
       "Promotional_Campaign.html"
     ]
   },
@@ -1449,6 +1485,13 @@ export const EMAIL_MARKETING_STARTER_KIT_ELEMENT_REGISTRY: StarterKitElementEntr
     ]
   },
   {
+    "id": "topic-1-image",
+    "profile": "IMAGE_PRODUCT",
+    "templates": [
+      "Newsletter_Editorial.html"
+    ]
+  },
+  {
     "id": "topic-1-title",
     "profile": "HEADING_FEATURE",
     "templates": [
@@ -1465,6 +1508,13 @@ export const EMAIL_MARKETING_STARTER_KIT_ELEMENT_REGISTRY: StarterKitElementEntr
   {
     "id": "topic-2-description",
     "profile": "BODY",
+    "templates": [
+      "Newsletter_Editorial.html"
+    ]
+  },
+  {
+    "id": "topic-2-image",
+    "profile": "IMAGE_PRODUCT",
     "templates": [
       "Newsletter_Editorial.html"
     ]
@@ -1491,6 +1541,13 @@ export const EMAIL_MARKETING_STARTER_KIT_ELEMENT_REGISTRY: StarterKitElementEntr
     ]
   },
   {
+    "id": "topic-3-image",
+    "profile": "IMAGE_PRODUCT",
+    "templates": [
+      "Newsletter_Editorial.html"
+    ]
+  },
+  {
     "id": "topic-3-title",
     "profile": "HEADING_FEATURE",
     "templates": [
@@ -1507,6 +1564,13 @@ export const EMAIL_MARKETING_STARTER_KIT_ELEMENT_REGISTRY: StarterKitElementEntr
   {
     "id": "topic-4-description",
     "profile": "BODY",
+    "templates": [
+      "Newsletter_Editorial.html"
+    ]
+  },
+  {
+    "id": "topic-4-image",
+    "profile": "IMAGE_PRODUCT",
     "templates": [
       "Newsletter_Editorial.html"
     ]
@@ -1574,6 +1638,7 @@ export const EMAIL_MARKETING_STARTER_KIT_ELEMENTS_BY_TEMPLATE = {
     "logo",
     "header-main-title",
     "header-subhead",
+    "product-image",
     "product-title",
     "product-description",
     "product-price",
@@ -1711,15 +1776,19 @@ export const EMAIL_MARKETING_STARTER_KIT_ELEMENTS_BY_TEMPLATE = {
     "featured-cta",
     "trending-heading",
     "trending-subhead",
+    "topic-1-image",
     "topic-1-title",
     "topic-1-description",
     "topic-1-cta",
+    "topic-2-image",
     "topic-2-title",
     "topic-2-description",
     "topic-2-cta",
+    "topic-3-image",
     "topic-3-title",
     "topic-3-description",
     "topic-3-cta",
+    "topic-4-image",
     "topic-4-title",
     "topic-4-description",
     "topic-4-cta",
@@ -1803,21 +1872,25 @@ export const EMAIL_MARKETING_STARTER_KIT_ELEMENTS_BY_TEMPLATE = {
     "product-rec-hero-cta-button",
     "product-rec-hero-cta",
     "recommendations-heading",
+    "arrival-1-image",
     "arrival-1-title",
     "arrival-1-description",
     "arrival-1-price",
     "arrival-1-cta-button",
     "arrival-1-cta",
+    "arrival-2-image",
     "arrival-2-title",
     "arrival-2-description",
     "arrival-2-price",
     "arrival-2-cta-button",
     "arrival-2-cta",
+    "arrival-3-image",
     "arrival-3-title",
     "arrival-3-description",
     "arrival-3-price",
     "arrival-3-cta-button",
     "arrival-3-cta",
+    "arrival-4-image",
     "arrival-4-title",
     "arrival-4-description",
     "arrival-4-price",
@@ -1896,6 +1969,7 @@ export const EMAIL_MARKETING_STARTER_KIT_ELEMENTS_BY_TEMPLATE = {
     "deal-1-price",
     "deal-1-compare",
     "deal-1-discount",
+    "deal-2-image",
     "deal-2-title",
     "deal-2-price",
     "deal-2-compare",

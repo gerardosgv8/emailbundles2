@@ -1325,15 +1325,12 @@
 }
 
 .wizard-app .content-product-block {
-  margin-top: 1rem;
-  padding: 0.85rem 0.9rem 0.25rem;
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  background: color-mix(in srgb, var(--surface) 92%, var(--text) 8%);
+  margin-top: 1.25rem;
+  padding: 0;
 }
 
 .wizard-app .content-product-block-title {
-  margin: 0 0 0.75rem;
+  margin: 0 0 0.65rem;
   font-size: 0.82rem;
   font-weight: 600;
   letter-spacing: 0.02em;
@@ -1510,10 +1507,9 @@
   opacity: 0.72;
 }
 
-.wizard-app .content-field--hidden .field-grid,
-.wizard-app .content-field--hidden textarea,
-.wizard-app .content-field--hidden input:not([type='checkbox']) {
-  border-style: dashed;
+.wizard-app .content-field--hidden .content-field-head > label,
+.wizard-app .content-field--hidden .field label {
+  color: var(--muted);
 }
 
 .wizard-app .content-hidden-note {

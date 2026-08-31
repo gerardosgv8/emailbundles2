@@ -60,6 +60,18 @@ export function useTemplateContentState(bundleId: string, templateFile: string) 
   }, [bundleId, templateFile]);
 
   useEffect(() => {
+    setStore((prev) => {
+      const empty = buildEmptyContentStore(fields);
+      const hasMissingField = fields.some((field) => !(field.id in prev.values));
+      if (!hasMissingField) return prev;
+      return {
+        values: { ...empty.values, ...prev.values },
+        visibility: { ...empty.visibility, ...prev.visibility },
+      };
+    });
+  }, [fields]);
+
+  useEffect(() => {
     localStorage.setItem(storageKey(bundleId, templateFile), JSON.stringify(store));
     setSavedAt(new Date().toLocaleTimeString());
   }, [bundleId, templateFile, store]);

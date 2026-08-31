@@ -42,6 +42,15 @@ export function profileToContentKind(profile: string): import('./types').Content
 
 /** Turn `product-1-name` into "Product 1 Name". Pass `omitProductIndex` when the template has only one product. */
 export function humanizeElementId(id: string, options?: { omitProductIndex?: boolean }): string {
+  const arrivalMatch = id.match(/^arrival-(\d+)-(.+)$/);
+  if (arrivalMatch) {
+    const tail = arrivalMatch[2]
+      .split('-')
+      .map((part) => (/^\d+$/.test(part) ? part : part.charAt(0).toUpperCase() + part.slice(1)))
+      .join(' ');
+    return `Product ${arrivalMatch[1]} ${tail}`.replace(/\s+/g, ' ').trim();
+  }
+
   const parts = id.split('-').filter((part, index, all) => {
     if (!options?.omitProductIndex) return true;
     if (!/^\d+$/.test(part)) return true;

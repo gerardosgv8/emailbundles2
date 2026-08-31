@@ -18,6 +18,7 @@
     "verify:templates": "node scripts/verify-bundle-templates.mjs",
     "verify:cta-styles": "node scripts/verify-cta-style-safety.mjs",
     "verify:starter-kit": "node scripts/verify-email-marketing-starter-kit-templates.mjs",
+    "verify:content-images": "node scripts/verify-content-wizard-image-fields.mjs",
     "sync:registry": "node scripts/sync-industrial-bundle-registry.mjs",
     "sync:starter-kit": "node scripts/sync-email-marketing-starter-kit-registry.mjs",
     "sync:bundle": "node scripts/sync-industrial-bundle-registry.mjs && node scripts/verify-bundle-templates.mjs",

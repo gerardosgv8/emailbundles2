@@ -8,6 +8,20 @@ import {
 } from './contentProfiles';
 import type { ContentFieldDef, ContentSection, TemplateVisibilityState } from './types';
 
+/** Template-specific field labels where generic hook names are unclear in the UI. */
+const TEMPLATE_FIELD_LABELS: Partial<Record<string, Partial<Record<string, string>>>> = {
+  'Product_Recommendations.html': {
+    'hero-image': 'Featured product image',
+  },
+};
+
+function fieldLabel(templateFile: string, id: string, omitProductIndex: boolean): string {
+  return (
+    TEMPLATE_FIELD_LABELS[templateFile]?.[id] ??
+    humanizeElementId(id, { omitProductIndex })
+  );
+}
+
 function labelAmountPairIds(elementId: string): { base: string; labelId: string; amountId: string } | null {
   if (elementId.endsWith('-label')) {
     const base = elementId.slice(0, -'-label'.length);
@@ -58,7 +72,7 @@ export function getContentFieldsForTemplate(bundleId: string, templateFile: stri
       fields.push({
         id: pair.base,
         kind: 'labelValue',
-        label: humanizeElementId(pair.base, { omitProductIndex }),
+        label: fieldLabel(templateFile, pair.base, omitProductIndex),
         section: sectionForElement(pair.amountId),
         profile: amountProfile,
         labelElementId: pair.labelId,
@@ -76,7 +90,7 @@ export function getContentFieldsForTemplate(bundleId: string, templateFile: stri
     fields.push({
       id,
       kind,
-      label: humanizeElementId(id, { omitProductIndex }),
+      label: fieldLabel(templateFile, id, omitProductIndex),
       section: sectionForElement(id),
       profile,
     });

@@ -1324,6 +1324,29 @@
   color: #fbbf24;
 }
 
+.wizard-app .content-product-block {
+  margin-top: 1rem;
+  padding: 0.85rem 0.9rem 0.25rem;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--surface) 92%, var(--text) 8%);
+}
+
+.wizard-app .content-product-block-title {
+  margin: 0 0 0.75rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.wizard-app .content-product-block-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
 .wizard-app .content-progress {
   color: var(--text-secondary);
 }

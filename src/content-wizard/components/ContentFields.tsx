@@ -1,4 +1,5 @@
 import type { ContentFieldDef, ContentFieldValue, TemplateContentState, TemplateVisibilityState } from '../types';
+import { layoutSectionFields } from '../contentFieldGrouping';
 
 type Props = {
   field: ContentFieldDef;
@@ -240,21 +241,37 @@ export function ContentSectionCard({
 }) {
   if (fields.length === 0) return null;
 
+  const layout = layoutSectionFields(title, fields);
+
+  const renderField = (field: ContentFieldDef) => (
+    <ContentFieldInput
+      key={field.id}
+      field={field}
+      value={values[field.id] ?? defaultValue(field)}
+      visible={visibility[field.id] ?? true}
+      onChange={onChange}
+      onVisibleChange={onVisibleChange}
+    />
+  );
+
   return (
     <div className="w-card content-section-card">
       <h3>{title}</h3>
       {warning ? <p className="content-section-warning">{warning}</p> : null}
       <div className="content-field-list">
-        {fields.map((field) => (
-          <ContentFieldInput
-            key={field.id}
-            field={field}
-            value={values[field.id] ?? defaultValue(field)}
-            visible={visibility[field.id] ?? true}
-            onChange={onChange}
-            onVisibleChange={onVisibleChange}
-          />
-        ))}
+        {layout.kind === 'flat' ? (
+          layout.fields.map(renderField)
+        ) : (
+          <>
+            {layout.lead.map(renderField)}
+            {layout.blocks.map((block) => (
+              <div key={block.id} className="content-product-block">
+                <h4 className="content-product-block-title">{block.title}</h4>
+                <div className="content-product-block-fields">{block.fields.map(renderField)}</div>
+              </div>
+            ))}
+          </>
+        )}
       </div>
     </div>
   );

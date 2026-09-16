@@ -1,0 +1,32 @@
+# Mailcraft Studio — AI / search crawler policy (GEO Pillar 5)
+# https://www.mailcraft.studio
+
+User-agent: *
+Allow: /
+Disallow: /brand-wizard/
+Disallow: /content-wizard/
+Disallow: /purchase/
+
+# Explicitly allow major AI retrieval crawlers on public content
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+Sitemap: https://www.mailcraft.studio/sitemap.xml

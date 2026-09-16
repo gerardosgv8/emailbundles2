@@ -1,0 +1,25 @@
+# Mailcraft Studio
+
+> Mailcraft Studio sells the Email Marketing Starter Kit: 11 production HTML email templates plus Brand and Content Wizards for applying brand tokens and campaign copy before pasting into an ESP (Klaviyo, Mailchimp, Salesforce Marketing Cloud, and other custom-HTML ESPs).
+
+## Primary sources
+
+- [Home](https://www.mailcraft.studio/): Product overview and workflow (brand → content → ESP)
+- [Email Marketing Starter Kit](https://www.mailcraft.studio/products): Pricing, features, and purchase
+- [User Guide](https://www.mailcraft.studio/docs): How-to walkthroughs for Brand Wizard, Content Wizard, fonts, Design Rules, and ESP variables
+- [FAQ](https://www.mailcraft.studio/docs/faq): Direct answers on branding, wizards, ESP upload, Outlook, and purchases
+- [Contact](https://www.mailcraft.studio/contact): Support email for downloads and order help
+
+## Product facts
+
+- Product name: Email Marketing Starter Kit
+- Template count: 11 production HTML files
+- Price: $79.99 USD
+- Brand Wizard: apply logo, colors, buttons, footer, and fonts across a zip
+- Content Wizard: fill headlines, body, CTAs, and images for one layout; download filled HTML
+- Output: ESP-ready HTML (table layouts, inline CSS, Outlook VML button fallbacks)
+
+## Optional
+
+- [sitemap.xml](https://www.mailcraft.studio/sitemap.xml)
+- [robots.txt](https://www.mailcraft.studio/robots.txt)

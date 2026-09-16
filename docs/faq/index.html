@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Frequently asked questions about Mailcraft Studio and the Email Marketing Starter Kit covering Brand Wizard, Content Wizard, ESP upload, Outlook, and purchases." />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <title>FAQ | Mailcraft Studio</title>
+    <script>
+      (function () {
+        try {
+          var resolved = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+          document.documentElement.setAttribute('data-theme', resolved);
+          document.documentElement.style.colorScheme = resolved;
+        } catch (e) {}
+      })();
+    </script>
+    <script type="module" crossorigin src="/assets/index-Bx19n6hm.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-BIGv0chZ.css">
+  
+    <link rel="canonical" href="https://www.mailcraft.studio/docs/faq" />
+    <meta name="robots" content="index, follow" />
+    <meta property="og:title" content="FAQ | Mailcraft Studio" />
+    <meta property="og:description" content="Frequently asked questions about Mailcraft Studio and the Email Marketing Starter Kit covering Brand Wizard, Content Wizard, ESP upload, Outlook, and purchases." />
+    <meta property="og:url" content="https://www.mailcraft.studio/docs/faq" />
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Mailcraft Studio" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="last-modified" content="2026-09-16" />
+    <script type="application/ld+json" id="geo-jsonld">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://www.mailcraft.studio/#organization","name":"Mailcraft Studio","legalName":"Mailcraft Studio","url":"https://www.mailcraft.studio","description":"Mailcraft Studio sells the Email Marketing Starter Kit: 11 production HTML email templates plus Brand and Content Wizards for applying brand tokens and campaign copy before pasting into an ESP.","email":"hello@mailcraft.studio"},{"@type":"WebSite","@id":"https://www.mailcraft.studio/#website","url":"https://www.mailcraft.studio","name":"Mailcraft Studio","description":"Production HTML email templates plus Brand and Content Wizards from Mailcraft Studio.","publisher":{"@id":"https://www.mailcraft.studio/#organization"}},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How do I get started after I download the Starter Kit?","acceptedAnswer":{"@type":"Answer","text":"You can brand and fill the whole pack at once, or edit a single HTML file by hand. For the pack path: open Brand Wizard to apply logo, colors, and footer across the zip, then use Content Wizard to drop in campaign copy and download filled HTML. Prefer manual edits? Extract the zip, open the file that matches your campaign, swap copy and images, and paste the full HTML into your ESP. Host images on HTTPS and send a test before your full list."}},{"@type":"Question","name":"Do I need to know HTML to use these templates?","acceptedAnswer":{"@type":"Answer","text":"A little HTML familiarity helps, but you can update most text and images without writing code. Styles are inlined and commented. For brand colors and logos across a whole pack, use the Brand Design Wizard. For campaign copy, use the Content Wizard."}},{"@type":"Question","name":"What’s the difference between Brand Wizard and Content Wizard?","acceptedAnswer":{"@type":"Answer","text":"Brand Wizard sets look and feel (logo, colors, buttons, footer identity) and can apply those tokens to a template zip. Content Wizard fills headings, body, CTAs, and images for one layout at a time. Best order: brand first, then content."}},{"@type":"Question","name":"Should I test before I send to my list?","acceptedAnswer":{"@type":"Answer","text":"Yes, always. Send tests to Gmail, Outlook, and Apple Mail at minimum. For high-stakes campaigns, use Litmus or Email on Acid. Templates are pre-tested, but your images, merge tags, and ESP can still introduce quirks."}},{"@type":"Question","name":"Can I change colors and fonts to match my brand?","acceptedAnswer":{"@type":"Answer","text":"Yes. Search for hex values in the HTML, or define tokens in the Brand Design Wizard and apply them to your zip. Export Design Rules so your team shares one brand reference."}},{"@type":"Question","name":"Will these emails work on mobile?","acceptedAnswer":{"@type":"Answer","text":"Yes. Templates use responsive, mobile-first patterns with fluid widths and stacked columns. Still send a phone test. Your ESP and image sizes can affect real devices."}},{"@type":"Question","name":"Why do my buttons look wrong in Outlook?","acceptedAnswer":{"@type":"Answer","text":"Outlook desktop uses a different rendering engine than most clients. Keep the VML fallback blocks in the HTML. Those “bulletproof” buttons are what make CTAs look consistent. Don’t strip them when editing."}},{"@type":"Question","name":"Why aren’t my images showing?","acceptedAnswer":{"@type":"Answer","text":"Use absolute HTTPS URLs. Relative paths break in almost every ESP. Host assets on your ESP CDN or a reliable HTTPS server, and keep logos lean (under ~100 KB)."}},{"@type":"Question","name":"How do I apply my brand to a whole zip of templates?","acceptedAnswer":{"@type":"Answer","text":"Open Brand Wizard for the Email Marketing Starter Kit, fill the token steps, then on Review & export upload your kit zip and click Apply brand. Download the branded package. It includes your Design Rules file."}},{"@type":"Question","name":"How do I unlock the Brand and Content Wizards after purchase?","acceptedAnswer":{"@type":"Answer","text":"Wizards are for buyers only. Go to Unlock wizards (or follow the link on your purchase success page), enter the email and order number from your Lemon Squeezy receipt, and access lasts 30 days in this browser tab. Files still arrive by email from Lemon Squeezy; unlocking only gates the online wizards."}},{"@type":"Question","name":"Where does the Brand Wizard save my progress?","acceptedAnswer":{"@type":"Answer","text":"In your browser only (localStorage). Nothing is uploaded to a server. Clearing site data or using Reset defaults wipes those values, so keep an exported Design Rules file as backup."}},{"@type":"Question","name":"How do I fill campaign copy without editing HTML by hand?","acceptedAnswer":{"@type":"Answer","text":"Use Content Wizard: pick the layout, edit fields, upload the matching HTML, then download the filled file. Toggle Shown / Hidden in email to drop optional blocks for this send."}},{"@type":"Question","name":"Can I use the Content Wizard on branded HTML?","acceptedAnswer":{"@type":"Answer","text":"Yes, and that’s the recommended path. Apply brand tokens first, then upload that branded HTML in Content Wizard so copy updates keep your colors and logo."}},{"@type":"Question","name":"Which email platforms can I use these with?","acceptedAnswer":{"@type":"Answer","text":"Any ESP that accepts custom HTML, including Salesforce Marketing Cloud, Klaviyo, Mailchimp, HubSpot, Braze, and Customer.io. Paste the full HTML, update image URLs, and swap merge tags for your platform’s syntax."}},{"@type":"Question","name":"How do I set up unsubscribe links?","acceptedAnswer":{"@type":"Answer","text":"Replace footer placeholders like {{unsubscribe_url}} with your ESP’s merge tag (for example Klaviyo or Mailchimp unsubscribe tags). Never hard-code a static unsubscribe URL."}},{"@type":"Question","name":"Are these templates CAN-SPAM compliant?","acceptedAnswer":{"@type":"Answer","text":"They include the right placeholders for physical address, company name, and unsubscribe, but you must fill in real business details and wire correct merge tags. Compliance depends on your completed footer and list practices."}},{"@type":"Question","name":"Will these templates hurt my deliverability?","acceptedAnswer":{"@type":"Answer","text":"Clean HTML alone doesn’t determine inbox placement. Keep a healthy text/image balance, host images on reputable domains, avoid huge file sizes, and maintain list hygiene. Authentication (SPF/DKIM/DMARC) still matters more than layout."}},{"@type":"Question","name":"How do downloads work after I purchase?","acceptedAnswer":{"@type":"Answer","text":"After checkout, Lemon Squeezy emails your receipt. Save the zip locally. If the files are missing, contact us with the email you used at checkout and your receipt."}},{"@type":"Question","name":"Can I use templates for client projects?","acceptedAnswer":{"@type":"Answer","text":"Yes, for agencies and freelancers building client campaigns. You may not redistribute raw template files as a competing product or resell the Starter Kit itself. One license covers your organization’s use."}},{"@type":"Question","name":"What if I need a refund?","acceptedAnswer":{"@type":"Answer","text":"If templates don’t meet the documented compatibility standards and we can’t resolve it, contact us within 14 days of purchase for a review. Digital product terms are covered in our Refund Policy."}},{"@type":"Question","name":"Where do I go if I’m still stuck?","acceptedAnswer":{"@type":"Answer","text":"Start with the Guide tab for step-by-step wizard and ESP walkthroughs, then this FAQ for quick answers. If you still need help, use the Contact page with your order number and what you already tried."}}]}]}</script>
+</head>
+  <body>
+    <div id="root">
+<article>
+  <h1>Mailcraft Studio FAQ</h1>
+  <p>Direct answers about the Email Marketing Starter Kit, Brand Wizard, Content Wizard, ESP integration, and purchases.</p>
+  
+  <section>
+    <h2>How do I get started after I download the Starter Kit?</h2>
+    <p>You can brand and fill the whole pack at once, or edit a single HTML file by hand. For the pack path: open Brand Wizard to apply logo, colors, and footer across the zip, then use Content Wizard to drop in campaign copy and download filled HTML. Prefer manual edits? Extract the zip, open the file that matches your campaign, swap copy and images, and paste the full HTML into your ESP. Host images on HTTPS and send a test before your full list.</p>
+  </section>
+
+  <section>
+    <h2>Do I need to know HTML to use these templates?</h2>
+    <p>A little HTML familiarity helps, but you can update most text and images without writing code. Styles are inlined and commented. For brand colors and logos across a whole pack, use the Brand Design Wizard. For campaign copy, use the Content Wizard.</p>
+  </section>
+
+  <section>
+    <h2>What’s the difference between Brand Wizard and Content Wizard?</h2>
+    <p>Brand Wizard sets look and feel (logo, colors, buttons, footer identity) and can apply those tokens to a template zip. Content Wizard fills headings, body, CTAs, and images for one layout at a time. Best order: brand first, then content.</p>
+  </section>
+
+  <section>
+    <h2>Should I test before I send to my list?</h2>
+    <p>Yes, always. Send tests to Gmail, Outlook, and Apple Mail at minimum. For high-stakes campaigns, use Litmus or Email on Acid. Templates are pre-tested, but your images, merge tags, and ESP can still introduce quirks.</p>
+  </section>
+
+  <section>
+    <h2>Can I change colors and fonts to match my brand?</h2>
+    <p>Yes. Search for hex values in the HTML, or define tokens in the Brand Design Wizard and apply them to your zip. Export Design Rules so your team shares one brand reference.</p>
+  </section>
+
+  <section>
+    <h2>Will these emails work on mobile?</h2>
+    <p>Yes. Templates use responsive, mobile-first patterns with fluid widths and stacked columns. Still send a phone test. Your ESP and image sizes can affect real devices.</p>
+  </section>
+
+  <section>
+    <h2>Why do my buttons look wrong in Outlook?</h2>
+    <p>Outlook desktop uses a different rendering engine than most clients. Keep the VML fallback blocks in the HTML. Those “bulletproof” buttons are what make CTAs look consistent. Don’t strip them when editing.</p>
+  </section>
+
+  <section>
+    <h2>Why aren’t my images showing?</h2>
+    <p>Use absolute HTTPS URLs. Relative paths break in almost every ESP. Host assets on your ESP CDN or a reliable HTTPS server, and keep logos lean (under ~100 KB).</p>
+  </section>
+
+  <section>
+    <h2>How do I apply my brand to a whole zip of templates?</h2>
+    <p>Open Brand Wizard for the Email Marketing Starter Kit, fill the token steps, then on Review &amp; export upload your kit zip and click Apply brand. Download the branded package. It includes your Design Rules file.</p>
+  </section>
+
+  <section>
+    <h2>How do I unlock the Brand and Content Wizards after purchase?</h2>
+    <p>Wizards are for buyers only. Go to Unlock wizards (or follow the link on your purchase success page), enter the email and order number from your Lemon Squeezy receipt, and access lasts 30 days in this browser tab. Files still arrive by email from Lemon Squeezy; unlocking only gates the online wizards.</p>
+  </section>
+
+  <section>
+    <h2>Where does the Brand Wizard save my progress?</h2>
+    <p>In your browser only (localStorage). Nothing is uploaded to a server. Clearing site data or using Reset defaults wipes those values, so keep an exported Design Rules file as backup.</p>
+  </section>
+
+  <section>
+    <h2>How do I fill campaign copy without editing HTML by hand?</h2>
+    <p>Use Content Wizard: pick the layout, edit fields, upload the matching HTML, then download the filled file. Toggle Shown / Hidden in email to drop optional blocks for this send.</p>
+  </section>
+
+  <section>
+    <h2>Can I use the Content Wizard on branded HTML?</h2>
+    <p>Yes, and that’s the recommended path. Apply brand tokens first, then upload that branded HTML in Content Wizard so copy updates keep your colors and logo.</p>
+  </section>
+
+  <section>
+    <h2>Which email platforms can I use these with?</h2>
+    <p>Any ESP that accepts custom HTML, including Salesforce Marketing Cloud, Klaviyo, Mailchimp, HubSpot, Braze, and Customer.io. Paste the full HTML, update image URLs, and swap merge tags for your platform’s syntax.</p>
+  </section>
+
+  <section>
+    <h2>How do I set up unsubscribe links?</h2>
+    <p>Replace footer placeholders like {{unsubscribe_url}} with your ESP’s merge tag (for example Klaviyo or Mailchimp unsubscribe tags). Never hard-code a static unsubscribe URL.</p>
+  </section>
+
+  <section>
+    <h2>Are these templates CAN-SPAM compliant?</h2>
+    <p>They include the right placeholders for physical address, company name, and unsubscribe, but you must fill in real business details and wire correct merge tags. Compliance depends on your completed footer and list practices.</p>
+  </section>
+
+  <section>
+    <h2>Will these templates hurt my deliverability?</h2>
+    <p>Clean HTML alone doesn’t determine inbox placement. Keep a healthy text/image balance, host images on reputable domains, avoid huge file sizes, and maintain list hygiene. Authentication (SPF/DKIM/DMARC) still matters more than layout.</p>
+  </section>
+
+  <section>
+    <h2>How do downloads work after I purchase?</h2>
+    <p>After checkout, Lemon Squeezy emails your receipt. Save the zip locally. If the files are missing, contact us with the email you used at checkout and your receipt.</p>
+  </section>
+
+  <section>
+    <h2>Can I use templates for client projects?</h2>
+    <p>Yes, for agencies and freelancers building client campaigns. You may not redistribute raw template files as a competing product or resell the Starter Kit itself. One license covers your organization’s use.</p>
+  </section>
+
+  <section>
+    <h2>What if I need a refund?</h2>
+    <p>If templates don’t meet the documented compatibility standards and we can’t resolve it, contact us within 14 days of purchase for a review. Digital product terms are covered in our Refund Policy.</p>
+  </section>
+
+  <section>
+    <h2>Where do I go if I’m still stuck?</h2>
+    <p>Start with the Guide tab for step-by-step wizard and ESP walkthroughs, then this FAQ for quick answers. If you still need help, use the Contact page with your order number and what you already tried.</p>
+  </section>
+  <p>Last updated: 2026-09-16</p>
+</article>
+</div>
+  </body>
+</html>

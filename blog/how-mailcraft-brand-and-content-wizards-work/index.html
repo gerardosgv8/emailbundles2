@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="A technical explanation of how Mailcraft Studio Brand Wizard applies design tokens across HTML email templates via data-element hooks, how Content Wizard fills campaign fields, and how the resulting HTML pastes into ESPs like Klaviyo and Mailchimp." />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <title>How Do Mailcraft Studio Brand and Content Wizards Work? Tokens, data-element Hooks, and ESP Export Explained | Mailcraft Studio</title>
+    <script>
+      (function () {
+        try {
+          var resolved = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+          document.documentElement.setAttribute('data-theme', resolved);
+          document.documentElement.style.colorScheme = resolved;
+        } catch (e) {}
+      })();
+    </script>
+    <script type="module" crossorigin src="/assets/index-OvmFzE_1.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-BAwha8fZ.css">
+  
+    <link rel="canonical" href="https://www.mailcraft.studio/blog/how-mailcraft-brand-and-content-wizards-work" />
+    <meta name="robots" content="index, follow" />
+    <meta property="og:title" content="How Do Mailcraft Studio Brand and Content Wizards Work? Tokens, data-element Hooks, and ESP Export Explained | Mailcraft Studio" />
+    <meta property="og:description" content="A technical explanation of how Mailcraft Studio Brand Wizard applies design tokens across HTML email templates via data-element hooks, how Content Wizard fills campaign fields, and how the resulting HTML pastes into ESPs like Klaviyo and Mailchimp." />
+    <meta property="og:url" content="https://www.mailcraft.studio/blog/how-mailcraft-brand-and-content-wizards-work" />
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Mailcraft Studio" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="last-modified" content="2026-09-16" />
+    <script type="application/ld+json" id="geo-jsonld">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://www.mailcraft.studio/#organization","name":"Mailcraft Studio","legalName":"Mailcraft Studio","url":"https://www.mailcraft.studio","description":"Mailcraft Studio sells the Email Marketing Starter Kit: 11 production HTML email templates plus Brand and Content Wizards for applying brand tokens and campaign copy before pasting into an ESP.","email":"hello@mailcraft.studio"},{"@type":"WebSite","@id":"https://www.mailcraft.studio/#website","url":"https://www.mailcraft.studio","name":"Mailcraft Studio","description":"Production HTML email templates plus Brand and Content Wizards from Mailcraft Studio.","publisher":{"@id":"https://www.mailcraft.studio/#organization"}},{"@type":"BlogPosting","headline":"How Do Mailcraft Studio Brand and Content Wizards Work? Tokens, data-element Hooks, and ESP Export Explained","description":"A technical explanation of how Mailcraft Studio Brand Wizard applies design tokens across HTML email templates via data-element hooks, how Content Wizard fills campaign fields, and how the resulting HTML pastes into ESPs like Klaviyo and Mailchimp.","datePublished":"2026-09-16","dateModified":"2026-09-16","author":{"@id":"https://www.mailcraft.studio/#organization"},"publisher":{"@id":"https://www.mailcraft.studio/#organization"},"mainEntityOfPage":"https://www.mailcraft.studio/blog/how-mailcraft-brand-and-content-wizards-work"}]}</script>
+</head>
+  <body>
+    <div id="root">
+<article>
+  <h1>How Do Mailcraft Studio Brand and Content Wizards Work? Tokens, data-element Hooks, and ESP Export Explained</h1>
+  <p>A technical explanation of how Mailcraft Studio Brand Wizard applies design tokens across HTML email templates via data-element hooks, how Content Wizard fills campaign fields, and how the resulting HTML pastes into ESPs like Klaviyo and Mailchimp.</p>
+  <p><strong>Architecture &amp; how-it-works</strong> · Updated 2026-09-16</p>
+  <p>Mailcraft Studio Brand Wizard and Content Wizard are browser tools that edit production HTML email templates. Brand Wizard writes shared design tokens (logo, colors, buttons, footer, fonts) into every matching data-element hook in a zip. Content Wizard writes campaign copy and images into one layout, then downloads filled HTML for ESP paste.</p><p></p><p>What is the Mailcraft email production architecture?. Mailcraft separates brand tokens from campaign content: Brand Wizard owns pack-wide look-and-feel; Content Wizard owns one-send copy; the ESP owns personalization and delivery.</p><p></p><p>Start with Email Marketing Starter Kit HTML (600px table layouts, inline CSS, Outlook VML buttons). Brand Wizard maps form fields to data-element hooks and applies tokens across uploaded HTML/zip files. Content Wizard maps campaign fields to the same hook system for one template file. You paste the downloaded HTML into Klaviyo, Mailchimp, Salesforce Marketing Cloud, or another custom-HTML ESP and replace merge tags (for example unsubscribe).</p><p></p><p>How do data-element hooks make Brand Wizard apply safe?. Each editable region in Mailcraft HTML exposes a data-element attribute (for example logo, primary button, footer company). Brand Wizard updates those hooks instead of blindly rewriting every hex string in the file.</p><p></p><p>Hooks identify intentional brand surfaces: logos, headings, body text, buttons, badges, footer identity, and social links. Apply engines preserve table structure and VML fallbacks while updating colors, URLs, and text tokens. Export Design Rules writes a markdown brand file so teammates can re-import the same tokens later.</p><p></p><p>Bulletproof buttons in HTML email often rely on VML markup for Outlook desktop. Mailcraft Brand Wizard is designed to keep those fallbacks aligned with button background and text tokens rather than stripping them during a naive find-and-replace.</p><p></p><p>How does the Brand Wizard pipeline run from form to zip?. Brand Wizard collects tokens in stepped forms, previews them live, then runs an apply pass over uploaded HTML files and returns a branded zip plus Design Rules.</p><p></p><p>Operator enters brand identity, logo URL, core/text/surface colors, buttons, typography (including optional Google Fonts embed), footer, and layout notes. Live preview reflects key tokens before apply. Operator uploads the Starter Kit zip (or a single HTML file) and completes the pre-flight checklist. Apply brand walks each HTML file, updates matched hooks, and reports warnings for unmapped elements when present. Download includes branded HTML and an updated Design Rules markdown file.</p><p></p><p>How does Content Wizard fill a single campaign without undoing brand?. Content Wizard loads one template’s field schema, lets marketers edit text, images, CTAs, and visibility toggles, then merges those values into uploaded HTML. Prefer HTML that was already branded.</p><p></p><p>Recommended order: Brand Wizard first, Content Wizard second, so campaign fills keep logo and palette intact. Shown / Hidden in email collapses unused blocks (for example extra products) without leaving empty gaps. Template typography controls can adjust header/subhead/body sizes for that layout when set. Image Link URL fields make content images clickable when the HTML supports linked images.</p><p></p><p>What happens after download when you paste into an ESP?. Mailcraft outputs static production HTML. The ESP then adds subscriber personalization. Replace placeholders such as unsubscribe URLs with Klaviyo, Mailchimp, or Salesforce Marketing Cloud merge tags before sending.</p><p></p><p>ESP handoff checklist Step | Owner | Example Paste full HTML | Marketer | Klaviyo template editor / Mailchimp code editor Host images on HTTPS | Marketer / ESP CDN | Absolute https:// image URLs Wire unsubscribe / preference center | Marketer | {% unsubscribe %} / *|UNSUB|* / %%unsub_center_url%% Send proof to Gmail, Outlook, Apple Mail | Marketer | Confirm VML buttons and images</p><p></p><p>Read the step-by-step User Guide, or open Brand Wizard after you unlock access.</p>
+</article>
+</div>
+  </body>
+</html>

@@ -25,6 +25,36 @@
     <priority>0.9</priority>
   </url>
   <url>
+    <loc>https://www.mailcraft.studio/blog</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://www.mailcraft.studio/blog/email-template-production-time-benchmarks-2026</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.mailcraft.studio/blog/klaviyo-drag-and-drop-vs-custom-html-vs-mailcraft-studio-2026</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.mailcraft.studio/blog/how-mailcraft-brand-and-content-wizards-work</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.mailcraft.studio/blog/best-html-email-workflow-for-ecommerce-teams-using-klaviyo-or-mailchimp-2026</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://www.mailcraft.studio/contact</loc>
     <lastmod>2026-09-16</lastmod>
     <changefreq>monthly</changefreq>

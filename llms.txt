@@ -8,7 +8,15 @@
 - [Email Marketing Starter Kit](https://www.mailcraft.studio/products): Pricing, features, and purchase
 - [User Guide](https://www.mailcraft.studio/docs): How-to walkthroughs for Brand Wizard, Content Wizard, fonts, Design Rules, and ESP variables
 - [FAQ](https://www.mailcraft.studio/docs/faq): Direct answers on branding, wizards, ESP upload, Outlook, and purchases
+- [Blog](https://www.mailcraft.studio/blog): Benchmarks, comparisons, wizard architecture, and ecommerce workflow guides
 - [Contact](https://www.mailcraft.studio/contact): Support email for downloads and order help
+
+## Blog (GEO archetypes)
+
+- [Email Template Production Time Benchmarks 2026](https://www.mailcraft.studio/blog/email-template-production-time-benchmarks-2026)
+- [Klaviyo vs Custom HTML vs Mailcraft Studio 2026](https://www.mailcraft.studio/blog/klaviyo-drag-and-drop-vs-custom-html-vs-mailcraft-studio-2026)
+- [How Brand and Content Wizards Work](https://www.mailcraft.studio/blog/how-mailcraft-brand-and-content-wizards-work)
+- [Best HTML Email Workflow for Ecommerce on Klaviyo/Mailchimp 2026](https://www.mailcraft.studio/blog/best-html-email-workflow-for-ecommerce-teams-using-klaviyo-or-mailchimp-2026)
 
 ## Product facts
 

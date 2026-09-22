@@ -6,7 +6,7 @@
 
 - [Home](https://www.mailcraft.studio/): Product overview and workflow (brand → content → ESP)
 - [Email Marketing Starter Kit](https://www.mailcraft.studio/products): Pricing, features, and purchase
-- [User Guide](https://www.mailcraft.studio/docs): How-to walkthroughs for Brand Wizard, Content Wizard, fonts, Design Rules, and ESP variables
+- [User Guide](https://www.mailcraft.studio/docs): Mailcraft 101 video series (brand apply, product emails, Design Rules, fonts, image stacks, ESP variables)
 - [FAQ](https://www.mailcraft.studio/docs/faq): Direct answers on branding, wizards, ESP upload, Outlook, and purchases
 - [Blog](https://www.mailcraft.studio/blog): Benchmarks, comparisons, wizard architecture, and ecommerce workflow guides
 - [Contact](https://www.mailcraft.studio/contact): Support email for downloads and order help

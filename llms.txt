@@ -10,6 +10,7 @@
 - [FAQ](https://www.mailcraft.studio/docs/faq): Direct answers on branding, wizards, ESP upload, Outlook, and purchases
 - [Blog](https://www.mailcraft.studio/blog): Benchmarks, comparisons, wizard architecture, and ecommerce workflow guides
 - [Contact](https://www.mailcraft.studio/contact): Support email for downloads and order help
+- [YouTube](https://www.youtube.com/@MailcraftStudio): Mailcraft 101 video series
 
 ## Blog (GEO archetypes)
 

@@ -101,22 +101,27 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
 
     if (isUnlockRegistryAvailable()) {
-      const deviceKey = resolveWizardDeviceKey(req, secret, body.deviceId);
-      const unlock = await requestWizardUnlock(
-        order.id,
-        deviceKey,
-        getWizardMaxDevicesPerOrder(),
-      );
-
-      // Soft cap: requestWizardUnlock replaces the oldest slot when full.
-      // Hard DEVICE_LIMIT is retained only as a defensive fallback.
-      if (!unlock.allowed) {
-        await delay(400);
-        return sendWizardUnlockIssue(
-          res,
-          403,
-          WIZARD_UNLOCK_ISSUES.deviceLimit(getWizardMaxDevicesPerOrder()),
+      try {
+        const deviceKey = resolveWizardDeviceKey(req, secret, body.deviceId);
+        const unlock = await requestWizardUnlock(
+          order.id,
+          deviceKey,
+          getWizardMaxDevicesPerOrder(),
         );
+
+        // Soft cap: requestWizardUnlock replaces the oldest slot when full.
+        // Hard DEVICE_LIMIT is retained only as a defensive fallback.
+        if (!unlock.allowed) {
+          await delay(400);
+          return sendWizardUnlockIssue(
+            res,
+            403,
+            WIZARD_UNLOCK_ISSUES.deviceLimit(getWizardMaxDevicesPerOrder()),
+          );
+        }
+      } catch (err) {
+        // Redis down should not block a valid buyer from unlocking.
+        console.error('[verify-purchase] device registry unavailable — continuing', err);
       }
     } else {
       console.warn('[verify-purchase] KV not configured — device limits disabled');

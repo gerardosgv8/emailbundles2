@@ -1,4 +1,5 @@
 import { getLemonSqueezyApiKey, getLemonSqueezyVariantStarterKit, isLiveLemonSqueezyMode } from './env.js';
+import { fetchWithRetry } from './fetchRetry.js';
 import { getProduct } from './products.js';
 
 const LS_API = 'https://api.lemonsqueezy.com/v1';
@@ -39,10 +40,11 @@ type LemonListResponse = {
 };
 
 function lsHeaders(): HeadersInit {
+  // GETs only need Accept + Authorization. Content-Type on bodyless requests
+  // has caused intermittent upstream rejections with some API gateways.
   return {
     Authorization: `Bearer ${getLemonSqueezyApiKey()}`,
     Accept: 'application/vnd.api+json',
-    'Content-Type': 'application/vnd.api+json',
   };
 }
 
@@ -61,10 +63,16 @@ function mapOrder(resource: LemonOrderResource): LemonSqueezyOrder {
   };
 }
 
+async function lsFetch(pathAndQuery: string): Promise<Response> {
+  return fetchWithRetry(
+    `${LS_API}${pathAndQuery}`,
+    { headers: lsHeaders() },
+    { label: 'lemonsqueezy', attempts: 3 },
+  );
+}
+
 async function fetchOrderById(orderId: string): Promise<LemonSqueezyOrder | null> {
-  const response = await fetch(`${LS_API}/orders/${encodeURIComponent(orderId)}`, {
-    headers: lsHeaders(),
-  });
+  const response = await lsFetch(`/orders/${encodeURIComponent(orderId)}`);
 
   if (response.status === 404) {
     return null;
@@ -86,9 +94,7 @@ async function fetchOrderByNumber(orderNumber: string): Promise<LemonSqueezyOrde
     'page[size]': '1',
   });
 
-  const response = await fetch(`${LS_API}/orders?${params}`, {
-    headers: lsHeaders(),
-  });
+  const response = await lsFetch(`/orders?${params}`);
 
   if (!response.ok) {
     const body = await response.text();
@@ -107,9 +113,7 @@ async function listOrdersByEmail(email: string): Promise<LemonSqueezyOrder[]> {
     'page[size]': '25',
   });
 
-  const response = await fetch(`${LS_API}/orders?${params}`, {
-    headers: lsHeaders(),
-  });
+  const response = await lsFetch(`/orders?${params}`);
 
   if (!response.ok) {
     const body = await response.text();

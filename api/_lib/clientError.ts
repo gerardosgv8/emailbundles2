@@ -4,7 +4,8 @@ const INTERNAL_PATTERNS = [
   /^Missing environment variable:/i,
   /LEMONSQUEEZY_API_KEY|LEMONSQUEEZY_API_KEY_LIVE|WIZARD_SESSION_SECRET/i,
   /Add the env var in Vercel/i,
-  /ECONNREFUSED|ENOTFOUND|getaddrinfo/i,
+  /ECONNREFUSED|ENOTFOUND|getaddrinfo|fetch failed|unreachable/i,
+  /Redis unavailable|device registry unavailable/i,
 ];
 
 export function toClientErrorMessage(err: unknown, fallback: string): string {

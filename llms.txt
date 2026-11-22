@@ -1,15 +1,16 @@
 # Mailcraft Studio
 
-> Mailcraft Studio sells the Email Marketing Starter Kit: 11 production HTML email templates plus Brand and Content Wizards for applying brand tokens and campaign copy before pasting into an ESP (Klaviyo, Mailchimp, Salesforce Marketing Cloud, and other custom-HTML ESPs).
+> Mailcraft Studio offers free Brand and Content Wizards (Google or email sign-in) plus the Email Marketing Starter Kit: 11 production HTML email templates you brand and fill before pasting into an ESP (Klaviyo, Mailchimp, Salesforce Marketing Cloud, and other custom-HTML ESPs).
 
 ## Primary sources
 
-- [Home](https://www.mailcraft.studio/): Product overview and workflow (brand → content → ESP)
-- [Email Marketing Starter Kit](https://www.mailcraft.studio/products): Pricing, features, and purchase
+- [Home](https://www.mailcraft.studio/): Product overview and workflow (sign in → brand → content → ESP)
+- [Try free / wizard access](https://www.mailcraft.studio/wizard-access): Free Google or email sign-in for Brand and Content Wizards
+- [Email Marketing Starter Kit](https://www.mailcraft.studio/products): Pricing, features, and HTML kit purchase
 - [User Guide](https://www.mailcraft.studio/docs): Mailcraft 101 video series (brand apply, product emails, Design Rules, fonts, image stacks, ESP variables)
-- [FAQ](https://www.mailcraft.studio/docs/faq): Direct answers on branding, wizards, ESP upload, Outlook, and purchases
+- [FAQ](https://www.mailcraft.studio/docs/faq): Direct answers on free wizards, branding, ESP upload, Outlook, and kit purchases
 - [Blog](https://www.mailcraft.studio/blog): Benchmarks, comparisons, wizard architecture, and ecommerce workflow guides
-- [Contact](https://www.mailcraft.studio/contact): Support email for downloads and order help
+- [Contact](https://www.mailcraft.studio/contact): Support for wizards, downloads, and order help
 - [YouTube](https://www.youtube.com/@MailcraftStudio): Mailcraft 101 video series
 
 ## Blog (GEO archetypes)
@@ -21,7 +22,8 @@
 
 ## Product facts
 
-- Product name: Email Marketing Starter Kit
+- Wizards: free with Google or email sign-in (no kit purchase required)
+- Product name: Email Marketing Starter Kit (paid HTML zip)
 - Template count: 11 production HTML files
 - Price: $79.99 USD
 - Brand Wizard: apply logo, colors, buttons, footer, and fonts across a zip
